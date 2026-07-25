@@ -1,0 +1,28 @@
+# Dependencies
+/vendor/
+/node_modules/
+composer.lock
+
+# Recon harness input: verbatim GPL WordPress core, extracted locally.
+# Never committed — see docs/recon/README.md for how to regenerate.
+/docs/recon/core-fn.php
+
+# Build output
+/build/
+/dist/
+*.zip
+
+# Local tooling
+.phpcs.xml
+phpcs.xml
+phpunit.xml
+.phpunit.result.cache
+/.wp-env.override.json
+
+# Editors and OS
+.idea/
+.vscode/
+*.sublime-*
+.DS_Store
+Thumbs.db
+desktop.ini
