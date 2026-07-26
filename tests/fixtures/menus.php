@@ -97,8 +97,19 @@ function mocam_fixture_production_menu(): array {
 		// Users and access.
 		'84.4' => array( 'Members', 'list_roles', 'roles', '', 'menu-top toplevel_page_roles', 'toplevel_page_roles', 'dashicons-groups' ),
 
-		// Something entirely unrecognisable, to exercise the ungrouped bucket.
+		/*
+		 * An obscure plugin with a describable purpose. Nothing recognises the
+		 * vendor, but "Widgets" is a real signal, so the keyword layer should
+		 * still place it. This is what the cascade exists for.
+		 */
 		'90'   => array( 'Zarqawi Widgets', 'manage_options', 'zarqawi-widgets-pro', '', 'menu-top', 'toplevel_page_zarqawi-widgets-pro', 'dashicons-screenoptions' ),
+
+		/*
+		 * A genuinely opaque item: invented vendor, meaningless name, generic
+		 * capability, no icon. There is nothing here to reason from, so it must
+		 * land in the always-visible Other group rather than being guessed at.
+		 */
+		'91'   => array( 'Blorpex', 'manage_options', 'blorpex-panel', '', 'menu-top', 'toplevel_page_blorpex-panel', '' ),
 	);
 
 	foreach ( $plugins as $position => $item ) {

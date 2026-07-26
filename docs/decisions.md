@@ -134,6 +134,87 @@ Must be confirmed before submission. Wrong value is not fatal to the plugin, but
 the plugin will not appear on the author's profile and the author will not be
 able to manage it.
 
+### D-008 — The detector is a cascade, not a lookup table
+
+**Requested mid-build:** cover every plugin in the directory, or provide a
+mechanism that can categorise any plugin.
+
+Enumerating ~60,000 plugins is not achievable or maintainable, and a table alone
+would fail on the sub-pages and add-ons that plugins register beyond their main
+menu item. So SPEC section 5.2's five steps were extended to eight layers, each
+more general than the last, first answer wins:
+
+| Layer | Signal | Decisive? |
+|---|---|---|
+| 1 | Exact menu slug, case-sensitive then case-insensitive | yes |
+| 2 | Registered post type from `edit.php?post_type=X` | yes |
+| 3 | Distinctive brand token anywhere in the slug | yes |
+| 4 | Vendor prefix at the start of the slug, boundary-checked | yes |
+| 5 | The capability guarding the item | yes |
+| 6 | Weighted keywords over title and slug | only above threshold |
+| 7 | The Dashicon the vendor chose | yes, last resort |
+| 8 | `ungrouped` | fallback |
+
+Three of these do the heavy lifting for plugins nobody has listed:
+
+- **Post type defaulting.** An unrecognised custom post type is `content`,
+  because that is what a post type is. This one rule correctly files every
+  custom post type on every site without naming any of them.
+- **Vendor prefixes and brand tokens.** `wpseo_titles`, `woo-variation-swatches`
+  and `elementor-custom-icons` are all placed without appearing in any table,
+  which is how the plugin copes with add-ons and sub-pages.
+- **Namespaced capabilities.** A plugin guarding its page with
+  `manage_woocommerce` has told us what it is. `manage_options` is deliberately
+  excluded, being the default for almost every settings page in existence.
+
+**Declining to answer is a feature.** Layer 6 refuses when no category clearly
+leads, or when the leader ties, or when the score is below threshold. An item in
+the always-visible Other group is one the administrator will notice and can
+move; an item filed somewhere plausible but wrong is one they will never think to
+look for.
+
+**Measured, not asserted.** A blind sweep of forty real plugins whose slugs are
+deliberately absent from the table scores **40/40**. The thirty-two-item
+production fixture is filed **31/32**, the one holdout being a deliberately
+meaningless item that must not be guessed at. Both are committed, the sweep as
+`test_vendor_tokens_generalise_to_unlisted_slugs` and
+`test_keywords_place_unheard_of_plugins`.
+
+Two scoring defects were found by that sweep and fixed:
+
+- **Title and slug are now weighted separately**, title double. Slugs are noisy:
+  `custom-login-page` contributes the word "page", a real content keyword that
+  says nothing about a login customiser, and it was outvoting the actual subject.
+- **Regular plurals were double-counting.** Keyword matching is boundary-aware at
+  the start of a word with a free tail, so `setting` already matches `settings`.
+  Listing both scored one piece of evidence twice. Eleven such pairs were
+  removed and the file now documents the rule.
+
+### D-009 — Two files added beyond SPEC section 11
+
+- `includes/class-categories.php` — category definitions and their translated
+  labels. Labels cannot live in the data file: translating them there would run
+  `__()` the moment the file is required, which can precede text-domain
+  availability and trip WordPress 6.7's `_load_textdomain_just_in_time` notice,
+  against SPEC section 15's zero-notice requirement.
+- `includes/data/categories.php` — the definitions themselves, kept alongside
+  `known-slugs.php` and `keyword-map.php` for consistency.
+
+Also added `bin/check-readme.php`, CLI-only and excluded from the zip, because
+SPEC section 10.3 requires the readme to validate and nothing was checking it.
+
+### D-010 — A byte order mark got into a data file, so it is now tested for
+
+A tooling default wrote UTF-8 **with** BOM into `includes/data/keyword-map.php`.
+A BOM ahead of `<?php` is emitted as body content, which in WordPress surfaces as
+"Cannot modify header information - headers already sent" and breaks redirects,
+cookies and the REST API. The unit suite caught it as unexpected output.
+
+`tests/unit/test-file-hygiene.php` now asserts, for every PHP file: no BOM,
+`<?php` on the first byte, no closing tag, and a direct-access guard on
+everything that ships. The data files are additionally required inside an output
+buffer to prove they emit nothing.
+
 ## Environment notes
 
 - The build machine had **no** WordPress install, PHP, Composer, WP-CLI or
