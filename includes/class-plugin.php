@@ -199,9 +199,13 @@ final class Plugin {
 			return;
 		}
 
-		// Tier one: always registered, because these must answer on request types
-		// where the sidebar is never rendered.
+		/*
+		 * Tier one: always registered, because these must answer on request types
+		 * where the sidebar is never rendered. The REST routes in particular are
+		 * reached by a REST request, which should_organize_menu() excludes.
+		 */
 		Capabilities::register();
+		Rest_Controller::register();
 
 		if ( ! $this->should_organize_menu() ) {
 			return;

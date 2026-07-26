@@ -135,6 +135,31 @@ final class Menu_Renderer {
 			array( 'dashicons' ),
 			MOCAM_VERSION
 		);
+
+		wp_enqueue_script(
+			'mocam-admin-menu',
+			MOCAM_PLUGIN_URL . 'assets/js/admin-menu.js',
+			array( 'wp-i18n' ),
+			MOCAM_VERSION,
+			true
+		);
+
+		wp_set_script_translations(
+			'mocam-admin-menu',
+			'menu-organizer-collapsible-admin-menu',
+			MOCAM_PLUGIN_DIR . 'languages'
+		);
+
+		$data = $this->script_data();
+
+		$data['restUrl'] = rest_url( Rest_Controller::NAMESPACE_V1 . '/state' );
+		$data['nonce']   = wp_create_nonce( 'wp_rest' );
+
+		wp_add_inline_script(
+			'mocam-admin-menu',
+			'window.mocamMenu = ' . wp_json_encode( $data ) . ';',
+			'before'
+		);
 	}
 
 	/**
