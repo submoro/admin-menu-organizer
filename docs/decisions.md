@@ -70,12 +70,49 @@ JS-injected, into a row whose height CSS reserves, so there is no layout shift.
 With JS disabled the stylesheet force-expands all groups, so the menu degrades
 to a grouped, fully usable sidebar and **no item is ever unreachable**.
 
+### D-005 — phpcs alone does not prove PHP 7.4 compatibility
+
+**Spec said (§10.5, §15):** pass `phpcs` against `PHPCompatibilityWP` with
+`testVersion 7.4-`, and treat that as the PHP 7.4 gate.
+
+**Reality:** the current stable release of `phpcompatibility/php-compatibility`
+is **9.3.5, from May 2019 — eighteen months before PHP 8.0 shipped**. It has no
+knowledge of PHP 8 syntax whatsoever. Verified by writing a canary class using
+`?->`, `match` and PHP 8 functions and running it through
+`--standard=PHPCompatibility --runtime-set testVersion 7.4-`: 117 sniffs
+registered, file processed, **zero findings**.
+
+So the spec's gate runs, and it still catches genuine PHP 7.x-era problems, but
+it would happily wave through a nullsafe operator that fatals on the plugin's
+own declared minimum.
+
+**Decision:** keep the phpcs rule, but do not rely on it. The binding PHP 7.4
+check is parsing every shipped file with a real **PHP 7.4.33** binary:
+
+- **Locally**, after every phase. Verified the check has teeth — the same canary
+  is rejected with `syntax error, unexpected '->'`.
+- **In CI**, as the dedicated `syntax-php74` job, which covers files no test
+  happens to execute. The PHPUnit matrix then covers runtime behaviour.
+
 ## Environment notes
 
 - The build machine had **no** WordPress install, PHP, Composer, WP-CLI or
-  Docker at the start of Phase 1. PHP 8.3.32 and Composer 2.10.2 (installer
-  SHA-384 verified against `composer.github.io/installer.sig`) were installed
-  during Phase 1.
+  Docker at the start of Phase 1. Installed during Phases 1 and 2:
+  - **PHP 8.3.32** (winget), the primary development runtime.
+  - **Composer 2.10.2**, installer SHA-384 verified against
+    `composer.github.io/installer.sig` before running.
+  - **PHP 7.4.33** (official windows.php.net archive build) at
+    `~/.claude-php-tools/php74/`, used solely as a syntax oracle. PHP 7.4 is not
+    in winget, being end of life.
+- **No database server and no Docker**, so the PHPUnit suite cannot run locally.
+  It runs in CI only. See the open question logged at the end of Phase 2.
+- Local verification command for the PHP 7.4 gate:
+
+  ```
+  Get-ChildItem -Recurse -Filter *.php |
+    Where-Object { $_.FullName -notmatch '\\vendor\\|\\docs\\recon\\' } |
+    ForEach-Object { & "$HOME\.claude-php-tools\php74\php.exe" -l $_.FullName }
+  ```
 - Current WordPress stable at time of writing is **7.0.2**. The
   `Requires at least: 6.4` floor from SPEC §10.2 was validated by diffing both
   menu files across 6.4 and 7.0.2 — no relevant change.

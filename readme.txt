@@ -1,0 +1,119 @@
+=== Menu Organizer - Collapsible Admin Menu ===
+Contributors: moamenelabd
+Tags: admin menu, menu order, sidebar, accordion, admin
+Requires at least: 6.4
+Tested up to: 7.0.2
+Requires PHP: 7.4
+Stable tag: 1.0.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+Group your admin sidebar into named, collapsible categories. Sorts known plugins automatically, with full drag-and-drop control.
+
+== Description ==
+
+A busy WordPress site ends up with thirty to sixty plugins, and every one of them adds a top-level item to the admin sidebar. The result is a flat, unsorted list several screens long, with an SEO plugin sitting next to a mail delivery plugin sitting next to a firewall.
+
+Menu Organizer groups those items into named, collapsible categories inside the sidebar you already have. It sorts what it recognises automatically, and lets you rearrange everything else by dragging it.
+
+= What it does =
+
+* Groups top-level menu items into collapsible categories such as Content, Commerce, Design, SEO, Security and Tools.
+* Recognises many popular plugins on sight and files them in the right category.
+* Lets you override every automatic decision by drag and drop, with a keyboard-accessible alternative for every drag.
+* Remembers which groups you left open, per user.
+* Always expands the group containing the page you are on.
+* Lets each user personalise their own menu, or inherit the site-wide arrangement. Administrators can turn personalisation off.
+* Supports per-role layouts, so an editor and a shop manager can see different arrangements.
+
+= What it deliberately does not do =
+
+* It never hides or removes a menu item. Everything WordPress or a plugin registered is still reachable. Anything the plugin does not recognise goes into an "Other" group at the bottom, which is always visible.
+* It does not modify capabilities, so it cannot grant or revoke access to anything.
+* It does not restyle the rest of the admin.
+* It does not touch the network admin menu on multisite. That screen is left exactly as WordPress renders it.
+
+= Privacy and external requests =
+
+This plugin makes **no external HTTP requests of any kind**. It does not call home, it has no analytics, it collects no data, it sends nothing anywhere, and it contains no tracking of any sort. Everything it stores lives in your own database, in your site's options table and user meta.
+
+= Recovering from a problem =
+
+If the sidebar ever misbehaves, there are two escape hatches that always work:
+
+1. Add `?mocam=off` to any admin URL to disable the plugin for that one page load.
+2. Add `define( 'MOCAM_DISABLE', true );` to `wp-config.php` to disable it entirely.
+
+Both leave your saved arrangement intact.
+
+= Developers =
+
+The grouping rules are filterable, so you can teach it about your own plugins without forking:
+
+* `mocam_known_slugs` - the map of menu slug to group ID.
+* `mocam_category_definitions` - the list of available groups.
+* `mocam_resolve_group` - the group chosen for a single menu item.
+* `mocam_resolved_layout` - the final layout, immediately before it is rendered.
+
+== Installation ==
+
+1. Upload the plugin folder to `/wp-content/plugins/`, or install it through **Plugins > Add New** in your dashboard.
+2. Activate it through the **Plugins** screen.
+3. Your sidebar is grouped straight away, using the automatic rules.
+4. To change anything, go to **Settings > Menu Organizer**.
+
+== Frequently Asked Questions ==
+
+= Will this hide any of my menu items? =
+
+No. It only reorders and groups. Every item stays present and reachable. Anything it does not recognise is placed in an always-visible "Other" group rather than being tucked away.
+
+= Can it lock me out of a settings page? =
+
+No. The plugin never changes a menu item's required capability, so it cannot affect what you are allowed to reach. If the sidebar itself ever renders badly, `?mocam=off` on any admin URL restores the stock menu for that page load.
+
+= Does it work with other menu plugins? =
+
+It is built to coexist. It runs at a late priority and preserves the relative position of any menu item it does not recognise, including items another plugin has already moved. It has been checked alongside Admin Menu Editor.
+
+= Does each user get their own arrangement? =
+
+Yes, if you allow it. There is a site-wide default that an administrator sets, optional per-role layouts, and an optional personal override for each user with a one-click reset back to the site default. Administrators can switch personalisation off entirely.
+
+= Does it support right-to-left languages? =
+
+Yes. The sidebar is laid out with CSS logical properties, so it mirrors correctly in RTL languages including Arabic, and it has been checked with WPML active.
+
+= Does it work with all the admin colour schemes? =
+
+Yes. All eight colour schemes that ship with WordPress are supported, and the plugin inherits your scheme's colours rather than hardcoding its own.
+
+= Can I use it without a mouse? =
+
+Yes. Every group can be opened and closed from the keyboard, and the drag-and-drop editor has a "Move to group" control on every item so no arrangement requires dragging.
+
+= Does it send any of my data anywhere? =
+
+No. The plugin makes no external requests whatsoever and collects no data.
+
+= What happens if I deactivate it? =
+
+Your sidebar returns to exactly how WordPress renders it by default, with no residue. Your saved arrangement is kept, so reactivating restores it. Deleting the plugin removes every option and user meta key it created.
+
+== Screenshots ==
+
+1. The admin sidebar with items grouped into collapsible categories.
+2. A collapsed group showing an aggregated update count on its header.
+3. The drag-and-drop layout editor under Settings > Menu Organizer.
+4. The Groups tab, where categories are created, renamed and given icons.
+5. The personal layout panel, where a user overrides the site default.
+
+== Changelog ==
+
+= 1.0.0 =
+* Initial release.
+
+== Upgrade Notice ==
+
+= 1.0.0 =
+Initial release.

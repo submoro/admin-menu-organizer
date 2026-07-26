@@ -1,0 +1,45 @@
+# Everything listed here is excluded from the distribution zip.
+# The zip must contain only what the plugin needs at runtime.
+
+# Version control
+.git
+.github
+.gitignore
+.gitattributes
+.distignore
+
+# Development tooling. The plugin has no runtime Composer dependencies, so
+# vendor/ holds dev tools only and must never ship.
+composer.json
+composer.lock
+vendor
+node_modules
+package.json
+package-lock.json
+phpcs.xml.dist
+phpunit.xml.dist
+.phpunit.result.cache
+.wp-env.json
+.wp-env.override.json
+
+# Tests, tooling and documentation
+tests
+docs
+bin
+SPEC.md
+
+# Directory assets. These are uploaded to the WordPress.org assets/ SVN
+# directory, not bundled in the plugin itself.
+.wordpress-org
+
+# Build output
+build
+dist
+*.zip
+
+# Editors and OS cruft
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+desktop.ini

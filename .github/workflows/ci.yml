@@ -1,0 +1,214 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  # SPEC 10.5: phpcs against WordPress, WordPress-Extra, WordPress-Docs and
+  # PHPCompatibilityWP with testVersion 7.4-. Must report zero errors.
+  coding-standards:
+    name: Coding standards
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: cs2pr
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
+
+      - name: Run phpcs
+        run: composer run lint -- --report-full --report-checkstyle=./phpcs-report.xml
+
+      - name: Annotate the diff with any violations
+        if: ${{ failure() }}
+        run: cs2pr ./phpcs-report.xml
+
+      - name: Validate readme.txt
+        if: ${{ always() }}
+        run: composer run check:readme
+
+  # The real PHP 7.4 guarantee.
+  #
+  # PHPCompatibility 9.3.5 is the current stable release and predates PHP 8.0,
+  # so it cannot detect PHP 8 syntax at all. Running phpcs with
+  # testVersion 7.4- therefore proves far less than it appears to. Parsing every
+  # shipped file with an actual PHP 7.4 binary is the only deterministic check,
+  # and unlike the test suite it covers files no test happens to execute.
+  syntax-php74:
+    name: PHP 7.4 syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP 7.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: none
+
+      - name: Lint every shipped file
+        run: |
+          set -euo pipefail
+          status=0
+          while IFS= read -r file; do
+            if ! php -l "$file" > /dev/null 2>&1; then
+              echo "::error file=${file}::$(php -l "$file" 2>&1 | head -n1)"
+              status=1
+            fi
+          done < <(find . -name '*.php' \
+                     -not -path './vendor/*' \
+                     -not -path './node_modules/*' \
+                     -not -path './docs/recon/*')
+          exit "${status}"
+
+  # SPEC 15: the suite must pass on PHP 7.4, 8.1 and 8.3, against both the
+  # declared WordPress floor and current stable.
+  unit-tests:
+    name: PHP ${{ matrix.php }} / WP ${{ matrix.wordpress }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: '7.4'
+            wordpress: '6.4'
+          - php: '8.1'
+            wordpress: 'latest'
+          - php: '8.3'
+            wordpress: '6.4'
+          - php: '8.3'
+            wordpress: 'latest'
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+          MYSQL_DATABASE: wordpress_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mysqli
+          coverage: none
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
+
+      - name: Install the WordPress test library
+        env:
+          WP_VERSION: ${{ matrix.wordpress }}
+        run: |
+          set -euo pipefail
+
+          TESTS_DIR="${RUNNER_TEMP}/wordpress-tests-lib"
+          CORE_DIR="${RUNNER_TEMP}/wordpress"
+          mkdir -p "${TESTS_DIR}" "${CORE_DIR}"
+
+          if [ "${WP_VERSION}" = "latest" ]; then
+            WP_TAG=$(curl -fsSL https://api.wordpress.org/core/version-check/1.7/ \
+              | php -r 'echo json_decode(stream_get_contents(STDIN), true)["offers"][0]["current"];')
+          else
+            WP_TAG="${WP_VERSION}"
+          fi
+          echo "Testing against WordPress ${WP_TAG}"
+
+          # Core, from the official release tarball.
+          curl -fsSL "https://wordpress.org/wordpress-${WP_TAG}.tar.gz" \
+            | tar --strip-components=1 -zxf - -C "${CORE_DIR}"
+
+          # The test library, from the matching develop tag.
+          curl -fsSL "https://github.com/WordPress/wordpress-develop/archive/refs/tags/${WP_TAG}.tar.gz" \
+            | tar --strip-components=2 -zxf - -C "${TESTS_DIR}" \
+              "wordpress-develop-${WP_TAG}/tests/phpunit/includes" \
+              "wordpress-develop-${WP_TAG}/tests/phpunit/data"
+
+          curl -fsSL -o "${TESTS_DIR}/wp-tests-config.php" \
+            "https://raw.githubusercontent.com/WordPress/wordpress-develop/${WP_TAG}/wp-tests-config-sample.php"
+
+          sed -i \
+            -e "s!dirname( __FILE__ ) . '/src/'!'${CORE_DIR}/'!" \
+            -e "s/youremptytestdbnamehere/wordpress_test/" \
+            -e "s/yourusernamehere/root/" \
+            -e "s/yourpasswordhere//" \
+            -e "s/localhost/127.0.0.1/" \
+            "${TESTS_DIR}/wp-tests-config.php"
+
+          echo "WP_TESTS_DIR=${TESTS_DIR}" >> "${GITHUB_ENV}"
+
+      - name: Run PHPUnit
+        run: composer run test
+
+  # SPEC 10.5: the official Plugin Check plugin, both check sets, zero errors.
+  plugin-check:
+    name: Plugin Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Plugin Check
+        uses: wordpress/plugin-check-action@v1
+        with:
+          build-dir: './'
+          categories: |
+            general
+            plugin_repo
+            security
+            accessibility
+            performance
+
+  # SPEC 15: zero outbound HTTP requests. Belt and braces alongside the runtime
+  # pre_http_request assertion, this fails the build if any of the forbidden
+  # network primitives appear in shipped code at all.
+  no-outbound-requests:
+    name: No outbound requests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assert the plugin contains no network calls
+        run: |
+          set -euo pipefail
+
+          PATTERN='wp_remote_|curl_init|curl_exec|fsockopen|file_get_contents\s*\(\s*["'"'"']https\?:|fopen\s*\(\s*["'"'"']https\?:'
+
+          # docs/ and tests/ are not shipped; .distignore excludes them.
+          if grep -rnE "${PATTERN}" \
+               --include='*.php' --include='*.js' \
+               --exclude-dir=vendor --exclude-dir=node_modules \
+               --exclude-dir=docs --exclude-dir=tests \
+               . ; then
+            echo "::error::Found an outbound network call in shipped code. SPEC section 8 forbids this."
+            exit 1
+          fi
+
+          echo "No outbound network calls found."

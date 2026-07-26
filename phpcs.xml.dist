@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<ruleset name="Menu Organizer - Collapsible Admin Menu">
+
+	<description>Coding standards for Menu Organizer, per SPEC section 10.5.</description>
+
+	<!-- Scan the whole plugin by default. -->
+	<file>.</file>
+
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/build/*</exclude-pattern>
+	<exclude-pattern>*/languages/*</exclude-pattern>
+	<exclude-pattern>*/.wordpress-org/*</exclude-pattern>
+
+	<!--
+		The recon harnesses in docs/recon are diagnostic scripts that run outside
+		WordPress against an extracted copy of core. They are not shipped, and
+		holding them to the plugin's escaping and prefixing rules would be
+		meaningless.
+	-->
+	<exclude-pattern>*/docs/recon/*</exclude-pattern>
+
+	<!--
+		bin/ holds standalone CLI build tooling that runs outside WordPress and is
+		excluded from the distribution zip. WordPress escaping, prefixing and
+		filesystem rules do not apply to it.
+	-->
+	<exclude-pattern>*/bin/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="basepath" value="."/>
+	<arg name="colors"/>
+	<arg name="parallel" value="8"/>
+	<arg value="sp"/>
+
+	<!-- SPEC 10.5: WordPress, WordPress-Extra and WordPress-Docs. -->
+	<rule ref="WordPress"/>
+	<rule ref="WordPress-Extra"/>
+	<rule ref="WordPress-Docs"/>
+
+	<!-- SPEC 10.5: PHPCompatibilityWP with testVersion 7.4-. -->
+	<rule ref="PHPCompatibilityWP"/>
+	<config name="testVersion" value="7.4-"/>
+
+	<!-- SPEC 10.2: the plugin's declared floor. Drives the deprecation checks. -->
+	<config name="minimum_wp_version" value="6.4"/>
+
+	<!-- SPEC 2: every global symbol carries a plugin prefix. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="MOCAM"/>
+				<element value="mocam"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- SPEC 9: the text domain must be this literal string everywhere. -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="menu-organizer-collapsible-admin-menu"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!--
+		The bootstrap is deliberately PHP 5.6-parseable so that the "requires PHP
+		7.4" notice can render instead of the file causing a parse error on an
+		unsupported host. That means it cannot use the 7.4 syntax the rest of the
+		plugin uses, and it must not be flagged for it.
+	-->
+	<rule ref="PHPCompatibility.FunctionDeclarations.NewParamTypeDeclarations">
+		<exclude-pattern>menu-organizer-collapsible-admin-menu.php</exclude-pattern>
+	</rule>
+	<rule ref="PHPCompatibility.FunctionDeclarations.NewReturnTypeDeclarations">
+		<exclude-pattern>menu-organizer-collapsible-admin-menu.php</exclude-pattern>
+	</rule>
+
+	<!-- The test suite is not held to the plugin's file-naming convention. -->
+	<rule ref="WordPress.Files.FileName">
+		<exclude-pattern>*/tests/*</exclude-pattern>
+	</rule>
+
+</ruleset>
