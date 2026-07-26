@@ -1,0 +1,396 @@
+/**
+ * Menu Organizer - the collapsible sidebar.
+ *
+ * Written entirely with CSS logical properties, so the sidebar mirrors correctly
+ * in RTL without a generated rtl.css. SPEC section 6.4 makes RTL a hard
+ * requirement because the target site runs WPML with Arabic; using
+ * margin-inline-start rather than margin-left means there is one stylesheet to
+ * keep correct instead of two.
+ *
+ * On colour: SPEC section 6.4 asks for "core CSS custom properties", but core has
+ * none for the admin colour schemes. Verified by inspection of
+ * wp-admin/css/colors/<scheme>/colors.css in WordPress 7.0.2, every one of which
+ * sets concrete colours on #adminmenu and defines no custom properties at all.
+ * The equivalent honest approach is used instead: header rows paint no background
+ * of their own, so the scheme's own sidebar colour shows through, and text colour
+ * is taken from one custom property whose value is set per scheme from the values
+ * core actually uses, keyed off the admin-color-* body class core already emits.
+ *
+ * @package MenuOrganizerCollapsibleAdminMenu
+ */
+
+/* -------------------------------------------------------------------------
+ * Per-scheme text colour, taken from what each scheme sets on #adminmenu a.
+ * Seven of the nine use #fff, so that is the default and only two need stating.
+ * ---------------------------------------------------------------------- */
+
+#adminmenu {
+	--mocam-header-color: #fff;
+	--mocam-header-hover: #fff;
+	--mocam-row-height: 30px;
+	--mocam-indent: 6px;
+}
+
+body.admin-color-fresh #adminmenu {
+	--mocam-header-color: #f0f0f1;
+}
+
+body.admin-color-light #adminmenu {
+	--mocam-header-color: #333;
+	--mocam-header-hover: #000;
+}
+
+/* -------------------------------------------------------------------------
+ * Header rows.
+ *
+ * Core renders these as an empty <li>, because the capability check on the
+ * synthetic item deliberately fails. The label and icon arrive as CSS custom
+ * properties printed inline per request, which means the header is fully
+ * readable with JavaScript disabled. The script upgrades it to a real <button>
+ * for keyboard and screen-reader use.
+ * ---------------------------------------------------------------------- */
+
+#adminmenu li.mocam-group-header {
+	position: relative;
+	margin: 6px 0 0;
+	padding: 0;
+	background: transparent;
+	line-height: normal;
+}
+
+#adminmenu li.mocam-group-header:first-child {
+	margin-block-start: 0;
+}
+
+/*
+ * The no-JavaScript presentation. Rendered on the <li> itself so it exists
+ * before any script runs, and suppressed once the script has replaced it with a
+ * button, so the label is never announced twice.
+ */
+#adminmenu li.mocam-group-header::before {
+	content: var(--mocam-icon, "\f228") " " var(--mocam-label, "");
+	display: block;
+	box-sizing: border-box;
+	min-height: var(--mocam-row-height);
+	padding: 7px 12px 7px 10px;
+	padding-inline: 10px 12px;
+	color: var(--mocam-header-color);
+	font-family: dashicons, sans-serif;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	opacity: 0.72;
+}
+
+#adminmenu li.mocam-group-header.mocam-enhanced::before {
+	content: none;
+}
+
+/* The interactive header, injected by the script. */
+#adminmenu .mocam-group-toggle {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	box-sizing: border-box;
+	width: 100%;
+	min-height: var(--mocam-row-height);
+	margin: 0;
+	padding: 7px 12px 7px 10px;
+	padding-inline: 10px 12px;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	box-shadow: none;
+	color: var(--mocam-header-color);
+	font-family: inherit;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	line-height: 1.4;
+	text-align: start;
+	text-transform: uppercase;
+	cursor: pointer;
+	opacity: 0.72;
+	transition: opacity 0.15s ease-in-out;
+}
+
+#adminmenu .mocam-group-toggle:hover,
+#adminmenu .mocam-group-toggle:focus {
+	color: var(--mocam-header-hover);
+	opacity: 1;
+}
+
+/*
+ * A visible focus ring is mandatory: SPEC section 6.4 requires full keyboard
+ * operation, and an invisible focus state makes that useless. Offset inwards so
+ * it is not clipped by the sidebar edge.
+ */
+#adminmenu .mocam-group-toggle:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: -2px;
+}
+
+#adminmenu .mocam-group-toggle .mocam-toggle-icon {
+	flex: 0 0 auto;
+	width: 16px;
+	height: 16px;
+	font-family: dashicons, sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 1;
+	text-transform: none;
+}
+
+#adminmenu .mocam-group-toggle .mocam-toggle-icon::before {
+	content: var(--mocam-icon, "\f228");
+}
+
+#adminmenu .mocam-group-toggle .mocam-toggle-label {
+	flex: 1 1 auto;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* Chevron. Rotates rather than swapping glyphs, so the motion reads as one
+ * object turning and there is nothing to preload. */
+#adminmenu .mocam-group-toggle .mocam-toggle-chevron {
+	flex: 0 0 auto;
+	width: 16px;
+	height: 16px;
+	font-family: dashicons, sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 1;
+	text-transform: none;
+	transition: transform 0.2s ease-in-out;
+}
+
+#adminmenu .mocam-group-toggle .mocam-toggle-chevron::before {
+	content: "\f347"; /* dashicons-arrow-up. */
+}
+
+#adminmenu .mocam-group-toggle[aria-expanded="false"] .mocam-toggle-chevron {
+	transform: rotate(-180deg);
+}
+
+/* Aggregated update count for a collapsed group. SPEC section 6.3. */
+#adminmenu .mocam-group-toggle .mocam-toggle-badge {
+	flex: 0 0 auto;
+	min-width: 18px;
+	padding: 0 6px;
+	border-radius: 10px;
+	background: #d63638;
+	color: #fff;
+	font-size: 10px;
+	font-weight: 600;
+	line-height: 18px;
+	text-align: center;
+}
+
+/* Only shown while the group is closed; while open the individual rows already
+ * carry their own counts, and repeating the total is noise. */
+#adminmenu .mocam-group-toggle[aria-expanded="true"] .mocam-toggle-badge {
+	display: none;
+}
+
+/* -------------------------------------------------------------------------
+ * The accordion itself.
+ *
+ * Collapsed state arrives as a body class rendered by the server, so the browser
+ * knows what is closed before it paints. That is what makes this flash-free:
+ * there is no moment at which an expanded group is visible and then hidden.
+ * ---------------------------------------------------------------------- */
+
+/*
+ * Rows belonging to a closed group. The class is applied by the server, not by a
+ * selector pairing a body class with an item class, because group IDs are
+ * user-creatable and such selectors would have to be generated per request. This
+ * way the stylesheet stays static and cacheable while the first painted frame is
+ * still correct.
+ */
+#adminmenu li.mocam-collapsed-member {
+	display: none;
+}
+
+/* An empty group shows nothing at all: no header, no rows. SPEC section 6.1
+ * forbids a focusable header with no members behind it. */
+#adminmenu li.mocam-group-empty {
+	display: none;
+}
+
+/* The catch-all can never be collapsed, so its chevron would be a lie. */
+#adminmenu li.mocam-header-permanent .mocam-toggle-chevron {
+	display: none;
+}
+
+/* -------------------------------------------------------------------------
+ * Motion.
+ * ---------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+	#adminmenu .mocam-group-toggle,
+	#adminmenu .mocam-group-toggle .mocam-toggle-chevron {
+		transition: none;
+	}
+}
+
+/* -------------------------------------------------------------------------
+ * Folded sidebar.
+ *
+ * Core collapses the sidebar to icons only, either because the user collapsed it
+ * or because the viewport is between 782px and 960px and core auto-folded it.
+ * The header keeps its icon and drops its label, matching how core treats its
+ * own menu names, and stops being interactive: with no labels visible there is
+ * nothing to disclose, and every group is shown expanded so no item becomes
+ * unreachable.
+ * ---------------------------------------------------------------------- */
+
+.folded #adminmenu li.mocam-group-header,
+.auto-fold #adminmenu li.mocam-group-header {
+	margin-block-start: 4px;
+}
+
+.folded #adminmenu .mocam-group-toggle .mocam-toggle-label,
+.folded #adminmenu .mocam-group-toggle .mocam-toggle-chevron,
+.folded #adminmenu .mocam-group-toggle .mocam-toggle-badge {
+	display: none;
+}
+
+.folded #adminmenu .mocam-group-toggle {
+	justify-content: center;
+	padding-inline: 0;
+}
+
+.folded #adminmenu li.mocam-group-header::before {
+	content: var(--mocam-icon, "\f228");
+	text-align: center;
+	padding-inline: 0;
+}
+
+/* Nothing may be hidden while folded, because the flyouts are the only way to
+ * reach a submenu and a hidden parent has no flyout. */
+.folded #adminmenu li.mocam-collapsed-member {
+	display: block;
+}
+
+/* -------------------------------------------------------------------------
+ * Responsive.
+ *
+ * Below 782px core switches the sidebar to the mobile menu, which is a single
+ * full-width list revealed by the toolbar toggle. Headers stay useful there, so
+ * they are given a larger touch target.
+ * ---------------------------------------------------------------------- */
+
+@media screen and (max-width: 960px) {
+
+	.auto-fold #adminmenu .mocam-group-toggle .mocam-toggle-label,
+	.auto-fold #adminmenu .mocam-group-toggle .mocam-toggle-chevron,
+	.auto-fold #adminmenu .mocam-group-toggle .mocam-toggle-badge {
+		display: none;
+	}
+
+	.auto-fold #adminmenu .mocam-group-toggle {
+		justify-content: center;
+		padding-inline: 0;
+	}
+
+	.auto-fold #adminmenu li.mocam-collapsed-member {
+		display: block;
+	}
+}
+
+@media screen and (max-width: 782px) {
+
+	/* Core un-folds the menu again at this breakpoint, so the labels come back
+	 * and the accordion becomes meaningful once more. */
+	.auto-fold #adminmenu .mocam-group-toggle .mocam-toggle-label,
+	.auto-fold #adminmenu .mocam-group-toggle .mocam-toggle-chevron,
+	.auto-fold #adminmenu .mocam-group-toggle .mocam-toggle-badge {
+		display: block;
+	}
+
+	.auto-fold #adminmenu .mocam-group-toggle {
+		justify-content: flex-start;
+		padding-inline: 12px;
+	}
+
+	#adminmenu .mocam-group-toggle {
+		min-height: 40px;
+		padding-block: 10px;
+		font-size: 13px;
+	}
+
+	.auto-fold #adminmenu li.mocam-collapsed-member {
+		display: none;
+	}
+
+	#adminmenu li.mocam-group-header::before {
+		min-height: 40px;
+		padding-block: 10px;
+		font-size: 13px;
+	}
+}
+
+/* -------------------------------------------------------------------------
+ * High contrast and forced colours.
+ *
+ * In forced-colors mode the browser replaces the palette wholesale, so opacity
+ * tricks and transparent backgrounds stop conveying anything. System colour
+ * keywords are used instead, and the header is given a border so it remains
+ * distinguishable from the items beneath it.
+ * ---------------------------------------------------------------------- */
+
+@media (forced-colors: active) {
+
+	#adminmenu li.mocam-group-header::before,
+	#adminmenu .mocam-group-toggle {
+		border-block-end: 1px solid CanvasText;
+		color: CanvasText;
+		opacity: 1;
+	}
+
+	#adminmenu .mocam-group-toggle:focus-visible {
+		outline: 2px solid Highlight;
+	}
+
+	#adminmenu .mocam-group-toggle .mocam-toggle-badge {
+		border: 1px solid CanvasText;
+		background: Canvas;
+		color: CanvasText;
+	}
+}
+
+/* -------------------------------------------------------------------------
+ * Separators.
+ *
+ * Core's own spacers are moved to the end of the menu by the reordering pass,
+ * because a line drawn through the middle of a group is worse than no line. They
+ * are hidden rather than removed: they remain in the menu array, so nothing is
+ * lost, and they return the instant the plugin is deactivated. They carry no
+ * label, no link and no capability, and core renders them aria-hidden, so hiding
+ * them conceals no functionality.
+ * ---------------------------------------------------------------------- */
+
+body.mocam-active #adminmenu li.wp-menu-separator {
+	display: none;
+}
+
+/* -------------------------------------------------------------------------
+ * Screen reader text, matching core's own utility class so the appearance is
+ * identical if core changes it.
+ * ---------------------------------------------------------------------- */
+
+#adminmenu .mocam-sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	border: 0;
+	clip-path: inset(50%);
+	word-wrap: normal !important;
+}

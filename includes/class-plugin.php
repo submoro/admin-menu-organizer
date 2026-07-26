@@ -137,6 +137,14 @@ final class Plugin {
 	private $layout = null;
 
 	/**
+	 * The renderer, once the menu has been built.
+	 *
+	 * @since 1.0.0
+	 * @var Menu_Renderer|null
+	 */
+	private $renderer = null;
+
+	/**
 	 * Private constructor. Use instance().
 	 *
 	 * @since 1.0.0
@@ -202,6 +210,47 @@ final class Plugin {
 		// Tier two: menu decoration.
 		add_filter( 'custom_menu_order', array( $this, 'enable_custom_menu_order' ), Menu_Order::PRIORITY );
 		add_filter( 'menu_order', array( $this, 'filter_menu_order' ), Menu_Order::PRIORITY );
+
+		/*
+		 * The renderer is built on admin_menu at a late priority, because it needs
+		 * the finished menu to know which groups have members. It registers its own
+		 * hooks, all of which fire later still.
+		 */
+		add_action( 'admin_menu', array( $this, 'register_renderer' ), Menu_Order::PRIORITY );
+	}
+
+	/**
+	 * Builds and registers the renderer once the menu is final.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function register_renderer(): void {
+		$reader = $this->reader();
+
+		if ( ! $reader->is_usable() ) {
+			return;
+		}
+
+		$this->renderer = new Menu_Renderer(
+			$reader,
+			$this->layout(),
+			Layout_Repository::collapsed( get_current_user_id() )
+		);
+
+		$this->renderer->register();
+	}
+
+	/**
+	 * Returns the renderer, or null when the menu was not worth decorating.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return Menu_Renderer|null
+	 */
+	public function renderer(): ?Menu_Renderer {
+		return $this->renderer;
 	}
 
 	/**
