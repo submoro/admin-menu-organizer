@@ -94,6 +94,46 @@ check is parsing every shipped file with a real **PHP 7.4.33** binary:
 - **In CI**, as the dedicated `syntax-php74` job, which covers files no test
   happens to execute. The PHPUnit matrix then covers runtime behaviour.
 
+### D-006 — The test suite is split into unit and integration
+
+**Spec said (§12.1):** "PHPUnit via `wp-env` and the WordPress test suite."
+
+**Problem:** that makes every test require a database, which this build machine
+does not have and which the agreed toolchain does not include. Deferring all
+verification to CI would mean reporting phases complete on unrun tests, against
+§14.
+
+**Decision:** two suites.
+
+| Suite | Location | Needs | Runs |
+|---|---|---|---|
+| `unit` | `tests/unit/` | Nothing but PHP and Composer | Locally, every phase, plus CI on 7.4/8.1/8.3 |
+| `integration` | `tests/integration/` | WordPress, the test library, a database | CI only |
+
+Configured by `phpunit-unit.xml.dist` and `phpunit.xml.dist` respectively;
+`composer run test` is aliased to the unit suite because that is the one that
+always works.
+
+This has a design consequence worth stating plainly, and it is a good one: the
+components §12.1 wants covered — the detector, the layout sanitiser, the
+`menu_order` builder and the migration chain — must be written as **pure
+functions of their inputs**, taking the menu array and the layout as arguments
+rather than reaching for `$GLOBALS['menu']` or calling `get_option()` directly.
+The WordPress-facing classes stay thin wrappers that fetch and delegate. That is
+better structure regardless of the test arrangement.
+
+### D-007 — Open: the readme Contributors field is not yet correct
+
+`Contributors:` in `readme.txt` currently reads `moamenelabd`, which is a guess.
+It requires a **WordPress.org username**, the slug that appears at
+`profiles.wordpress.org/<username>/` — not the email address used to sign in,
+and not a display name. An email address there would fail directory validation
+and would publish the address on the plugin page.
+
+Must be confirmed before submission. Wrong value is not fatal to the plugin, but
+the plugin will not appear on the author's profile and the author will not be
+able to manage it.
+
 ## Environment notes
 
 - The build machine had **no** WordPress install, PHP, Composer, WP-CLI or

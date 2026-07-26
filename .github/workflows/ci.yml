@@ -78,10 +78,36 @@ jobs:
                      -not -path './docs/recon/*')
           exit "${status}"
 
+  # The WordPress-independent suite. No database, so it is fast and runs across
+  # the full PHP range as an early signal.
+  unit-tests:
+    name: Unit / PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '7.4', '8.1', '8.3' ]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
+
+      - name: Run the unit suite
+        run: composer run test:unit
+
   # SPEC 15: the suite must pass on PHP 7.4, 8.1 and 8.3, against both the
   # declared WordPress floor and current stable.
-  unit-tests:
-    name: PHP ${{ matrix.php }} / WP ${{ matrix.wordpress }}
+  integration-tests:
+    name: Integration / PHP ${{ matrix.php }} / WP ${{ matrix.wordpress }}
     runs-on: ubuntu-latest
 
     strategy:
@@ -165,8 +191,8 @@ jobs:
 
           echo "WP_TESTS_DIR=${TESTS_DIR}" >> "${GITHUB_ENV}"
 
-      - name: Run PHPUnit
-        run: composer run test
+      - name: Run the integration suite
+        run: composer run test:integration
 
   # SPEC 10.5: the official Plugin Check plugin, both check sets, zero errors.
   plugin-check:

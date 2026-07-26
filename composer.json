@@ -31,13 +31,22 @@
 		"lint:fix": "phpcbf",
 		"lint:report": "phpcs --report=summary",
 		"check:readme": "php bin/check-readme.php readme.txt",
-		"test": "phpunit"
+		"test": "@test:unit",
+		"test:unit": "phpunit -c phpunit-unit.xml.dist",
+		"test:integration": "phpunit -c phpunit.xml.dist"
 	},
 	"scripts-descriptions": {
 		"lint": "Check the codebase against WordPress Coding Standards. Note that the bundled PHPCompatibility 9.3.5 predates PHP 8 and cannot detect PHP 8 syntax; the binding 7.4 check is the syntax-php74 CI job.",
 		"lint:fix": "Auto-fix the coding standard violations that can be fixed safely.",
 		"lint:report": "Print a per-file summary of coding standard violations.",
 		"check:readme": "Validate readme.txt against the WordPress.org readme standard.",
-		"test": "Run the PHPUnit suite against the WordPress test library."
+		"test": "Alias of test:unit, the suite that runs anywhere.",
+		"test:unit": "Run the WordPress-independent tests. Needs no database.",
+		"test:integration": "Run the tests that need WordPress and a database. Set WP_TESTS_DIR first."
+	},
+	"autoload-dev": {
+		"classmap": [
+			"includes/"
+		]
 	}
 }

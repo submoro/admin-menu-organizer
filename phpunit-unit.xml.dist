@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	The integration suite. Needs a WordPress install, the WordPress test library
-	and a database, so it runs in CI rather than locally.
-	Run with: composer run test:integration
+	The unit suite. Covers logic with no WordPress dependency, so it needs no
+	database and no test library, and can gate every phase locally.
+	Run with: composer run test:unit
 -->
 <phpunit
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
-	bootstrap="tests/bootstrap.php"
+	bootstrap="tests/bootstrap-unit.php"
 	backupGlobals="false"
 	colors="true"
 	beStrictAboutTestsThatDoNotTestAnything="true"
@@ -20,8 +20,8 @@
 	failOnWarning="true"
 	>
 	<testsuites>
-		<testsuite name="integration">
-			<directory suffix=".php">./tests/integration/</directory>
+		<testsuite name="unit">
+			<directory suffix=".php">./tests/unit/</directory>
 		</testsuite>
 	</testsuites>
 
