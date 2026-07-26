@@ -1,0 +1,198 @@
+/**
+ * Menu Organizer - settings screen.
+ *
+ * Logical properties throughout, so the editor mirrors in RTL alongside the
+ * sidebar it configures.
+ *
+ * @package MenuOrganizerCollapsibleAdminMenu
+ */
+
+.mocam-settings .mocam-intro {
+	max-width: 70ch;
+	font-size: 14px;
+}
+
+/* -------------------------------------------------------------------------
+ * The two-column editor. Auto-fill rather than a fixed column count, so a site
+ * with four groups and a site with twenty both look deliberate.
+ * ---------------------------------------------------------------------- */
+
+.mocam-editor {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	gap: 16px;
+	margin-block: 20px;
+}
+
+.mocam-group {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	background: #fff;
+}
+
+.mocam-group-title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+	padding: 10px 12px;
+	border-block-end: 1px solid #c3c4c7;
+	background: #f6f7f7;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.mocam-badge-permanent {
+	margin-inline-start: auto;
+	padding: 2px 8px;
+	border-radius: 9px;
+	background: #dcdcde;
+	color: #50575e;
+	font-size: 11px;
+	font-weight: 400;
+	text-transform: lowercase;
+}
+
+.mocam-droplist {
+	flex: 1 1 auto;
+	min-height: 56px;
+	margin: 0;
+	padding: 8px;
+	list-style: none;
+}
+
+.mocam-chip {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0 0 6px;
+	padding: 6px 8px;
+	border: 1px solid #dcdcde;
+	border-radius: 3px;
+	background: #fff;
+}
+
+.mocam-chip:last-child {
+	margin-block-end: 0;
+}
+
+.mocam-chip-handle {
+	color: #8c8f94;
+	cursor: grab;
+}
+
+.mocam-chip-label {
+	flex: 1 1 auto;
+	font-weight: 500;
+}
+
+.mocam-chip-slug {
+	flex: 0 0 auto;
+	max-width: 14ch;
+	overflow: hidden;
+	background: #f0f0f1;
+	color: #646970;
+	font-size: 11px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.mocam-chip-move select {
+	max-width: 15ch;
+	font-size: 12px;
+}
+
+.mocam-chip-placeholder {
+	height: 34px;
+	margin: 0 0 6px;
+	border: 1px dashed #2271b1;
+	border-radius: 3px;
+	background: #f0f6fc;
+}
+
+.mocam-empty-note {
+	margin: 0;
+	padding: 0 12px 10px;
+}
+
+/* -------------------------------------------------------------------------
+ * Groups table.
+ * ---------------------------------------------------------------------- */
+
+.mocam-groups-table .mocam-order-cell {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	white-space: nowrap;
+}
+
+.mocam-drag-handle {
+	color: #8c8f94;
+	cursor: grab;
+}
+
+.mocam-groups-table td {
+	vertical-align: middle;
+}
+
+/* -------------------------------------------------------------------------
+ * Focus visibility. The editor is heavy on custom controls, and a lost focus
+ * ring here makes the keyboard route unusable.
+ * ---------------------------------------------------------------------- */
+
+.mocam-settings :focus-visible {
+	outline: 2px solid #2271b1;
+	outline-offset: 1px;
+}
+
+@media (forced-colors: active) {
+
+	.mocam-group,
+	.mocam-chip {
+		border: 1px solid CanvasText;
+	}
+
+	.mocam-chip-placeholder {
+		border: 1px dashed CanvasText;
+	}
+
+	.mocam-settings :focus-visible {
+		outline: 2px solid Highlight;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.mocam-settings * {
+		transition: none !important;
+		animation: none !important;
+	}
+}
+
+/* -------------------------------------------------------------------------
+ * Narrow screens: one column, and the slug is dropped since the label and the
+ * move control are what matter on a phone.
+ * ---------------------------------------------------------------------- */
+
+@media screen and (max-width: 782px) {
+
+	.mocam-editor {
+		grid-template-columns: 1fr;
+	}
+
+	.mocam-chip {
+		flex-wrap: wrap;
+	}
+
+	.mocam-chip-slug {
+		display: none;
+	}
+
+	.mocam-chip-move,
+	.mocam-chip-move select {
+		width: 100%;
+		max-width: none;
+	}
+}

@@ -207,6 +207,10 @@ final class Plugin {
 		Capabilities::register();
 		Rest_Controller::register();
 
+		if ( is_admin() ) {
+			Admin\Settings_Page::register();
+		}
+
 		if ( ! $this->should_organize_menu() ) {
 			return;
 		}
