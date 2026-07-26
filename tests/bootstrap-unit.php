@@ -25,6 +25,16 @@ if ( ! file_exists( $mocam_autoload ) ) {
 
 require_once $mocam_autoload;
 
+/*
+ * Every plugin file opens with `defined( 'ABSPATH' ) || exit;`, which stops it
+ * being requested directly over HTTP. Under CLI there is no such risk, but the
+ * guard would still halt the process the moment a class file is autoloaded, so
+ * the constant has to exist. Its value is irrelevant here: the unit suite loads
+ * no WordPress and calls no function that reads it.
+ */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- Standing in for WordPress's own constant in a WordPress-free test run; see above.
+defined( 'ABSPATH' ) || define( 'ABSPATH', dirname( __DIR__ ) . '/' );
+
 if ( ! defined( 'MOCAM_PLUGIN_DIR' ) ) {
 	define( 'MOCAM_PLUGIN_DIR', dirname( __DIR__ ) . '/' );
 }
