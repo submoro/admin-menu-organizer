@@ -82,4 +82,23 @@
 		<exclude-pattern>*/tests/*</exclude-pattern>
 	</rule>
 
+	<!--
+		The property-based test in tests/unit/test-menu-order.php seeds mt_srand()
+		deliberately, so that a failure is reproducible rather than a ghost that
+		vanishes on the next run. wp_rand() is the right choice for anything
+		security-sensitive precisely because it cannot be seeded, which makes it
+		the wrong choice here. Confined to the test suite, which never ships.
+	-->
+	<rule ref="WordPress.WP.AlternativeFunctions.rand_mt_rand">
+		<exclude-pattern>*/tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.AlternativeFunctions.rand_seeding_mt_srand">
+		<exclude-pattern>*/tests/*</exclude-pattern>
+	</rule>
+
+	<!-- var_export() appears only inside assertion failure messages. -->
+	<rule ref="WordPress.PHP.DevelopmentFunctions.error_log_var_export">
+		<exclude-pattern>*/tests/*</exclude-pattern>
+	</rule>
+
 </ruleset>

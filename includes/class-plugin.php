@@ -121,6 +121,22 @@ final class Plugin {
 	private $disabled = null;
 
 	/**
+	 * Reader over the live menu, built once the menu exists.
+	 *
+	 * @since 1.0.0
+	 * @var Menu_Reader|null
+	 */
+	private $reader = null;
+
+	/**
+	 * The layout resolved for this request.
+	 *
+	 * @since 1.0.0
+	 * @var array|null
+	 */
+	private $layout = null;
+
+	/**
 	 * Private constructor. Use instance().
 	 *
 	 * @since 1.0.0
@@ -175,13 +191,103 @@ final class Plugin {
 			return;
 		}
 
-		// Tier one: always registered. Populated from Phase 7 onward.
+		// Tier one: always registered, because these must answer on request types
+		// where the sidebar is never rendered.
+		Capabilities::register();
 
 		if ( ! $this->should_organize_menu() ) {
 			return;
 		}
 
-		// Tier two: menu decoration. Populated from Phase 5 onward.
+		// Tier two: menu decoration.
+		add_filter( 'custom_menu_order', array( $this, 'enable_custom_menu_order' ), Menu_Order::PRIORITY );
+		add_filter( 'menu_order', array( $this, 'filter_menu_order' ), Menu_Order::PRIORITY );
+	}
+
+	/**
+	 * Unlocks reordering by returning true from custom_menu_order.
+	 *
+	 * Preserves an upstream true rather than overriding it, so another plugin
+	 * that has already unlocked reordering is not contradicted.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param mixed $enabled Whatever the previous filter returned.
+	 * @return bool
+	 */
+	public function enable_custom_menu_order( $enabled ): bool {
+		return $this->reader()->is_usable() ? true : (bool) $enabled;
+	}
+
+	/**
+	 * Reorders the top-level menu so each group's members are contiguous.
+	 *
+	 * Returns the incoming array untouched on any doubt. That matters more than it
+	 * looks: core runs array_flip() on this return value, which raises a fatal
+	 * TypeError on PHP 8 if handed anything but an array, white-screening every
+	 * admin page. See docs/core-notes.md section 4.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param mixed $menu_order Slug order as received, possibly already reordered.
+	 * @return array Always an array.
+	 */
+	public function filter_menu_order( $menu_order ): array {
+		if ( ! is_array( $menu_order ) ) {
+			return array();
+		}
+
+		$reader = $this->reader();
+
+		if ( ! $reader->is_usable() ) {
+			return $menu_order;
+		}
+
+		$ordered = Menu_Order::order( $menu_order, $reader, $this->layout(), $this->detected() );
+
+		// A last guard against ever shipping a shorter array than we received.
+		return count( $ordered ) >= count( array_unique( $menu_order ) ) ? $ordered : $menu_order;
+	}
+
+	/**
+	 * Returns the reader over the live menu, building it once per request.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return Menu_Reader
+	 */
+	public function reader(): Menu_Reader {
+		if ( null === $this->reader ) {
+			$this->reader = Menu_Reader::from_globals();
+		}
+
+		return $this->reader;
+	}
+
+	/**
+	 * Returns the layout resolved for this request.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
+	public function layout(): array {
+		if ( null === $this->layout ) {
+			$this->layout = Layout_Repository::resolve( $this->reader() );
+		}
+
+		return $this->layout;
+	}
+
+	/**
+	 * Returns detected group assignments for items the layout does not place.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array<string, string>
+	 */
+	private function detected(): array {
+		return Detector::create()->detect_all( $this->reader() );
 	}
 
 	/**
