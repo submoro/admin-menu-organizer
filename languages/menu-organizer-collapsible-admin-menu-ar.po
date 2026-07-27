@@ -1,0 +1,334 @@
+# Arabic translation for Menu Organizer - Collapsible Admin Menu.
+# Copyright (C) 2026 Moamen Elabd
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Menu Organizer - Collapsible Admin Menu 1.0.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
+"X-Generator: bin/build-translation.php\n"
+
+msgid "%1$d of %2$d items were grouped automatically."
+msgstr ""
+
+msgid "%s pending updates in this group"
+msgstr ""
+
+msgid "%s starts open"
+msgstr ""
+
+msgid "Add %1$s to %2$s to turn it off entirely."
+msgstr ""
+
+msgid "Add %s to any admin URL to turn the plugin off for that one page load."
+msgstr ""
+
+msgid "Advanced"
+msgstr "إعدادات متقدمة"
+
+msgid "Always open"
+msgstr "مفتوح دائمًا"
+
+msgid "Appearance"
+msgstr "المظهر"
+
+msgid "Arrange your own sidebar. This affects only your account; everyone else keeps the site default."
+msgstr ""
+
+msgid "Automatic grouping decisions"
+msgstr ""
+
+msgid "Backup"
+msgstr "نسخ احتياطي"
+
+msgid "Book"
+msgstr "كتاب"
+
+msgid "Cart"
+msgstr "سلة"
+
+msgid "Chart"
+msgstr "مخطط"
+
+msgid "Commerce"
+msgstr "التجارة"
+
+msgid "Content"
+msgstr "المحتوى"
+
+msgid "Copy this to move the arrangement to another site."
+msgstr ""
+
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+msgid "Decided by"
+msgstr "حُدّدت بواسطة"
+
+msgid "Design & Layout"
+msgstr "التصميم والتنسيق"
+
+msgid "Detected group"
+msgstr "المجموعة المكتشفة"
+
+msgid "Discards the site-wide arrangement and returns to the automatically detected grouping. Personal layouts and role presets are left alone."
+msgstr ""
+
+msgid "Drag items between groups to arrange the sidebar for everyone. Every item stays reachable: anything you do not place appears in the Other group at the bottom."
+msgstr ""
+
+msgid "Email"
+msgstr "بريد إلكتروني"
+
+msgid "Empty. This group will not appear in the sidebar."
+msgstr "فارغة. لن تظهر هذه المجموعة في الشريط الجانبي."
+
+msgid "Export"
+msgstr "تصدير"
+
+msgid "Give a role its own arrangement, or let it inherit the site-wide layout. A role with its own copy can then be edited independently on the Layout tab while that role is selected."
+msgstr ""
+
+msgid "Give this role its own copy"
+msgstr "إعطاء هذا الدور نسخته الخاصة"
+
+msgid "Group icon"
+msgstr "أيقونة المجموعة"
+
+msgid "Group name"
+msgstr "اسم المجموعة"
+
+msgid "Groups"
+msgstr "المجموعات"
+
+msgid "Icon"
+msgstr "الأيقونة"
+
+msgid "If something goes wrong"
+msgstr "إذا حدث خطأ ما"
+
+msgid "Import"
+msgstr "استيراد"
+
+msgid "Import layout"
+msgstr "استيراد التنسيق"
+
+msgid "Integrations"
+msgstr "التكاملات"
+
+msgid "Items"
+msgstr "العناصر"
+
+msgid "Items in %s"
+msgstr ""
+
+msgid "Layout"
+msgstr "التنسيق"
+
+msgid "Layout JSON to import"
+msgstr "ملف JSON للتنسيق المراد استيراده"
+
+msgid "Layout as JSON"
+msgstr "التنسيق بصيغة JSON"
+
+msgid "Let each user arrange their own sidebar"
+msgstr "السماح لكل مستخدم بترتيب شريطه الجانبي"
+
+msgid "Links"
+msgstr "روابط"
+
+msgid "Matched on"
+msgstr "تمّت المطابقة على"
+
+msgid "Media"
+msgstr "وسائط"
+
+msgid "Megaphone"
+msgstr "مكبر صوت"
+
+msgid "Menu"
+msgstr "قائمة"
+
+msgid "Menu Organizer"
+msgstr "منظّم القوائم"
+
+msgid "Menu Organizer requires PHP %1$s or newer. This site is running PHP %2$s, so the plugin has not been loaded."
+msgstr ""
+
+msgid "Menu Organizer requires WordPress %1$s or newer. This site is running WordPress %2$s, so the plugin has not been loaded."
+msgstr ""
+
+msgid "Menu Organizer sections"
+msgstr "أقسام منظّم القوائم"
+
+msgid "Menu groups and their settings"
+msgstr ""
+
+msgid "Menu item"
+msgstr "عنصر القائمة"
+
+msgid "Menu layout"
+msgstr "تنسيق القائمة"
+
+msgid "Menu layout for %s"
+msgstr ""
+
+msgid "Menu layout for each role"
+msgstr ""
+
+msgid "Move %s to group"
+msgstr ""
+
+msgid "Moved to group"
+msgstr "تم النقل إلى المجموعة"
+
+msgid "Name"
+msgstr "الاسم"
+
+msgid "Order"
+msgstr "الترتيب"
+
+msgid "Other"
+msgstr "أخرى"
+
+msgid "Page"
+msgstr "صفحة"
+
+msgid "Paste an exported layout. Anything it refers to that does not exist on this site is ignored rather than imported, so a layout from a site with different plugins is safe to use."
+msgstr ""
+
+msgid "Performance"
+msgstr "الأداء"
+
+msgid "Personal layouts"
+msgstr "التنسيقات الشخصية"
+
+msgid "Personalise my menu"
+msgstr "تخصيص قائمتي"
+
+msgid "Personalising your menu is not available on this site."
+msgstr ""
+
+msgid "Position of %s"
+msgstr ""
+
+msgid "Post"
+msgstr "مقالة"
+
+msgid "Products"
+msgstr "منتجات"
+
+msgid "Rename groups, choose their icons, set whether they start open, and drag them into the order you want them to appear in the sidebar."
+msgstr ""
+
+msgid "Reset"
+msgstr "إعادة تعيين"
+
+msgid "Reset to detected default"
+msgstr "إعادة التعيين إلى الافتراضي المكتشف"
+
+msgid "Reset to site default"
+msgstr "إعادة التعيين إلى الافتراضي للموقع"
+
+msgid "Role"
+msgstr "الدور"
+
+msgid "Roles"
+msgstr "الأدوار"
+
+msgid "SEO & Marketing"
+msgstr "تحسين محركات البحث والتسويق"
+
+msgid "Save"
+msgstr "حفظ"
+
+msgid "Save groups"
+msgstr "حفظ المجموعات"
+
+msgid "Save layout"
+msgstr "حفظ التنسيق"
+
+msgid "Save roles"
+msgstr "حفظ الأدوار"
+
+msgid "Security & Backup"
+msgstr "الأمان والنسخ الاحتياطي"
+
+msgid "Settings"
+msgstr "الإعدادات"
+
+msgid "Shield"
+msgstr "درع"
+
+msgid "Slug"
+msgstr "المُعرّف"
+
+msgid "Starts open"
+msgstr "يبدأ مفتوحًا"
+
+msgid "That layout could not be imported. Check that it is the JSON produced by the export button."
+msgstr ""
+
+msgid "The layout has been reset to the automatically detected default."
+msgstr ""
+
+msgid "The layout was imported."
+msgstr "تم استيراد التنسيق."
+
+msgid "Tools"
+msgstr "أدوات"
+
+msgid "Tools & System"
+msgstr "الأدوات والنظام"
+
+msgid "Translation"
+msgstr "ترجمة"
+
+msgid "Two escape hatches always work, and both leave your saved arrangement intact:"
+msgstr ""
+
+msgid "Use the site-wide layout"
+msgstr "استخدام تنسيق الموقع العام"
+
+msgid "Users & Access"
+msgstr "المستخدمون والوصول"
+
+msgid "What the automatic rules decided for every top-level item currently in your sidebar, and which rule decided it. Anything you have moved by hand overrides this."
+msgstr ""
+
+msgid "When this is off, everyone sees the layout you have set here and the \"Personalise my menu\" tab disappears. Any personal arrangements already saved are kept, and take effect again if you switch this back on."
+msgstr ""
+
+msgid "Why items were grouped this way"
+msgstr "سبب تجميع العناصر بهذه الطريقة"
+
+msgid "You are not allowed to access this page."
+msgstr "غير مسموح لك بالوصول إلى هذه الصفحة."
+
+msgid "You are not allowed to change the site-wide menu layout."
+msgstr ""
+
+msgid "You are not allowed to change these settings."
+msgstr "غير مسموح لك بتغيير هذه الإعدادات."
+
+msgid "You are not allowed to personalise your menu."
+msgstr "غير مسموح لك بتخصيص قائمتك."
+
+msgid "You must be signed in to save your menu state."
+msgstr "يجب تسجيل الدخول لحفظ حالة قائمتك."
+
+msgid "Your changes have been saved."
+msgstr "تم حفظ التغييرات."
+
+msgid "always visible"
+msgstr "مرئي دائمًا"
+
+msgid "collapsed"
+msgstr "مطوي"
+
+msgid "expanded"
+msgstr "موسّع"
+

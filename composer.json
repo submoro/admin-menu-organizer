@@ -31,6 +31,12 @@
 		"lint:fix": "phpcbf",
 		"lint:report": "phpcs --report=summary",
 		"check:readme": "php bin/check-readme.php readme.txt",
+		"i18n:pot": "php bin/make-pot.php . menu-organizer-collapsible-admin-menu languages/menu-organizer-collapsible-admin-menu.pot",
+		"i18n:ar": "php bin/build-translation.php languages/menu-organizer-collapsible-admin-menu.pot ar bin/i18n-ar.php languages menu-organizer-collapsible-admin-menu",
+		"i18n": [
+			"@i18n:pot",
+			"@i18n:ar"
+		],
 		"test": "@test:unit",
 		"test:unit": "phpunit -c phpunit-unit.xml.dist",
 		"test:integration": "phpunit -c phpunit.xml.dist"
@@ -40,6 +46,9 @@
 		"lint:fix": "Auto-fix the coding standard violations that can be fixed safely.",
 		"lint:report": "Print a per-file summary of coding standard violations.",
 		"check:readme": "Validate readme.txt against the WordPress.org readme standard.",
+		"i18n": "Regenerate the POT file and rebuild the Arabic translation.",
+		"i18n:pot": "Extract translatable strings into languages/*.pot. Stands in for 'wp i18n make-pot' where WP-CLI is unavailable.",
+		"i18n:ar": "Compile the Arabic .po and .mo from bin/i18n-ar.php.",
 		"test": "Alias of test:unit, the suite that runs anywhere.",
 		"test:unit": "Run the WordPress-independent tests. Needs no database.",
 		"test:integration": "Run the tests that need WordPress and a database. Set WP_TESTS_DIR first."

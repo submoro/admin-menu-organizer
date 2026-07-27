@@ -17,16 +17,26 @@
 ( function ( $ ) {
 	'use strict';
 
-	var i18n = ( window.wp && window.wp.i18n ) || null;
-
 	/**
 	 * Translates a string, falling back to the original when wp.i18n is absent.
 	 *
-	 * @param {string} text Untranslated text.
+	 * The text domain is passed by every caller rather than being supplied here,
+	 * because string extraction is static: `wp i18n make-pot` reads the literal
+	 * arguments at each call site and skips any call whose domain it cannot see.
+	 * Hiding the domain inside this function would leave every JavaScript string
+	 * out of the POT file and therefore permanently untranslatable, which SPEC
+	 * section 9 forbids.
+	 *
+	 * @param {string} text   Untranslated text.
+	 * @param {string} domain Text domain, always passed literally.
 	 * @return {string} Translated text.
 	 */
-	function __( text ) {
-		return i18n ? i18n.__( text, 'menu-organizer-collapsible-admin-menu' ) : text;
+	function __( text, domain ) {
+		if ( window.wp && window.wp.i18n ) {
+			return window.wp.i18n.__( text, domain );
+		}
+
+		return text;
 	}
 
 	var dirty = false;
@@ -95,7 +105,7 @@
 					$group.find( '.mocam-droplist' ).after(
 						$( '<p/>', {
 							'class': 'mocam-empty-note description',
-							text: __( 'Empty. This group will not appear in the sidebar.' )
+							text: __( 'Empty. This group will not appear in the sidebar.', 'menu-organizer-collapsible-admin-menu' )
 						} )
 					);
 				}
@@ -139,7 +149,7 @@
 		$chip.find( '.mocam-move-select' ).trigger( 'focus' );
 
 		announce(
-			__( 'Moved to group' ) + ': ' + $target.closest( '.mocam-group' ).find( '.mocam-group-title' ).text().trim()
+			__( 'Moved to group', 'menu-organizer-collapsible-admin-menu' ) + ': ' + $target.closest( '.mocam-group' ).find( '.mocam-group-title' ).text().trim()
 		);
 	}
 

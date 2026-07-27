@@ -18,16 +18,27 @@
 	'use strict';
 
 	var data = window.mocamMenu || {};
-	var i18n = ( window.wp && window.wp.i18n ) || null;
 
 	/**
 	 * Translates a string, falling back to the original when wp.i18n is absent.
 	 *
-	 * @param {string} text Untranslated text.
+	 * The text domain is passed by every caller rather than being supplied here,
+	 * because string extraction is static: `wp i18n make-pot` reads the literal
+	 * arguments at each call site and skips any call whose domain it cannot see.
+	 * Hiding the domain inside this function would leave every JavaScript string
+	 * out of the POT file and therefore permanently untranslatable, which SPEC
+	 * section 9 forbids.
+	 *
+	 * @param {string} text   Untranslated text.
+	 * @param {string} domain Text domain, always passed literally.
 	 * @return {string} Translated text.
 	 */
-	function __( text ) {
-		return i18n ? i18n.__( text, 'menu-organizer-collapsible-admin-menu' ) : text;
+	function __( text, domain ) {
+		if ( window.wp && window.wp.i18n ) {
+			return window.wp.i18n.__( text, domain );
+		}
+
+		return text;
 	}
 
 	/**
@@ -175,7 +186,7 @@
 		var state = toggle.querySelector( '.mocam-sr-state' );
 
 		if ( state ) {
-			state.textContent = expanded ? __( 'expanded' ) : __( 'collapsed' );
+			state.textContent = expanded ? __( 'expanded', 'menu-organizer-collapsible-admin-menu' ) : __( 'collapsed', 'menu-organizer-collapsible-admin-menu' );
 		}
 
 		if ( persist ) {
@@ -238,7 +249,11 @@
 			badge.textContent = String( group.updates );
 			badge.setAttribute(
 				'aria-label',
-				sprintf( __( '%s pending updates in this group' ), String( group.updates ) )
+				sprintf(
+					/* translators: %s: Number of pending updates. */
+					__( '%s pending updates in this group', 'menu-organizer-collapsible-admin-menu' ),
+					String( group.updates )
+				)
 			);
 			toggle.appendChild( badge );
 		}
@@ -251,7 +266,7 @@
 		 */
 		var state = document.createElement( 'span' );
 		state.className = 'mocam-sr-only mocam-sr-state';
-		state.textContent = startsCollapsed ? __( 'collapsed' ) : __( 'expanded' );
+		state.textContent = startsCollapsed ? __( 'collapsed', 'menu-organizer-collapsible-admin-menu' ) : __( 'expanded', 'menu-organizer-collapsible-admin-menu' );
 		toggle.appendChild( state );
 
 		var chevron = document.createElement( 'span' );

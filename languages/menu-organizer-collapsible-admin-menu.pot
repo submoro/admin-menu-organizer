@@ -1,0 +1,467 @@
+# Copyright (C) 2026 Moamen Elabd
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Menu Organizer - Collapsible Admin Menu 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/menu-organizer-collapsible-admin-menu/\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-07-27T00:00:00+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Domain: menu-organizer-collapsible-admin-menu\n"
+
+#. translators: 1: Number of items grouped automatically, 2: Total number of items.
+#: includes/admin/views/tab-advanced.php:143
+msgid "%1$d of %2$d items were grouped automatically."
+msgstr ""
+
+#. translators: %s: Number of pending updates.
+#: assets/js/admin-menu.js:254
+msgid "%s pending updates in this group"
+msgstr ""
+
+#. translators: %s: Group name.
+#: includes/admin/views/tab-groups.php:152
+msgid "%s starts open"
+msgstr ""
+
+#. translators: 1: The constant to define, 2: The file to define it in.
+#: includes/admin/views/tab-advanced.php:96
+msgid "Add %1$s to %2$s to turn it off entirely."
+msgstr ""
+
+#. translators: %s: The query parameter, wrapped in a code element.
+#: includes/admin/views/tab-advanced.php:87
+msgid "Add %s to any admin URL to turn the plugin off for that one page load."
+msgstr ""
+
+#: includes/admin/class-settings-page.php:202
+#: includes/admin/views/page.php:29
+msgid "Advanced"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:138
+msgid "Always open"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:28
+msgid "Appearance"
+msgstr ""
+
+#: includes/admin/views/tab-layout.php:46
+msgid "Arrange your own sidebar. This affects only your account; everyone else keeps the site default."
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:114
+msgid "Automatic grouping decisions"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:32
+msgid "Backup"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:40
+msgid "Book"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:26
+msgid "Cart"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:29
+msgid "Chart"
+msgstr ""
+
+#: includes/class-categories.php:163
+msgid "Commerce"
+msgstr ""
+
+#: includes/class-categories.php:162
+msgid "Content"
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:46
+msgid "Copy this to move the arrangement to another site."
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:22
+#: includes/class-categories.php:161
+msgid "Dashboard"
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:121
+msgid "Decided by"
+msgstr ""
+
+#: includes/class-categories.php:164
+msgid "Design & Layout"
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:120
+msgid "Detected group"
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:35
+msgid "Discards the site-wide arrangement and returns to the automatically detected grouping. Personal layouts and role presets are left alone."
+msgstr ""
+
+#: includes/admin/views/tab-layout.php:50
+msgid "Drag items between groups to arrange the sidebar for everyone. Every item stays reachable: anything you do not place appears in the Other group at the bottom."
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:39
+msgid "Email"
+msgstr ""
+
+#: assets/js/settings.js:108
+msgid "Empty. This group will not appear in the sidebar."
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:43
+msgid "Export"
+msgstr ""
+
+#: includes/admin/views/tab-roles.php:22
+msgid "Give a role its own arrangement, or let it inherit the site-wide layout. A role with its own copy can then be edited independently on the Layout tab while that role is selected."
+msgstr ""
+
+#: includes/admin/views/tab-roles.php:78
+msgid "Give this role its own copy"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:123
+msgid "Group icon"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:107
+msgid "Group name"
+msgstr ""
+
+#: includes/admin/class-settings-page.php:200
+#: includes/admin/views/page.php:27
+#: includes/admin/views/tab-groups.php:34
+msgid "Groups"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:60
+msgid "Icon"
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:76
+msgid "If something goes wrong"
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:56
+msgid "Import"
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:71
+msgid "Import layout"
+msgstr ""
+
+#: includes/class-categories.php:169
+msgid "Integrations"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:62
+msgid "Items"
+msgstr ""
+
+#. translators: %s: Group name.
+#: includes/admin/views/tab-layout.php:84
+msgid "Items in %s"
+msgstr ""
+
+#: includes/admin/class-settings-page.php:199
+#: includes/admin/views/page.php:26
+msgid "Layout"
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:67
+msgid "Layout JSON to import"
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:50
+msgid "Layout as JSON"
+msgstr ""
+
+#: includes/admin/views/tab-roles.php:106
+msgid "Let each user arrange their own sidebar"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:35
+msgid "Links"
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:122
+msgid "Matched on"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:25
+msgid "Media"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:30
+msgid "Megaphone"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:21
+msgid "Menu"
+msgstr ""
+
+#: includes/admin/class-settings-page.php:102
+#: includes/admin/class-settings-page.php:103
+#: includes/admin/views/page.php:37
+msgid "Menu Organizer"
+msgstr ""
+
+#. translators: 1: Required PHP version, 2: PHP version running on the server.
+#: menu-organizer-collapsible-admin-menu.php:85
+msgid "Menu Organizer requires PHP %1$s or newer. This site is running PHP %2$s, so the plugin has not been loaded."
+msgstr ""
+
+#. translators: 1: Required WordPress version, 2: WordPress version running on the site.
+#: menu-organizer-collapsible-admin-menu.php:92
+msgid "Menu Organizer requires WordPress %1$s or newer. This site is running WordPress %2$s, so the plugin has not been loaded."
+msgstr ""
+
+#: includes/admin/views/page.php:45
+msgid "Menu Organizer sections"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:54
+msgid "Menu groups and their settings"
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:118
+msgid "Menu item"
+msgstr ""
+
+#: includes/admin/views/tab-roles.php:36
+msgid "Menu layout"
+msgstr ""
+
+#. translators: %s: Role name.
+#: includes/admin/views/tab-roles.php:54
+msgid "Menu layout for %s"
+msgstr ""
+
+#: includes/admin/views/tab-roles.php:31
+msgid "Menu layout for each role"
+msgstr ""
+
+#. translators: %s: Menu item name.
+#: includes/admin/views/tab-layout.php:111
+msgid "Move %s to group"
+msgstr ""
+
+#: assets/js/settings.js:152
+msgid "Moved to group"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:59
+msgid "Name"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:58
+msgid "Order"
+msgstr ""
+
+#: includes/class-categories.php:171
+msgid "Other"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:24
+msgid "Page"
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:63
+msgid "Paste an exported layout. Anything it refers to that does not exist on this site is ignored rather than imported, so a layout from a site with different plugins is safe to use."
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:33
+#: includes/class-categories.php:167
+msgid "Performance"
+msgstr ""
+
+#: includes/admin/views/tab-roles.php:92
+msgid "Personal layouts"
+msgstr ""
+
+#: includes/admin/class-settings-page.php:206
+#: includes/admin/views/page.php:33
+msgid "Personalise my menu"
+msgstr ""
+
+#: includes/class-rest-controller.php:169
+msgid "Personalising your menu is not available on this site."
+msgstr ""
+
+#. translators: %s: Group name.
+#: includes/admin/views/tab-groups.php:88
+msgid "Position of %s"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:23
+msgid "Post"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:27
+msgid "Products"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:45
+msgid "Rename groups, choose their icons, set whether they start open, and drag them into the order you want them to appear in the sidebar."
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:28
+msgid "Reset"
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:38
+msgid "Reset to detected default"
+msgstr ""
+
+#: includes/admin/views/tab-layout.php:149
+msgid "Reset to site default"
+msgstr ""
+
+#: includes/admin/views/tab-roles.php:35
+msgid "Role"
+msgstr ""
+
+#: includes/admin/class-settings-page.php:201
+#: includes/admin/views/page.php:28
+msgid "Roles"
+msgstr ""
+
+#: includes/class-categories.php:165
+msgid "SEO & Marketing"
+msgstr ""
+
+#: includes/admin/views/tab-roles.php:114
+msgid "Save"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:175
+msgid "Save groups"
+msgstr ""
+
+#: includes/admin/views/tab-layout.php:141
+msgid "Save layout"
+msgstr ""
+
+#: includes/admin/views/tab-roles.php:87
+msgid "Save roles"
+msgstr ""
+
+#: includes/class-categories.php:166
+msgid "Security & Backup"
+msgstr ""
+
+#: includes/admin/class-settings-page.php:124
+#: includes/admin/views/tab-groups.php:37
+msgid "Settings"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:31
+msgid "Shield"
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:119
+msgid "Slug"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:61
+msgid "Starts open"
+msgstr ""
+
+#: includes/admin/class-settings-page.php:604
+msgid "That layout could not be imported. Check that it is the JSON produced by the export button."
+msgstr ""
+
+#: includes/admin/class-settings-page.php:596
+msgid "The layout has been reset to the automatically detected default."
+msgstr ""
+
+#: includes/admin/class-settings-page.php:600
+msgid "The layout was imported."
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:36
+msgid "Tools"
+msgstr ""
+
+#: includes/class-categories.php:170
+msgid "Tools & System"
+msgstr ""
+
+#: includes/admin/views/tab-groups.php:38
+msgid "Translation"
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:79
+msgid "Two escape hatches always work, and both leave your saved arrangement intact:"
+msgstr ""
+
+#: includes/admin/views/tab-roles.php:68
+msgid "Use the site-wide layout"
+msgstr ""
+
+#: includes/class-categories.php:168
+msgid "Users & Access"
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:109
+msgid "What the automatic rules decided for every top-level item currently in your sidebar, and which rule decided it. Anything you have moved by hand overrides this."
+msgstr ""
+
+#: includes/admin/views/tab-roles.php:111
+msgid "When this is off, everyone sees the layout you have set here and the \"Personalise my menu\" tab disappears. Any personal arrangements already saved are kept, and take effect again if you switch this back on."
+msgstr ""
+
+#: includes/admin/views/tab-advanced.php:106
+msgid "Why items were grouped this way"
+msgstr ""
+
+#: includes/admin/class-settings-page.php:221
+msgid "You are not allowed to access this page."
+msgstr ""
+
+#: includes/class-rest-controller.php:150
+msgid "You are not allowed to change the site-wide menu layout."
+msgstr ""
+
+#: includes/admin/class-settings-page.php:309
+msgid "You are not allowed to change these settings."
+msgstr ""
+
+#: includes/admin/class-settings-page.php:324
+msgid "You are not allowed to personalise your menu."
+msgstr ""
+
+#: includes/class-rest-controller.php:131
+msgid "You must be signed in to save your menu state."
+msgstr ""
+
+#: includes/admin/class-settings-page.php:592
+msgid "Your changes have been saved."
+msgstr ""
+
+#: includes/admin/views/tab-layout.php:72
+msgid "always visible"
+msgstr ""
+
+#: assets/js/admin-menu.js:189
+#: assets/js/admin-menu.js:269
+msgid "collapsed"
+msgstr ""
+
+#: assets/js/admin-menu.js:189
+#: assets/js/admin-menu.js:269
+msgid "expanded"
+msgstr ""
+
