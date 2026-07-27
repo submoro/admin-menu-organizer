@@ -44,10 +44,15 @@ if ( Capabilities::current_user_can_personalise() ) {
 
 	<nav class="nav-tab-wrapper wp-clearfix" aria-label="<?php echo esc_attr__( 'Menu Organizer sections', 'menu-organizer-collapsible-admin-menu' ); ?>">
 		<?php foreach ( $mocam_tabs as $mocam_slug => $mocam_label ) : ?>
+			<?php $mocam_is_current = ( $tab === $mocam_slug ); ?>
 			<a
 				href="<?php echo esc_url( admin_url( 'options-general.php?page=' . Settings_Page::SLUG . '&tab=' . $mocam_slug ) ); ?>"
-				class="nav-tab <?php echo $tab === $mocam_slug ? 'nav-tab-active' : ''; ?>"
-				<?php echo $tab === $mocam_slug ? 'aria-current="page"' : ''; ?>
+				class="<?php echo esc_attr( $mocam_is_current ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>"
+				<?php
+				if ( $mocam_is_current ) {
+					echo 'aria-current="page"';
+				}
+				?>
 			><?php echo esc_html( $mocam_label ); ?></a>
 		<?php endforeach; ?>
 	</nav>
