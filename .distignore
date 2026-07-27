@@ -17,7 +17,10 @@ node_modules
 package.json
 package-lock.json
 phpcs.xml.dist
-phpunit.xml.dist
+# Glob rather than a literal, so a new suite config cannot silently ship the way
+# phpunit-unit.xml.dist did until bin/build-zip.php caught it.
+phpunit*.xml.dist
+phpcs*.xml.dist
 .phpunit.result.cache
 .wp-env.json
 .wp-env.override.json

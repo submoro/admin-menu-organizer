@@ -37,6 +37,16 @@
 			"@i18n:pot",
 			"@i18n:ar"
 		],
+		"audit": "php bin/security-audit.php",
+		"build": [
+			"@i18n",
+			"@lint",
+			"@test:unit",
+			"@check:readme",
+			"@audit",
+			"php bin/build-zip.php"
+		],
+		"build:assets": "php bin/build-assets.php",
 		"test": "@test:unit",
 		"test:unit": "phpunit -c phpunit-unit.xml.dist",
 		"test:integration": "phpunit -c phpunit.xml.dist"
@@ -49,6 +59,9 @@
 		"i18n": "Regenerate the POT file and rebuild the Arabic translation.",
 		"i18n:pot": "Extract translatable strings into languages/*.pot. Stands in for 'wp i18n make-pot' where WP-CLI is unavailable.",
 		"i18n:ar": "Compile the Arabic .po and .mo from bin/i18n-ar.php.",
+		"audit": "Check the shipped code against every rule in SPEC section 8.",
+		"build": "Run the whole pre-submission gate and produce the release zip.",
+		"build:assets": "Regenerate the WordPress.org icons and banners.",
 		"test": "Alias of test:unit, the suite that runs anywhere.",
 		"test:unit": "Run the WordPress-independent tests. Needs no database.",
 		"test:integration": "Run the tests that need WordPress and a database. Set WP_TESTS_DIR first."

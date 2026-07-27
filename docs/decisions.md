@@ -215,6 +215,44 @@ cookies and the REST API. The unit suite caught it as unexpected output.
 everything that ships. The data files are additionally required inside an output
 buffer to prove they emit nothing.
 
+### D-011 — Directory artwork is generated, not sourced
+
+SPEC section 10.1 requires every bundled asset to be GPL-compatible with its
+source documented. `bin/build-assets.php` draws the icons and banners with GD
+from primitives, so the provenance is unambiguous: the script is the source, and
+the output is original work under the same licence as the plugin. No fonts, no
+stock imagery, no third-party SVG.
+
+The motif is the plugin's own subject matter — a sidebar with grouped indented
+rows, one group collapsed — so the artwork says what the plugin does without
+needing text, which also means it survives the directory rendering the plugin
+name over the banner.
+
+### D-012 — Screenshots cannot be produced here
+
+`readme.txt` describes five screenshots and `.wordpress-org/` holds the icons and
+banners, but not `screenshot-1.png` … `screenshot-5.png`. Capturing them requires
+a running WordPress with the plugin active and a realistic plugin stack, which
+this machine does not have.
+
+The readme entries are kept, because SPEC section 10.3 lists Screenshots as a
+required section and the captions are what a capture session works from. A missing
+screenshot file makes the directory show no screenshot; it breaks nothing.
+`docs/release.md` carries the capture checklist.
+
+**This is the only outstanding item for submission.**
+
+### D-013 — The zip verifies itself, and immediately caught a leak
+
+`bin/build-zip.php` does not only build the archive; it asserts the contents.
+Anything matching a never-ship prefix fails the build, and so does a missing file
+the plugin cannot run without.
+
+It earned that on first run: `phpunit-unit.xml.dist` was in the archive, because
+`.distignore` listed `phpunit.xml.dist` literally and the second suite config was
+added later. `.distignore` now uses globs, and the check would have caught it
+whatever the cause.
+
 ## Environment notes
 
 - The build machine had **no** WordPress install, PHP, Composer, WP-CLI or
