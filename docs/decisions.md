@@ -286,22 +286,56 @@ Ideas noted but explicitly **not** in v1 scope, per SPEC §14.
   membership only).
 - Import/export of role presets as a bundle (v1 exports the layout only).
 
-## Manual test matrix
+## Verification status
 
-To be filled in from Phase 12 onward, per SPEC §12.2. No manual testing has been
-performed yet.
+Everything below is stated as it actually is. Where something has not been
+verified, it says so.
 
-| Case | Result | Notes |
-|---|---|---|
-| WordPress 6.4 | not run | |
-| WordPress current stable (7.0.2) | not run | |
-| PHP 7.4 / 8.1 / 8.3 | not run | |
-| All eight admin colour schemes | not run | |
-| LTR and RTL (Arabic) with WPML | not run | |
-| WooCommerce + page builder + security + SEO together | not run | |
-| Alongside Admin Menu Editor | not run | |
-| Folded sidebar, mobile, 782 px, 960 px | not run | |
-| Subscriber / Editor / Shop Manager / Administrator | not run | |
-| Multisite network-admin no-op | not run | |
-| Keyboard-only navigation | not run | |
-| Screen reader (NVDA or VoiceOver) | not run | |
+### Verified automatically, every phase
+
+| Check | Status |
+|---|---|
+| `phpcs`: WordPress, WordPress-Extra, WordPress-Docs, PHPCompatibilityWP | clean, 36 files |
+| Every shipped file parses on a real **PHP 7.4.33** binary | pass, 43 files |
+| Unit suite | **291 tests, 2991 assertions**, green |
+| Security audit against SPEC §8 (18 rules) | clean, 25 shipped files |
+| `readme.txt` against the WordPress.org standard | 20/20 |
+| No outbound-request primitive anywhere in shipped code | clean |
+| Both JavaScript files parse | pass |
+| Release zip contents | 32 files, nothing leaked, nothing missing |
+
+### Verified by executing real WordPress core code
+
+Rather than by reimplementing it. These are the load-bearing claims.
+
+| Claim | How it was proven |
+|---|---|
+| `$menu` index map, separator rendering, raw title output | Extracted `_wp_menu_output()` from `menu-header.php` and ran it against fixtures. `docs/recon/` |
+| `menu_order` cannot delete an item; duplicates corrupt ordering; a non-array is fatal on PHP 8 | Replicated the reorder block from `includes/menu.php` and exercised six failure modes. `docs/recon/` |
+| The accordion renders correctly end to end | Pushed the 35-item production fixture through reorder, decorate, and then core's own `_wp_menu_output()`. 11 header rows emitted, **none `aria-hidden`**, all as bare `<li>`; the active group force-expanded; collapsed groups hidden; every original slug still present. |
+| The compiled Arabic `.mo` is loadable | Parsed with WordPress's own `wp-includes/pomo` reader, not the writer that produced it. 79 entries, six Arabic round-trips, no invalid UTF-8. |
+| Detection generalises beyond its table | Blind sweep of 40 real plugins deliberately absent from `known-slugs.php`: **40/40**. |
+
+### Not yet verified — needs a running WordPress
+
+None of this can be done on the build machine, which has no WordPress, no
+database and no browser. It is the honest remainder of SPEC §12.2.
+
+| Case | Status |
+|---|---|
+| WordPress 6.4 and 7.0.2, live | **not run** — CI matrix is configured but has never executed; there is no git remote |
+| PHPUnit integration suite (13 tests) | **written, not run** — needs a database |
+| Plugin Check, both check sets | **not run** — needs a WordPress install |
+| `WP_DEBUG` + `SCRIPT_DEBUG` notice sweep | **not run** |
+| All nine admin colour schemes, visually | **not run** — the CSS derives from values extracted from core's own scheme files, so it is reasoned rather than seen |
+| RTL with Arabic and WPML, visually | **not run** — the stylesheet uses logical properties throughout and a real Arabic translation ships to test against |
+| WooCommerce + page builder + security + SEO, live | **not run** — modelled as a fixture and passing, but not observed |
+| Alongside Admin Menu Editor | **not run** |
+| Folded sidebar, mobile, 782 px, 960 px | **not run** |
+| Subscriber / Editor / Shop Manager / Administrator | **not run** live; covered by integration tests that have not executed |
+| Multisite network-admin no-op | **not run** live; the guard is unit-tested |
+| Keyboard-only navigation | **not run** |
+| Screen reader (NVDA or VoiceOver) | **not run** |
+
+The first three rows are the ones to clear first: they are cheap on any real
+install and would confirm most of the rest.

@@ -13,6 +13,7 @@ zip by `.distignore`.
 |---|---|
 | `probe-render.php` | How `_wp_menu_output()` treats separator items, raw titles, empty slugs, class escaping, and items whose capability fails. core-notes.md §2, §3. |
 | `probe-order.php` | What the `menu_order` filter can and cannot do — dropped slugs, duplicates, phantom slugs, non-array returns. core-notes.md §4. |
+| `probe-render-e2e.php` | That the finished accordion actually renders. Pushes the 35-item production fixture through the plugin's own reorder and decorate steps, then through core's `_wp_menu_output()`, and asserts the result: header rows emitted, none `aria-hidden`, active group force-expanded, collapsed groups hidden, no slug lost. |
 
 `probe-render.php` runs the **real** core function, extracted verbatim rather
 than reimplemented. `probe-order.php` replicates core's reorder block, which is
