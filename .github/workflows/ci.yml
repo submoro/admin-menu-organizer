@@ -166,7 +166,18 @@ jobs:
           else
             WP_TAG="${WP_VERSION}"
           fi
-          echo "Testing against WordPress ${WP_TAG}"
+          # The two sources disagree on how a .0 release is named. wordpress.org
+          # ships it as wordpress-6.4.tar.gz, while every wordpress-develop tag
+          # is three-part, so 6.4 exists only as 6.4.0 there. Asking GitHub for
+          # a "6.4" tag returns 404, which is what broke both WP 6.4 jobs while
+          # the "latest" jobs, resolving to a three-part 7.0.2, passed.
+          if [[ "${WP_TAG}" =~ ^[0-9]+\.[0-9]+$ ]]; then
+            WP_DEVELOP_TAG="${WP_TAG}.0"
+          else
+            WP_DEVELOP_TAG="${WP_TAG}"
+          fi
+
+          echo "Core tarball: ${WP_TAG}   test library tag: ${WP_DEVELOP_TAG}"
 
           # Core, from the official release tarball.
           curl -fsSL "https://wordpress.org/wordpress-${WP_TAG}.tar.gz" \
@@ -179,10 +190,10 @@ jobs:
           # components leaves the library at ${TESTS_DIR}/phpunit/includes,
           # one level below where the bootstrap looks for it. tar still exits 0,
           # so the mistake surfaces only as "could not find the test library".
-          curl -fsSL "https://github.com/WordPress/wordpress-develop/archive/refs/tags/${WP_TAG}.tar.gz" \
+          curl -fsSL "https://github.com/WordPress/wordpress-develop/archive/refs/tags/${WP_DEVELOP_TAG}.tar.gz" \
             | tar --strip-components=3 -zxf - -C "${TESTS_DIR}" \
-              "wordpress-develop-${WP_TAG}/tests/phpunit/includes" \
-              "wordpress-develop-${WP_TAG}/tests/phpunit/data"
+              "wordpress-develop-${WP_DEVELOP_TAG}/tests/phpunit/includes" \
+              "wordpress-develop-${WP_DEVELOP_TAG}/tests/phpunit/data"
 
           test -f "${TESTS_DIR}/includes/functions.php" \
             || { echo "::error::Test library layout unexpected"; find "${TESTS_DIR}" -maxdepth 2 -type d; exit 1; }
