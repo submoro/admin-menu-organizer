@@ -191,15 +191,24 @@ functions of their arguments, which is better structure regardless.
 
 ### Verification
 
-- Unit suite: **295 tests, 2995 assertions**
-- `phpcs` clean; security audit clean across 25 shipped files
-- Every shipped file parses on a real PHP 7.4.33 binary
-- The `$menu` internals, the `menu_order` semantics, the finished accordion render
-  and the compiled `.mo` are all proven by **executing real WordPress core code**
-  rather than a reimplementation of it — see [`docs/recon/`](docs/recon/README.md)
+CI runs 11 jobs, all green:
 
-Not yet verified, honestly: the integration suite and Plugin Check have never
-executed, and nothing has been seen in a browser. Full status in
+| | |
+|---|---|
+| **Plugin Check** | passes all five categories, run against the built zip rather than the repo |
+| **Integration suite** | 29 tests on PHP 7.4 / 8.1 / 8.3 against **both WordPress 6.4 and current stable** |
+| **Unit suite** | 295 tests, 2995 assertions, on PHP 7.4 / 8.1 / 8.3 |
+| **PHP 7.4 syntax** | every shipped file parsed by a real 7.4 binary |
+| **Coding standards** | WordPress, -Extra, -Docs, PHPCompatibilityWP |
+| **No outbound requests** | source scan, plus a `pre_http_request` tripwire in the suite |
+
+The `$menu` internals, the `menu_order` semantics, the finished accordion render
+and the compiled `.mo` are each proven by **executing real WordPress core code**
+rather than a reimplementation of it — see [`docs/recon/`](docs/recon/README.md).
+
+What is *not* verified: anything requiring a rendered page. The nine colour
+schemes, RTL, the responsive breakpoints, keyboard navigation and a screen-reader
+pass have not been looked at in a browser. Honest status in
 [`docs/decisions.md`](docs/decisions.md).
 
 ## Releasing

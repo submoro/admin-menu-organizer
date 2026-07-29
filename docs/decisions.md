@@ -425,26 +425,48 @@ Rather than by reimplementing it. These are the load-bearing claims.
 | The compiled Arabic `.mo` is loadable | Parsed with WordPress's own `wp-includes/pomo` reader, not the writer that produced it. 79 entries, six Arabic round-trips, no invalid UTF-8. |
 | Detection generalises beyond its table | Blind sweep of 40 real plugins deliberately absent from `known-slugs.php`: **40/40**. |
 
-### Not yet verified — needs a running WordPress
+### Verified in CI
 
-None of this can be done on the build machine, which has no WordPress, no
-database and no browser. It is the honest remainder of SPEC §12.2.
+Run [30500654963](https://github.com/submoro/admin-menu-organizer/actions),
+**11 of 11 jobs green.** This closes most of what was previously unverified.
+
+| Job | Result |
+|---|---|
+| **Plugin Check** — general, plugin_repo, security, accessibility, performance | **pass**, against the built zip |
+| Integration suite, PHP 7.4 / WP 6.4 | **pass** — 29 tests, 63 assertions |
+| Integration suite, PHP 8.3 / WP 6.4 | **pass** |
+| Integration suite, PHP 8.1 / WP 7.0.2 | **pass** |
+| Integration suite, PHP 8.3 / WP 7.0.2 | **pass** |
+| Unit suite, PHP 7.4 / 8.1 / 8.3 | **pass** — 295 tests each |
+| PHP 7.4 syntax over every shipped file | **pass** |
+| Coding standards | **pass** |
+| No outbound requests | **pass** |
+
+So the plugin is now proven to work against **both the declared 6.4 floor and
+current stable**, on **all three PHP versions**, with the capability gates, the
+`pre_http_request` tripwire and the uninstall sweep all exercised against a real
+database.
+
+Getting there took four real defects out of CI, none of which any amount of local
+checking would have surfaced: D-015 through D-018.
+
+### Not yet verified — needs a browser
+
+What remains is everything that requires *looking at a rendered page*. CI proves
+behaviour, not appearance.
 
 | Case | Status |
 |---|---|
-| WordPress 6.4 and 7.0.2, live | **not run** — CI matrix is configured but has never executed; there is no git remote |
-| PHPUnit integration suite (13 tests) | **written, not run** — needs a database |
-| Plugin Check, both check sets | **not run** — needs a WordPress install |
-| `WP_DEBUG` + `SCRIPT_DEBUG` notice sweep | **not run** |
-| All nine admin colour schemes, visually | **not run** — the CSS derives from values extracted from core's own scheme files, so it is reasoned rather than seen |
-| RTL with Arabic and WPML, visually | **not run** — the stylesheet uses logical properties throughout and a real Arabic translation ships to test against |
-| WooCommerce + page builder + security + SEO, live | **not run** — modelled as a fixture and passing, but not observed |
+| All nine admin colour schemes, visually | **not seen** — the CSS derives from values extracted from core's own scheme files, so it is reasoned, not observed |
+| RTL with Arabic and WPML, visually | **not seen** — the stylesheet uses logical properties throughout and a real Arabic translation ships to test against |
+| Folded sidebar, mobile, 782 px and 960 px breakpoints | **not seen** |
+| WooCommerce + page builder + security + SEO, live | **not seen** — modelled as a fixture and passing, and the render is proven through core's own function, but not observed in a browser |
 | Alongside Admin Menu Editor | **not run** |
-| Folded sidebar, mobile, 782 px, 960 px | **not run** |
-| Subscriber / Editor / Shop Manager / Administrator | **not run** live; covered by integration tests that have not executed |
-| Multisite network-admin no-op | **not run** live; the guard is unit-tested |
 | Keyboard-only navigation | **not run** |
 | Screen reader (NVDA or VoiceOver) | **not run** |
+| `WP_DEBUG` + `SCRIPT_DEBUG` notice sweep on a live install | **not run** — CI runs with `WP_DEBUG` on and the suite converts notices to exceptions, so a notice on a tested path would already have failed |
+| Multisite network-admin no-op, live | **not seen** — the guard is unit-tested |
+| Screenshots for the directory | **not captured** — see D-012 |
 
-The first three rows are the ones to clear first: they are cheap on any real
-install and would confirm most of the rest.
+The accessibility and RTL rows are the ones that matter most, and they need a
+human at a browser. Everything mechanical is now covered.
