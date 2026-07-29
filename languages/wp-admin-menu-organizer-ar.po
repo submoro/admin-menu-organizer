@@ -1,9 +1,9 @@
-# Arabic translation for Menu Organizer - Collapsible Admin Menu.
+# Arabic translation for WP Admin Menu Organizer.
 # Copyright (C) 2026 Moamen Elabd
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Menu Organizer - Collapsible Admin Menu 1.0.0\n"
+"Project-Id-Version: WP Admin Menu Organizer 1.0.0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"

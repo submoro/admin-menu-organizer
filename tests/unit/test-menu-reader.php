@@ -2,13 +2,13 @@
 /**
  * Unit tests for the menu read layer.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
 declare( strict_types=1 );
 
-use MOCAM\Menu_Reader;
+use WPAMO\Menu_Reader;
 use PHPUnit\Framework\TestCase;
 
 require_once dirname( __DIR__ ) . '/fixtures/menus.php';
@@ -29,7 +29,7 @@ final class Test_Menu_Reader extends TestCase {
 	 * @return Menu_Reader
 	 */
 	private function core(): Menu_Reader {
-		return new Menu_Reader( mocam_fixture_core_menu(), mocam_fixture_core_submenu() );
+		return new Menu_Reader( wpamo_fixture_core_menu(), wpamo_fixture_core_submenu() );
 	}
 
 	/**
@@ -40,7 +40,7 @@ final class Test_Menu_Reader extends TestCase {
 	 * @return Menu_Reader
 	 */
 	private function production(): Menu_Reader {
-		return new Menu_Reader( mocam_fixture_production_menu(), mocam_fixture_core_submenu() );
+		return new Menu_Reader( wpamo_fixture_production_menu(), wpamo_fixture_core_submenu() );
 	}
 
 	/**
@@ -232,7 +232,7 @@ final class Test_Menu_Reader extends TestCase {
 	 * @return void
 	 */
 	public function test_malformed_entries_are_survived(): void {
-		$reader = new Menu_Reader( mocam_fixture_malformed_menu() );
+		$reader = new Menu_Reader( wpamo_fixture_malformed_menu() );
 
 		$this->assertSame(
 			array( 'index.php', 'short.php', 'numeric-title.php', 'options-general.php' ),
@@ -249,7 +249,7 @@ final class Test_Menu_Reader extends TestCase {
 	 * @return void
 	 */
 	public function test_duplicate_slugs_keep_the_first_occurrence(): void {
-		$reader = new Menu_Reader( mocam_fixture_malformed_menu() );
+		$reader = new Menu_Reader( wpamo_fixture_malformed_menu() );
 
 		$this->assertSame( 'Dashboard', $reader->get( 'index.php' )['title'] );
 		$this->assertSame( 1, count( array_keys( $reader->slugs(), 'index.php', true ) ) );
@@ -263,7 +263,7 @@ final class Test_Menu_Reader extends TestCase {
 	 * @return void
 	 */
 	public function test_numeric_titles_are_coerced(): void {
-		$reader = new Menu_Reader( mocam_fixture_malformed_menu() );
+		$reader = new Menu_Reader( wpamo_fixture_malformed_menu() );
 
 		$this->assertSame( '12345', $reader->get( 'numeric-title.php' )['title'] );
 	}

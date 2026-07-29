@@ -2,11 +2,11 @@
 /**
  * REST endpoints.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
-namespace MOCAM;
+namespace WPAMO;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -28,7 +28,7 @@ final class Rest_Controller {
 	 * @since 1.0.0
 	 * @var string
 	 */
-	const NAMESPACE_V1 = 'mocam/v1';
+	const NAMESPACE_V1 = 'wpamo/v1';
 
 	/**
 	 * Registers the REST hook.
@@ -127,8 +127,8 @@ final class Rest_Controller {
 	public static function can_save_state() {
 		if ( ! is_user_logged_in() || ! current_user_can( 'read' ) ) {
 			return new \WP_Error(
-				'mocam_forbidden',
-				__( 'You must be signed in to save your menu state.', 'menu-organizer-collapsible-admin-menu' ),
+				'wpamo_forbidden',
+				__( 'You must be signed in to save your menu state.', 'wp-admin-menu-organizer' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -146,8 +146,8 @@ final class Rest_Controller {
 	public static function can_save_site_layout() {
 		if ( ! current_user_can( Capabilities::MANAGE ) ) {
 			return new \WP_Error(
-				'mocam_forbidden',
-				__( 'You are not allowed to change the site-wide menu layout.', 'menu-organizer-collapsible-admin-menu' ),
+				'wpamo_forbidden',
+				__( 'You are not allowed to change the site-wide menu layout.', 'wp-admin-menu-organizer' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -165,8 +165,8 @@ final class Rest_Controller {
 	public static function can_personalise() {
 		if ( ! Capabilities::current_user_can_personalise() ) {
 			return new \WP_Error(
-				'mocam_forbidden',
-				__( 'Personalising your menu is not available on this site.', 'menu-organizer-collapsible-admin-menu' ),
+				'wpamo_forbidden',
+				__( 'Personalising your menu is not available on this site.', 'wp-admin-menu-organizer' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}

@@ -16,7 +16,7 @@
  * is taken from one custom property whose value is set per scheme from the values
  * core actually uses, keyed off the admin-color-* body class core already emits.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  */
 
 /* -------------------------------------------------------------------------
@@ -25,19 +25,19 @@
  * ---------------------------------------------------------------------- */
 
 #adminmenu {
-	--mocam-header-color: #fff;
-	--mocam-header-hover: #fff;
-	--mocam-row-height: 30px;
-	--mocam-indent: 6px;
+	--wpamo-header-color: #fff;
+	--wpamo-header-hover: #fff;
+	--wpamo-row-height: 30px;
+	--wpamo-indent: 6px;
 }
 
 body.admin-color-fresh #adminmenu {
-	--mocam-header-color: #f0f0f1;
+	--wpamo-header-color: #f0f0f1;
 }
 
 body.admin-color-light #adminmenu {
-	--mocam-header-color: #333;
-	--mocam-header-hover: #000;
+	--wpamo-header-color: #333;
+	--wpamo-header-hover: #000;
 }
 
 /* -------------------------------------------------------------------------
@@ -50,7 +50,7 @@ body.admin-color-light #adminmenu {
  * for keyboard and screen-reader use.
  * ---------------------------------------------------------------------- */
 
-#adminmenu li.mocam-group-header {
+#adminmenu li.wpamo-group-header {
 	position: relative;
 	margin: 6px 0 0;
 	padding: 0;
@@ -58,7 +58,7 @@ body.admin-color-light #adminmenu {
 	line-height: normal;
 }
 
-#adminmenu li.mocam-group-header:first-child {
+#adminmenu li.wpamo-group-header:first-child {
 	margin-block-start: 0;
 }
 
@@ -67,14 +67,14 @@ body.admin-color-light #adminmenu {
  * before any script runs, and suppressed once the script has replaced it with a
  * button, so the label is never announced twice.
  */
-#adminmenu li.mocam-group-header::before {
-	content: var(--mocam-icon, "\f228") " " var(--mocam-label, "");
+#adminmenu li.wpamo-group-header::before {
+	content: var(--wpamo-icon, "\f228") " " var(--wpamo-label, "");
 	display: block;
 	box-sizing: border-box;
-	min-height: var(--mocam-row-height);
+	min-height: var(--wpamo-row-height);
 	padding: 7px 12px 7px 10px;
 	padding-inline: 10px 12px;
-	color: var(--mocam-header-color);
+	color: var(--wpamo-header-color);
 	font-family: dashicons, sans-serif;
 	font-size: 12px;
 	font-weight: 600;
@@ -83,18 +83,18 @@ body.admin-color-light #adminmenu {
 	opacity: 0.72;
 }
 
-#adminmenu li.mocam-group-header.mocam-enhanced::before {
+#adminmenu li.wpamo-group-header.wpamo-enhanced::before {
 	content: none;
 }
 
 /* The interactive header, injected by the script. */
-#adminmenu .mocam-group-toggle {
+#adminmenu .wpamo-group-toggle {
 	display: flex;
 	align-items: center;
 	gap: 8px;
 	box-sizing: border-box;
 	width: 100%;
-	min-height: var(--mocam-row-height);
+	min-height: var(--wpamo-row-height);
 	margin: 0;
 	padding: 7px 12px 7px 10px;
 	padding-inline: 10px 12px;
@@ -102,7 +102,7 @@ body.admin-color-light #adminmenu {
 	border-radius: 0;
 	background: transparent;
 	box-shadow: none;
-	color: var(--mocam-header-color);
+	color: var(--wpamo-header-color);
 	font-family: inherit;
 	font-size: 12px;
 	font-weight: 600;
@@ -115,9 +115,9 @@ body.admin-color-light #adminmenu {
 	transition: opacity 0.15s ease-in-out;
 }
 
-#adminmenu .mocam-group-toggle:hover,
-#adminmenu .mocam-group-toggle:focus {
-	color: var(--mocam-header-hover);
+#adminmenu .wpamo-group-toggle:hover,
+#adminmenu .wpamo-group-toggle:focus {
+	color: var(--wpamo-header-hover);
 	opacity: 1;
 }
 
@@ -126,12 +126,12 @@ body.admin-color-light #adminmenu {
  * operation, and an invisible focus state makes that useless. Offset inwards so
  * it is not clipped by the sidebar edge.
  */
-#adminmenu .mocam-group-toggle:focus-visible {
+#adminmenu .wpamo-group-toggle:focus-visible {
 	outline: 2px solid currentColor;
 	outline-offset: -2px;
 }
 
-#adminmenu .mocam-group-toggle .mocam-toggle-icon {
+#adminmenu .wpamo-group-toggle .wpamo-toggle-icon {
 	flex: 0 0 auto;
 	width: 16px;
 	height: 16px;
@@ -142,11 +142,11 @@ body.admin-color-light #adminmenu {
 	text-transform: none;
 }
 
-#adminmenu .mocam-group-toggle .mocam-toggle-icon::before {
-	content: var(--mocam-icon, "\f228");
+#adminmenu .wpamo-group-toggle .wpamo-toggle-icon::before {
+	content: var(--wpamo-icon, "\f228");
 }
 
-#adminmenu .mocam-group-toggle .mocam-toggle-label {
+#adminmenu .wpamo-group-toggle .wpamo-toggle-label {
 	flex: 1 1 auto;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -155,7 +155,7 @@ body.admin-color-light #adminmenu {
 
 /* Chevron. Rotates rather than swapping glyphs, so the motion reads as one
  * object turning and there is nothing to preload. */
-#adminmenu .mocam-group-toggle .mocam-toggle-chevron {
+#adminmenu .wpamo-group-toggle .wpamo-toggle-chevron {
 	flex: 0 0 auto;
 	width: 16px;
 	height: 16px;
@@ -167,16 +167,16 @@ body.admin-color-light #adminmenu {
 	transition: transform 0.2s ease-in-out;
 }
 
-#adminmenu .mocam-group-toggle .mocam-toggle-chevron::before {
+#adminmenu .wpamo-group-toggle .wpamo-toggle-chevron::before {
 	content: "\f347"; /* dashicons-arrow-up. */
 }
 
-#adminmenu .mocam-group-toggle[aria-expanded="false"] .mocam-toggle-chevron {
+#adminmenu .wpamo-group-toggle[aria-expanded="false"] .wpamo-toggle-chevron {
 	transform: rotate(-180deg);
 }
 
 /* Aggregated update count for a collapsed group. SPEC section 6.3. */
-#adminmenu .mocam-group-toggle .mocam-toggle-badge {
+#adminmenu .wpamo-group-toggle .wpamo-toggle-badge {
 	flex: 0 0 auto;
 	min-width: 18px;
 	padding: 0 6px;
@@ -191,7 +191,7 @@ body.admin-color-light #adminmenu {
 
 /* Only shown while the group is closed; while open the individual rows already
  * carry their own counts, and repeating the total is noise. */
-#adminmenu .mocam-group-toggle[aria-expanded="true"] .mocam-toggle-badge {
+#adminmenu .wpamo-group-toggle[aria-expanded="true"] .wpamo-toggle-badge {
 	display: none;
 }
 
@@ -210,18 +210,18 @@ body.admin-color-light #adminmenu {
  * way the stylesheet stays static and cacheable while the first painted frame is
  * still correct.
  */
-#adminmenu li.mocam-collapsed-member {
+#adminmenu li.wpamo-collapsed-member {
 	display: none;
 }
 
 /* An empty group shows nothing at all: no header, no rows. SPEC section 6.1
  * forbids a focusable header with no members behind it. */
-#adminmenu li.mocam-group-empty {
+#adminmenu li.wpamo-group-empty {
 	display: none;
 }
 
 /* The catch-all can never be collapsed, so its chevron would be a lie. */
-#adminmenu li.mocam-header-permanent .mocam-toggle-chevron {
+#adminmenu li.wpamo-header-permanent .wpamo-toggle-chevron {
 	display: none;
 }
 
@@ -231,8 +231,8 @@ body.admin-color-light #adminmenu {
 
 @media (prefers-reduced-motion: reduce) {
 
-	#adminmenu .mocam-group-toggle,
-	#adminmenu .mocam-group-toggle .mocam-toggle-chevron {
+	#adminmenu .wpamo-group-toggle,
+	#adminmenu .wpamo-group-toggle .wpamo-toggle-chevron {
 		transition: none;
 	}
 }
@@ -248,31 +248,31 @@ body.admin-color-light #adminmenu {
  * unreachable.
  * ---------------------------------------------------------------------- */
 
-.folded #adminmenu li.mocam-group-header,
-.auto-fold #adminmenu li.mocam-group-header {
+.folded #adminmenu li.wpamo-group-header,
+.auto-fold #adminmenu li.wpamo-group-header {
 	margin-block-start: 4px;
 }
 
-.folded #adminmenu .mocam-group-toggle .mocam-toggle-label,
-.folded #adminmenu .mocam-group-toggle .mocam-toggle-chevron,
-.folded #adminmenu .mocam-group-toggle .mocam-toggle-badge {
+.folded #adminmenu .wpamo-group-toggle .wpamo-toggle-label,
+.folded #adminmenu .wpamo-group-toggle .wpamo-toggle-chevron,
+.folded #adminmenu .wpamo-group-toggle .wpamo-toggle-badge {
 	display: none;
 }
 
-.folded #adminmenu .mocam-group-toggle {
+.folded #adminmenu .wpamo-group-toggle {
 	justify-content: center;
 	padding-inline: 0;
 }
 
-.folded #adminmenu li.mocam-group-header::before {
-	content: var(--mocam-icon, "\f228");
+.folded #adminmenu li.wpamo-group-header::before {
+	content: var(--wpamo-icon, "\f228");
 	text-align: center;
 	padding-inline: 0;
 }
 
 /* Nothing may be hidden while folded, because the flyouts are the only way to
  * reach a submenu and a hidden parent has no flyout. */
-.folded #adminmenu li.mocam-collapsed-member {
+.folded #adminmenu li.wpamo-collapsed-member {
 	display: block;
 }
 
@@ -286,18 +286,18 @@ body.admin-color-light #adminmenu {
 
 @media screen and (max-width: 960px) {
 
-	.auto-fold #adminmenu .mocam-group-toggle .mocam-toggle-label,
-	.auto-fold #adminmenu .mocam-group-toggle .mocam-toggle-chevron,
-	.auto-fold #adminmenu .mocam-group-toggle .mocam-toggle-badge {
+	.auto-fold #adminmenu .wpamo-group-toggle .wpamo-toggle-label,
+	.auto-fold #adminmenu .wpamo-group-toggle .wpamo-toggle-chevron,
+	.auto-fold #adminmenu .wpamo-group-toggle .wpamo-toggle-badge {
 		display: none;
 	}
 
-	.auto-fold #adminmenu .mocam-group-toggle {
+	.auto-fold #adminmenu .wpamo-group-toggle {
 		justify-content: center;
 		padding-inline: 0;
 	}
 
-	.auto-fold #adminmenu li.mocam-collapsed-member {
+	.auto-fold #adminmenu li.wpamo-collapsed-member {
 		display: block;
 	}
 }
@@ -306,28 +306,28 @@ body.admin-color-light #adminmenu {
 
 	/* Core un-folds the menu again at this breakpoint, so the labels come back
 	 * and the accordion becomes meaningful once more. */
-	.auto-fold #adminmenu .mocam-group-toggle .mocam-toggle-label,
-	.auto-fold #adminmenu .mocam-group-toggle .mocam-toggle-chevron,
-	.auto-fold #adminmenu .mocam-group-toggle .mocam-toggle-badge {
+	.auto-fold #adminmenu .wpamo-group-toggle .wpamo-toggle-label,
+	.auto-fold #adminmenu .wpamo-group-toggle .wpamo-toggle-chevron,
+	.auto-fold #adminmenu .wpamo-group-toggle .wpamo-toggle-badge {
 		display: block;
 	}
 
-	.auto-fold #adminmenu .mocam-group-toggle {
+	.auto-fold #adminmenu .wpamo-group-toggle {
 		justify-content: flex-start;
 		padding-inline: 12px;
 	}
 
-	#adminmenu .mocam-group-toggle {
+	#adminmenu .wpamo-group-toggle {
 		min-height: 40px;
 		padding-block: 10px;
 		font-size: 13px;
 	}
 
-	.auto-fold #adminmenu li.mocam-collapsed-member {
+	.auto-fold #adminmenu li.wpamo-collapsed-member {
 		display: none;
 	}
 
-	#adminmenu li.mocam-group-header::before {
+	#adminmenu li.wpamo-group-header::before {
 		min-height: 40px;
 		padding-block: 10px;
 		font-size: 13px;
@@ -345,18 +345,18 @@ body.admin-color-light #adminmenu {
 
 @media (forced-colors: active) {
 
-	#adminmenu li.mocam-group-header::before,
-	#adminmenu .mocam-group-toggle {
+	#adminmenu li.wpamo-group-header::before,
+	#adminmenu .wpamo-group-toggle {
 		border-block-end: 1px solid CanvasText;
 		color: CanvasText;
 		opacity: 1;
 	}
 
-	#adminmenu .mocam-group-toggle:focus-visible {
+	#adminmenu .wpamo-group-toggle:focus-visible {
 		outline: 2px solid Highlight;
 	}
 
-	#adminmenu .mocam-group-toggle .mocam-toggle-badge {
+	#adminmenu .wpamo-group-toggle .wpamo-toggle-badge {
 		border: 1px solid CanvasText;
 		background: Canvas;
 		color: CanvasText;
@@ -374,7 +374,7 @@ body.admin-color-light #adminmenu {
  * them conceals no functionality.
  * ---------------------------------------------------------------------- */
 
-body.mocam-active #adminmenu li.wp-menu-separator {
+body.wpamo-active #adminmenu li.wp-menu-separator {
 	display: none;
 }
 
@@ -383,7 +383,7 @@ body.mocam-active #adminmenu li.wp-menu-separator {
  * identical if core changes it.
  * ---------------------------------------------------------------------- */
 
-#adminmenu .mocam-sr-only {
+#adminmenu .wpamo-sr-only {
 	position: absolute;
 	width: 1px;
 	height: 1px;

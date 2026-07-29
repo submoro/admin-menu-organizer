@@ -18,9 +18,9 @@
  * treated as decisive, because a vendor prefix or a namespaced capability is
  * strong evidence rather than a guess.
  *
- * Extend through the mocam_keyword_map filter rather than editing this file.
+ * Extend through the wpamo_keyword_map filter rather than editing this file.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 

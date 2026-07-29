@@ -2,11 +2,11 @@
 /**
  * Plugin container and hook registration.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
-namespace MOCAM;
+namespace WPAMO;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -27,7 +27,7 @@ final class Plugin {
 	 * @since 1.0.0
 	 * @var string
 	 */
-	const OPTION_LAYOUT = 'mocam_layout';
+	const OPTION_LAYOUT = 'wpamo_layout';
 
 	/**
 	 * Option holding the map of role slug to layout.
@@ -35,7 +35,7 @@ final class Plugin {
 	 * @since 1.0.0
 	 * @var string
 	 */
-	const OPTION_ROLE_LAYOUTS = 'mocam_role_layouts';
+	const OPTION_ROLE_LAYOUTS = 'wpamo_role_layouts';
 
 	/**
 	 * Option holding plugin-wide settings, such as the personalisation toggle.
@@ -43,7 +43,7 @@ final class Plugin {
 	 * @since 1.0.0
 	 * @var string
 	 */
-	const OPTION_SETTINGS = 'mocam_settings';
+	const OPTION_SETTINGS = 'wpamo_settings';
 
 	/**
 	 * Option holding the installed plugin version, used to trigger migrations.
@@ -51,7 +51,7 @@ final class Plugin {
 	 * @since 1.0.0
 	 * @var string
 	 */
-	const OPTION_VERSION = 'mocam_version';
+	const OPTION_VERSION = 'wpamo_version';
 
 	/**
 	 * User meta holding a personal layout override.
@@ -59,7 +59,7 @@ final class Plugin {
 	 * @since 1.0.0
 	 * @var string
 	 */
-	const META_USER_LAYOUT = 'mocam_user_layout';
+	const META_USER_LAYOUT = 'wpamo_user_layout';
 
 	/**
 	 * User meta holding the list of group IDs the user has collapsed.
@@ -67,7 +67,7 @@ final class Plugin {
 	 * @since 1.0.0
 	 * @var string
 	 */
-	const META_COLLAPSED = 'mocam_collapsed';
+	const META_COLLAPSED = 'wpamo_collapsed';
 
 	/**
 	 * Every option key the plugin creates. Used by the uninstaller.
@@ -353,9 +353,9 @@ final class Plugin {
 	 * Two escape hatches are supported, both of which must keep working so that
 	 * an administrator can always recover a broken sidebar:
 	 *
-	 * - The MOCAM_DISABLE constant, normally set in wp-config.php, disables the
+	 * - The WPAMO_DISABLE constant, normally set in wp-config.php, disables the
 	 *   plugin entirely.
-	 * - The mocam=off query parameter disables it for a single request.
+	 * - The wpamo=off query parameter disables it for a single request.
 	 *
 	 * The query parameter is read for its presence and value only. It is never
 	 * persisted, never echoed, and drives no database write, so no nonce is
@@ -371,14 +371,14 @@ final class Plugin {
 			return $this->disabled;
 		}
 
-		if ( defined( 'MOCAM_DISABLE' ) && MOCAM_DISABLE ) {
+		if ( defined( 'WPAMO_DISABLE' ) && WPAMO_DISABLE ) {
 			$this->disabled = true;
 
 			return true;
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only kill switch, see docblock.
-		$off = isset( $_GET['mocam'] ) ? sanitize_key( wp_unslash( $_GET['mocam'] ) ) : '';
+		$off = isset( $_GET['wpamo'] ) ? sanitize_key( wp_unslash( $_GET['wpamo'] ) ) : '';
 
 		$this->disabled = ( 'off' === $off );
 

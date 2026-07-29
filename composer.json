@@ -1,5 +1,5 @@
 {
-	"name": "archinest/menu-organizer-collapsible-admin-menu",
+	"name": "archinest/wp-admin-menu-organizer",
 	"description": "Groups WordPress admin menu items into named, collapsible categories.",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
@@ -31,8 +31,8 @@
 		"lint:fix": "phpcbf",
 		"lint:report": "phpcs --report=summary",
 		"check:readme": "php bin/check-readme.php readme.txt",
-		"i18n:pot": "php bin/make-pot.php . menu-organizer-collapsible-admin-menu languages/menu-organizer-collapsible-admin-menu.pot",
-		"i18n:ar": "php bin/build-translation.php languages/menu-organizer-collapsible-admin-menu.pot ar bin/i18n-ar.php languages menu-organizer-collapsible-admin-menu",
+		"i18n:pot": "php bin/make-pot.php . wp-admin-menu-organizer languages/wp-admin-menu-organizer.pot",
+		"i18n:ar": "php bin/build-translation.php languages/wp-admin-menu-organizer.pot ar bin/i18n-ar.php languages wp-admin-menu-organizer",
 		"i18n": [
 			"@i18n:pot",
 			"@i18n:ar"

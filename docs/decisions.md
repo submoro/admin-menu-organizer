@@ -4,8 +4,9 @@
 
 | Date | Decision | Value |
 |---|---|---|
-| 2026-07-26 | Public slug | `menu-organizer-collapsible-admin-menu` — checked against the directory, no plugin page exists at that slug (wordpress.org falls through to search, its behaviour for an unknown slug). Nearest neighbours (`wpb-accordion-menu-or-category`, `collapse-magic`, `vertical-sidebar-menu-block`) do not collide. Meets SPEC §2: no leading trademark, no "WordPress"/"WP" brand claim. |
-| 2026-07-26 | Display name | `Menu Organizer - Collapsible Admin Menu` |
+| 2026-07-28 | Public slug | `wp-admin-menu-organizer` — renamed from the original `menu-organizer-collapsible-admin-menu` at the owner's request, to shorten it and signal WordPress. Availability confirmed against the plugins API, not by scraping the HTML page. See D-014. |
+| 2026-07-28 | Display name | `WP Admin Menu Organizer` |
+| 2026-07-28 | PHP prefix | `WPAMO_` constants, `wpamo_` functions and keys, `wpamo-` CSS and JS, `WPAMO\` namespace |
 | 2026-07-26 | Licence | GPLv2 or later (unchanged from spec) |
 | 2026-07-26 | Core source for recon | Official wordpress.org release zips, read-only, in the scratchpad. Not committed. |
 | 2026-07-26 | Verification toolchain | PHP + Composer locally (phpcs, PHPCompatibilityWP); PHPUnit matrix and Plugin Check in GitHub Actions, since both need a database and a real WordPress install. |
@@ -252,6 +253,51 @@ It earned that on first run: `phpunit-unit.xml.dist` was in the archive, because
 `.distignore` listed `phpunit.xml.dist` literally and the second suite config was
 added later. `.distignore` now uses globs, and the check would have caught it
 whatever the cause.
+
+### D-014 — Renamed to `wp-admin-menu-organizer`
+
+Requested mid-build: shorten the name and signal WordPress in it.
+
+On the "WP" question, SPEC §2 forbids `WordPress` or `WP` "as a leading brand
+claim". A leading `wp-` is not that. WordPress's trademark policy objects to
+`WordPress` implying official endorsement; `WP` is the accepted abbreviation and
+is used by many of the directory's most-installed plugins — WP Rocket, WPForms,
+WP Mail SMTP, WP Super Cache. So a leading `wp-` is compliant, and the spec's
+constraint is satisfied by not using the full word.
+
+Availability was checked against the **plugins API**
+(`api.wordpress.org/plugins/info/1.2/`) rather than by fetching the public plugin
+page. That matters: an unknown slug on `wordpress.org/plugins/<slug>/` redirects
+to a search results page, which is easy to misread as "the page exists". The API
+returns a definitive error for an unclaimed slug.
+
+| Candidate | Result |
+|---|---|
+| `wp-admin-menu-organizer` | free — **chosen** |
+| `wp-menu-organizer` | free |
+| `admin-menu-organizer` | free |
+| `wp-menu-groups`, `wp-admin-menu-groups`, `collapsible-admin-menu` | free |
+| `menu-organizer` | **taken**, 80 active installs |
+| `admin-menu-groups` | **taken**, 800 active installs |
+
+Two of the shorter, more obvious candidates were already taken, which is the
+reason for checking rather than assuming.
+
+`admin` is kept in the slug deliberately. The directory is full of front-end
+navigation-menu plugins, and `admin` is the word that distinguishes this from
+them for anyone searching.
+
+The rename was mechanical and total: slug, main file name, display name, text
+domain across all 107 strings, `@package` tag, PHP prefix and namespace, option
+and user meta keys, CSS classes, body classes, REST namespace, settings page
+slug, filter names, the `?wpamo=off` escape hatch and the `WPAMO_DISABLE`
+constant. Nothing was released beforehand, so no migration path is needed for the
+renamed option keys.
+
+Two existing tests made this safe rather than risky: one asserts the text domain
+equals the directory basename, and one asserts the plugin header, the version
+constant and the readme's stable tag all agree. Both would have failed on a
+partial rename.
 
 ## Environment notes
 

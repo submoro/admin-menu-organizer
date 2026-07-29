@@ -2,11 +2,11 @@
 /**
  * Safe reading of the WordPress admin menu globals.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
-namespace MOCAM;
+namespace WPAMO;
 
 defined( 'ABSPATH' ) || exit;
 

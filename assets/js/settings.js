@@ -11,7 +11,7 @@
  * handler does. That is a hard accessibility requirement, not a nicety: a
  * drag-only editor is unusable with a keyboard and would fail review.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  */
 
 ( function ( $ ) {
@@ -61,17 +61,17 @@
 	 * @return {void}
 	 */
 	function syncGroup( groupId ) {
-		var $list = $( '.mocam-droplist[data-mocam-group="' + groupId + '"]' );
-		var $input = $( '[data-mocam-group-input="' + groupId + '"]' );
+		var $list = $( '.wpamo-droplist[data-wpamo-group="' + groupId + '"]' );
+		var $input = $( '[data-wpamo-group-input="' + groupId + '"]' );
 
 		if ( ! $list.length || ! $input.length ) {
 			return;
 		}
 
 		var slugs = $list
-			.children( '.mocam-chip' )
+			.children( '.wpamo-chip' )
 			.map( function () {
-				return $( this ).attr( 'data-mocam-slug' );
+				return $( this ).attr( 'data-wpamo-slug' );
 			} )
 			.get();
 
@@ -84,8 +84,8 @@
 	 * @return {void}
 	 */
 	function syncAll() {
-		$( '.mocam-droplist' ).each( function () {
-			syncGroup( $( this ).attr( 'data-mocam-group' ) );
+		$( '.wpamo-droplist' ).each( function () {
+			syncGroup( $( this ).attr( 'data-wpamo-group' ) );
 		} );
 	}
 
@@ -95,17 +95,17 @@
 	 * @return {void}
 	 */
 	function refreshCounts() {
-		$( '.mocam-group' ).each( function () {
+		$( '.wpamo-group' ).each( function () {
 			var $group = $( this );
-			var count = $group.find( '.mocam-droplist > .mocam-chip' ).length;
-			var $empty = $group.find( '.mocam-empty-note' );
+			var count = $group.find( '.wpamo-droplist > .wpamo-chip' ).length;
+			var $empty = $group.find( '.wpamo-empty-note' );
 
 			if ( 0 === count ) {
 				if ( ! $empty.length ) {
-					$group.find( '.mocam-droplist' ).after(
+					$group.find( '.wpamo-droplist' ).after(
 						$( '<p/>', {
-							'class': 'mocam-empty-note description',
-							text: __( 'Empty. This group will not appear in the sidebar.', 'menu-organizer-collapsible-admin-menu' )
+							'class': 'wpamo-empty-note description',
+							text: __( 'Empty. This group will not appear in the sidebar.', 'wp-admin-menu-organizer' )
 						} )
 					);
 				}
@@ -123,17 +123,17 @@
 	 * @return {void}
 	 */
 	function moveChip( slug, groupId ) {
-		var $chip = $( '.mocam-chip[data-mocam-slug="' + slug + '"]' );
-		var $target = $( '.mocam-droplist[data-mocam-group="' + groupId + '"]' );
+		var $chip = $( '.wpamo-chip[data-wpamo-slug="' + slug + '"]' );
+		var $target = $( '.wpamo-droplist[data-wpamo-group="' + groupId + '"]' );
 
 		if ( ! $chip.length || ! $target.length ) {
 			return;
 		}
 
-		var from = $chip.closest( '.mocam-droplist' ).attr( 'data-mocam-group' );
+		var from = $chip.closest( '.wpamo-droplist' ).attr( 'data-wpamo-group' );
 
 		$target.append( $chip );
-		$chip.find( '.mocam-move-select' ).val( groupId );
+		$chip.find( '.wpamo-move-select' ).val( groupId );
 
 		syncGroup( from );
 		syncGroup( groupId );
@@ -146,10 +146,10 @@
 		 * would land back at the top of the document and the user would have to
 		 * find their place again.
 		 */
-		$chip.find( '.mocam-move-select' ).trigger( 'focus' );
+		$chip.find( '.wpamo-move-select' ).trigger( 'focus' );
 
 		announce(
-			__( 'Moved to group', 'menu-organizer-collapsible-admin-menu' ) + ': ' + $target.closest( '.mocam-group' ).find( '.mocam-group-title' ).text().trim()
+			__( 'Moved to group', 'wp-admin-menu-organizer' ) + ': ' + $target.closest( '.wpamo-group' ).find( '.wpamo-group-title' ).text().trim()
 		);
 	}
 
@@ -170,11 +170,11 @@
 
 	$( function () {
 		// The layout editor.
-		if ( $( '.mocam-droplist' ).length ) {
-			$( '.mocam-droplist' ).sortable( {
-				connectWith: '.mocam-droplist',
-				handle: '.mocam-chip-handle',
-				placeholder: 'mocam-chip-placeholder',
+		if ( $( '.wpamo-droplist' ).length ) {
+			$( '.wpamo-droplist' ).sortable( {
+				connectWith: '.wpamo-droplist',
+				handle: '.wpamo-chip-handle',
+				placeholder: 'wpamo-chip-placeholder',
 				forcePlaceholderSize: true,
 				tolerance: 'pointer',
 				update: function () {
@@ -183,16 +183,16 @@
 					markDirty();
 				},
 				receive: function ( event, ui ) {
-					var groupId = $( this ).attr( 'data-mocam-group' );
+					var groupId = $( this ).attr( 'data-wpamo-group' );
 
 					// Keep the item's own select honest after a drag, so the two
 					// input methods never disagree about where the item is.
-					ui.item.find( '.mocam-move-select' ).val( groupId );
+					ui.item.find( '.wpamo-move-select' ).val( groupId );
 				}
 			} );
 
-			$( document ).on( 'change', '.mocam-move-select', function () {
-				moveChip( $( this ).attr( 'data-mocam-slug' ), $( this ).val() );
+			$( document ).on( 'change', '.wpamo-move-select', function () {
+				moveChip( $( this ).attr( 'data-wpamo-slug' ), $( this ).val() );
 			} );
 
 			syncAll();
@@ -200,9 +200,9 @@
 		}
 
 		// The groups table.
-		if ( $( '.mocam-group-rows' ).length ) {
-			$( '.mocam-group-rows' ).sortable( {
-				handle: '.mocam-drag-handle',
+		if ( $( '.wpamo-group-rows' ).length ) {
+			$( '.wpamo-group-rows' ).sortable( {
+				handle: '.wpamo-drag-handle',
 				axis: 'y',
 				containment: 'parent',
 				update: function () {
@@ -211,10 +211,10 @@
 				}
 			} );
 
-			$( document ).on( 'change', '.mocam-position', function () {
+			$( document ).on( 'change', '.wpamo-position', function () {
 				var $row = $( this ).closest( 'tr' );
 				var target = parseInt( $( this ).val(), 10 );
-				var $rows = $( '.mocam-group-rows tr' );
+				var $rows = $( '.wpamo-group-rows tr' );
 
 				if ( isNaN( target ) || target < 1 || target > $rows.length ) {
 					syncGroupOrder();
@@ -225,7 +225,7 @@
 				var $reference = $rows.not( $row ).eq( target - 1 );
 
 				if ( ! $reference.length ) {
-					$( '.mocam-group-rows' ).append( $row );
+					$( '.wpamo-group-rows' ).append( $row );
 				} else if ( target - 1 >= $rows.index( $row ) ) {
 					$reference.after( $row );
 				} else {
@@ -234,17 +234,17 @@
 
 				syncGroupOrder();
 				markDirty();
-				$row.find( '.mocam-position' ).trigger( 'focus' );
+				$row.find( '.wpamo-position' ).trigger( 'focus' );
 			} );
 
 			syncGroupOrder();
 		}
 
-		$( '.mocam-settings form' ).on( 'submit', function () {
+		$( '.wpamo-settings form' ).on( 'submit', function () {
 			dirty = false;
 		} );
 
-		$( '.mocam-settings' ).on( 'change input', 'input, select, textarea', markDirty );
+		$( '.wpamo-settings' ).on( 'change input', 'input, select, textarea', markDirty );
 	} );
 
 	/**
@@ -253,16 +253,16 @@
 	 * @return {void}
 	 */
 	function syncGroupOrder() {
-		var ids = $( '.mocam-group-rows tr' )
+		var ids = $( '.wpamo-group-rows tr' )
 			.map( function () {
-				return $( this ).attr( 'data-mocam-group' );
+				return $( this ).attr( 'data-wpamo-group' );
 			} )
 			.get();
 
-		$( '#mocam-group-order' ).val( ids.join( ',' ) );
+		$( '#wpamo-group-order' ).val( ids.join( ',' ) );
 
-		$( '.mocam-group-rows tr' ).each( function ( index ) {
-			$( this ).find( '.mocam-position' ).val( index + 1 );
+		$( '.wpamo-group-rows tr' ).each( function ( index ) {
+			$( this ).find( '.wpamo-position' ).val( index + 1 );
 		} );
 	}
 

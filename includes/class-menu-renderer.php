@@ -2,11 +2,11 @@
 /**
  * Decoration of the rendered admin menu.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
-namespace MOCAM;
+namespace WPAMO;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -50,7 +50,7 @@ final class Menu_Renderer {
 	 * @since 1.0.0
 	 * @var string
 	 */
-	const HEADER_SLUG_PREFIX = 'mocam-header-';
+	const HEADER_SLUG_PREFIX = 'wpamo-header-';
 
 	/**
 	 * Priority for the add_menu_classes filter.
@@ -130,24 +130,24 @@ final class Menu_Renderer {
 	 */
 	public function enqueue(): void {
 		wp_enqueue_style(
-			'mocam-admin-menu',
-			MOCAM_PLUGIN_URL . 'assets/css/admin-menu.css',
+			'wpamo-admin-menu',
+			WPAMO_PLUGIN_URL . 'assets/css/admin-menu.css',
 			array( 'dashicons' ),
-			MOCAM_VERSION
+			WPAMO_VERSION
 		);
 
 		wp_enqueue_script(
-			'mocam-admin-menu',
-			MOCAM_PLUGIN_URL . 'assets/js/admin-menu.js',
+			'wpamo-admin-menu',
+			WPAMO_PLUGIN_URL . 'assets/js/admin-menu.js',
 			array( 'wp-i18n' ),
-			MOCAM_VERSION,
+			WPAMO_VERSION,
 			true
 		);
 
 		wp_set_script_translations(
-			'mocam-admin-menu',
-			'menu-organizer-collapsible-admin-menu',
-			MOCAM_PLUGIN_DIR . 'languages'
+			'wpamo-admin-menu',
+			'wp-admin-menu-organizer',
+			WPAMO_PLUGIN_DIR . 'languages'
 		);
 
 		$data = $this->script_data();
@@ -156,8 +156,8 @@ final class Menu_Renderer {
 		$data['nonce']   = wp_create_nonce( 'wp_rest' );
 
 		wp_add_inline_script(
-			'mocam-admin-menu',
-			'window.mocamMenu = ' . wp_json_encode( $data ) . ';',
+			'wpamo-admin-menu',
+			'window.wpamoMenu = ' . wp_json_encode( $data ) . ';',
 			'before'
 		);
 	}
@@ -181,9 +181,9 @@ final class Menu_Renderer {
 	 * @return void
 	 */
 	public function print_noscript_styles(): void {
-		echo '<noscript><style id="mocam-noscript">'
-			. '#adminmenu li.mocam-collapsed-member{display:block}'
-			. '#adminmenu .mocam-group-toggle{display:none}'
+		echo '<noscript><style id="wpamo-noscript">'
+			. '#adminmenu li.wpamo-collapsed-member{display:block}'
+			. '#adminmenu .wpamo-group-toggle{display:none}'
 			. '</style></noscript>' . "\n";
 	}
 
@@ -225,7 +225,7 @@ final class Menu_Renderer {
 			}
 
 			if ( null !== $group_id ) {
-				$classes = 'mocam-item mocam-group-' . $group_id;
+				$classes = 'wpamo-item wpamo-group-' . $group_id;
 
 				/*
 				 * Whether a row is hidden is decided here, on the server, rather
@@ -236,7 +236,7 @@ final class Menu_Renderer {
 				 * and still paints the correct state on first frame.
 				 */
 				if ( isset( $collapsed[ $group_id ] ) ) {
-					$classes .= ' mocam-collapsed-member';
+					$classes .= ' wpamo-collapsed-member';
 				}
 
 				$item[4] = self::add_class(
@@ -316,10 +316,10 @@ final class Menu_Renderer {
 	 * @return array A $menu entry.
 	 */
 	private function header_row( string $group_id ): array {
-		$classes = 'mocam-group-header mocam-header-' . $group_id;
+		$classes = 'wpamo-group-header wpamo-header-' . $group_id;
 
 		if ( Categories::UNGROUPED === $group_id ) {
-			$classes .= ' mocam-header-permanent';
+			$classes .= ' wpamo-header-permanent';
 		}
 
 		return array(
@@ -328,7 +328,7 @@ final class Menu_Renderer {
 			self::HEADER_SLUG_PREFIX . $group_id,        // 2: unique slug.
 			'',                                          // 3: page_title, unused by the renderer.
 			$classes,                                    // 4: classes, escaped by core.
-			'mocam-group-' . $group_id,                  // 5: hookname, becomes the li id.
+			'wpamo-group-' . $group_id,                  // 5: hookname, becomes the li id.
 			'',                                          // 6: icon_url.
 		);
 	}
@@ -348,7 +348,7 @@ final class Menu_Renderer {
 	public function body_classes( $classes ): string {
 		$classes = is_string( $classes ) ? $classes : '';
 
-		$added = array( 'mocam-active' );
+		$added = array( 'wpamo-active' );
 
 		$active = $this->active_group();
 
@@ -358,7 +358,7 @@ final class Menu_Renderer {
 			if ( $group['count_members'] < 1 ) {
 				// An empty group has no header and no rows, so it is neither open
 				// nor closed. SPEC section 6.1 requires it hidden entirely.
-				$added[] = 'mocam-empty-' . $group_id;
+				$added[] = 'wpamo-empty-' . $group_id;
 				continue;
 			}
 
@@ -369,12 +369,12 @@ final class Menu_Renderer {
 			 * see no indication of where they are.
 			 */
 			if ( $group_id === $active ) {
-				$added[] = 'mocam-current-' . $group_id;
+				$added[] = 'wpamo-current-' . $group_id;
 				continue;
 			}
 
 			if ( ! $group['open'] ) {
-				$added[] = 'mocam-collapsed-' . $group_id;
+				$added[] = 'wpamo-collapsed-' . $group_id;
 			}
 		}
 
@@ -407,15 +407,15 @@ final class Menu_Renderer {
 				continue;
 			}
 
-			$selector = '#adminmenu .mocam-header-' . $group['id'];
+			$selector = '#adminmenu .wpamo-header-' . $group['id'];
 
 			$declarations = array(
-				'--mocam-label: "' . self::css_string( $group['label'] ) . '"',
-				'--mocam-icon: "' . self::dashicon_glyph( $group['icon'] ) . '"',
+				'--wpamo-label: "' . self::css_string( $group['label'] ) . '"',
+				'--wpamo-icon: "' . self::dashicon_glyph( $group['icon'] ) . '"',
 			);
 
 			if ( $group['count_updates'] > 0 ) {
-				$declarations[] = '--mocam-badge: "' . self::css_string( (string) $group['count_updates'] ) . '"';
+				$declarations[] = '--wpamo-badge: "' . self::css_string( (string) $group['count_updates'] ) . '"';
 			}
 
 			$rules[] = $selector . '{' . implode( ';', $declarations ) . '}';
@@ -438,7 +438,7 @@ final class Menu_Renderer {
 		 * guard on the whole block.
 		 */
 		printf(
-			"<style id='mocam-inline'>%s</style>\n",
+			"<style id='wpamo-inline'>%s</style>\n",
 			wp_strip_all_tags( implode( "\n", $rules ) ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS block, not HTML; values individually escaped by css_string(), see docblock.
 		);
 	}

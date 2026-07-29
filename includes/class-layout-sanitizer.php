@@ -2,11 +2,11 @@
 /**
  * Recursive whitelist sanitiser for layout arrays.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
-namespace MOCAM;
+namespace WPAMO;
 
 defined( 'ABSPATH' ) || exit;
 

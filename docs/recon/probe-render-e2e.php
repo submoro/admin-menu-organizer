@@ -13,9 +13,9 @@ $sp   = __DIR__ . '/';
 
 define( 'ABSPATH', $sp . 'wpstub/' );
 define( 'WP_PLUGIN_DIR', $sp . 'wpstub/wp-content/plugins' );
-define( 'MOCAM_PLUGIN_DIR', $repo );
-define( 'MOCAM_PLUGIN_URL', 'https://example.test/wp-content/plugins/mocam/' );
-define( 'MOCAM_VERSION', '1.0.0' );
+define( 'WPAMO_PLUGIN_DIR', $repo );
+define( 'WPAMO_PLUGIN_URL', 'https://example.test/wp-content/plugins/wpamo/' );
+define( 'WPAMO_VERSION', '1.0.0' );
 
 // --- Stubs for the WordPress functions the render path and our classes touch. ---
 function wptexturize( $t ) { return $t; }
@@ -51,14 +51,14 @@ final class Categories_Stub {
 	public static function definitions(): array {
 		static $d = null;
 		if ( null === $d ) {
-			$d = require MOCAM_PLUGIN_DIR . 'includes/data/categories.php';
+			$d = require WPAMO_PLUGIN_DIR . 'includes/data/categories.php';
 		}
 		return $d;
 	}
 }
 
-// MOCAM\Categories is referenced by the renderer; alias a minimal version.
-eval( 'namespace MOCAM; final class Categories { const UNGROUPED = "ungrouped";
+// WPAMO\Categories is referenced by the renderer; alias a minimal version.
+eval( 'namespace WPAMO; final class Categories { const UNGROUPED = "ungrouped";
 	public static function definitions(): array { return \Categories_Stub::definitions(); }
 	public static function ids(): array { return array_column( self::definitions(), "id" ); }
 	public static function get( string $id ) { foreach ( self::definitions() as $d ) { if ( $d["id"] === $id ) { return $d; } } return null; }
@@ -73,8 +73,8 @@ $GLOBALS['pagenow']      = 'edit.php';
 
 $groups = array_column( Categories_Stub::definitions(), 'id' );
 
-$reader   = new MOCAM\Menu_Reader( mocam_fixture_production_menu() );
-$detector = new MOCAM\Detector(
+$reader   = new WPAMO\Menu_Reader( wpamo_fixture_production_menu() );
+$detector = new WPAMO\Detector(
 	require $repo . 'includes/data/known-slugs.php',
 	require $repo . 'includes/data/keyword-map.php',
 	$groups
@@ -95,7 +95,7 @@ foreach ( Categories_Stub::definitions() as $definition ) {
 $layout = array( 'schema' => 1, 'groups' => $layout_groups );
 
 // 1. Reorder.
-$ordered = MOCAM\Menu_Order::order( $reader->slugs(), $reader, $layout, $detected );
+$ordered = WPAMO\Menu_Order::order( $reader->slugs(), $reader, $layout, $detected );
 
 echo "=== STEP 1: reorder ===\n";
 printf( "  in %d slugs, out %d slugs, permutation: %s\n",
@@ -106,13 +106,13 @@ printf( "  in %d slugs, out %d slugs, permutation: %s\n",
 
 // Apply the order to the menu array, as core's usort would.
 $position = array_flip( $ordered );
-$menu     = mocam_fixture_production_menu();
+$menu     = wpamo_fixture_production_menu();
 usort( $menu, static function ( $a, $b ) use ( $position ) {
 	return ( $position[ $a[2] ] ?? 999 ) <=> ( $position[ $b[2] ] ?? 999 );
 } );
 
 // 2. Decorate. The user has collapsed 'design' and 'security'.
-$renderer = new MOCAM\Menu_Renderer( $reader, $layout, array( 'design', 'security' ) );
+$renderer = new WPAMO\Menu_Renderer( $reader, $layout, array( 'design', 'security' ) );
 $decorated = $renderer->decorate( $menu );
 
 echo "\n=== STEP 2: decorate ===\n";
@@ -129,10 +129,10 @@ $html = ob_get_clean();
 echo "\n=== STEP 3: render via core _wp_menu_output() ===\n";
 
 $li_count      = preg_match_all( '/<li[^>]*>/', $html, $lis );
-$headers       = preg_match_all( '/<li class="[^"]*mocam-group-header[^"]*"[^>]*>/', $html, $hs );
-$collapsed     = preg_match_all( '/mocam-collapsed-member/', $html );
-$aria_hidden   = preg_match_all( '/mocam-group-header[^>]*aria-hidden/', $html );
-$items         = preg_match_all( '/mocam-item/', $html );
+$headers       = preg_match_all( '/<li class="[^"]*wpamo-group-header[^"]*"[^>]*>/', $html, $hs );
+$collapsed     = preg_match_all( '/wpamo-collapsed-member/', $html );
+$aria_hidden   = preg_match_all( '/wpamo-group-header[^>]*aria-hidden/', $html );
+$items         = preg_match_all( '/wpamo-item/', $html );
 
 printf( "  total <li>: %d\n", $li_count );
 printf( "  header rows rendered: %d\n", $headers );
@@ -146,10 +146,10 @@ foreach ( $hs[0] as $h ) {
 }
 
 echo "\n--- a decorated item, and a collapsed one ---\n";
-if ( preg_match( '#<li class="[^"]*mocam-group-commerce[^"]*".*?</li>#s', $html, $m ) ) {
+if ( preg_match( '#<li class="[^"]*wpamo-group-commerce[^"]*".*?</li>#s', $html, $m ) ) {
 	echo '  ' . substr( preg_replace( '/\s+/', ' ', $m[0] ), 0, 300 ) . "\n";
 }
-if ( preg_match( '#<li class="[^"]*mocam-collapsed-member[^"]*".*?</li>#s', $html, $m ) ) {
+if ( preg_match( '#<li class="[^"]*wpamo-collapsed-member[^"]*".*?</li>#s', $html, $m ) ) {
 	echo '  ' . substr( preg_replace( '/\s+/', ' ', $m[0] ), 0, 300 ) . "\n";
 }
 
@@ -163,11 +163,11 @@ function check( $label, $ok ) {
 
 check( 'every group with members got a header row', $headers > 5 );
 check( 'no header row is aria-hidden', 0 === $aria_hidden );
-check( 'header rows render as empty <li> (no anchor inside)', ! preg_match( '/mocam-group-header[^>]*>\s*<a/', $html ) );
+check( 'header rows render as empty <li> (no anchor inside)', ! preg_match( '/wpamo-group-header[^>]*>\s*<a/', $html ) );
 check( 'items carry their group class', $items > 25 );
 check( 'collapsed groups hid their rows', $collapsed > 0 );
-check( 'the active group (content) is NOT collapsed', ! preg_match( '/mocam-group-content[^"]*mocam-collapsed-member/', $html ) );
-check( 'ungrouped is never collapsed', ! preg_match( '/mocam-group-ungrouped[^"]*mocam-collapsed-member/', $html ) );
+check( 'the active group (content) is NOT collapsed', ! preg_match( '/wpamo-group-content[^"]*wpamo-collapsed-member/', $html ) );
+check( 'ungrouped is never collapsed', ! preg_match( '/wpamo-group-ungrouped[^"]*wpamo-collapsed-member/', $html ) );
 check( 'no menu item lost: every original slug appears in the HTML', (function () use ( $reader, $html ) {
 	foreach ( $reader->organizable_slugs() as $slug ) {
 		if ( false === strpos( $html, "'" . $slug . "'" ) && false === strpos( $html, htmlspecialchars( $slug, ENT_QUOTES ) ) ) {
@@ -181,7 +181,7 @@ check( 'inline CSS carries a label for each group', (function () use ( $renderer
 	ob_start();
 	$renderer->print_inline_styles();
 	$css = ob_get_clean();
-	return false !== strpos( $css, '--mocam-label' ) && false !== strpos( $css, 'noscript' );
+	return false !== strpos( $css, '--wpamo-label' ) && false !== strpos( $css, 'noscript' );
 } )() );
 
 echo "\n", 0 === $fail ? "END-TO-END RENDER OK\n" : "$fail ASSERTION(S) FAILED\n";

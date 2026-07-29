@@ -4,7 +4,7 @@
  *
  * Returned as a PHP array rather than JSON so that opcache keeps it in memory
  * and no decoding happens per request. Extend or replace through the
- * mocam_category_definitions filter rather than editing this file.
+ * wpamo_category_definitions filter rather than editing this file.
  *
  * Labels are translated at the point they are read, not here, because this file
  * may be loaded before the text domain is available and calling a translation
@@ -12,7 +12,7 @@
  * Each entry therefore carries an untranslated label plus a context-free key
  * that Categories::labels() maps to a translated string.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 

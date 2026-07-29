@@ -2,13 +2,13 @@
 /**
  * Unit tests for the schema migration chain.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
 declare( strict_types=1 );
 
-use MOCAM\Migrations;
+use WPAMO\Migrations;
 use PHPUnit\Framework\TestCase;
 
 /**

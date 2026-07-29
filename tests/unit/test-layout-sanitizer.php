@@ -2,13 +2,13 @@
 /**
  * Unit tests for the layout sanitiser.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
 declare( strict_types=1 );
 
-use MOCAM\Layout_Sanitizer;
+use WPAMO\Layout_Sanitizer;
 use PHPUnit\Framework\TestCase;
 
 /**

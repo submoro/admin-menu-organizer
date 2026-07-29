@@ -11,13 +11,13 @@
  * before this runs. See includes/class-menu-renderer.php for why core cannot be
  * made to emit a button itself.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  */
 
 ( function () {
 	'use strict';
 
-	var data = window.mocamMenu || {};
+	var data = window.wpamoMenu || {};
 
 	/**
 	 * Translates a string, falling back to the original when wp.i18n is absent.
@@ -52,7 +52,7 @@
 		return template.replace( '%s', value );
 	}
 
-	var COLLAPSED_CLASS = 'mocam-collapsed-member';
+	var COLLAPSED_CLASS = 'wpamo-collapsed-member';
 	var SAVE_DEBOUNCE_MS = 400;
 
 	var menu = document.getElementById( 'adminmenu' );
@@ -72,7 +72,7 @@
 	 */
 	function rowsFor( groupId ) {
 		return Array.prototype.slice.call(
-			menu.querySelectorAll( 'li.mocam-group-' + cssEscape( groupId ) )
+			menu.querySelectorAll( 'li.wpamo-group-' + cssEscape( groupId ) )
 		);
 	}
 
@@ -105,7 +105,7 @@
 	function collapsedIds() {
 		return data.groups
 			.filter( function ( group ) {
-				var toggle = document.getElementById( 'mocam-toggle-' + group.id );
+				var toggle = document.getElementById( 'wpamo-toggle-' + group.id );
 
 				return toggle && 'false' === toggle.getAttribute( 'aria-expanded' );
 			} )
@@ -171,22 +171,22 @@
 	 * @return {void}
 	 */
 	function setExpanded( toggle, expanded, persist ) {
-		var groupId = toggle.getAttribute( 'data-mocam-group' );
+		var groupId = toggle.getAttribute( 'data-wpamo-group' );
 
 		toggle.setAttribute( 'aria-expanded', expanded ? 'true' : 'false' );
 
 		rowsFor( groupId ).forEach( function ( row ) {
-			if ( row.classList.contains( 'mocam-group-header' ) ) {
+			if ( row.classList.contains( 'wpamo-group-header' ) ) {
 				return;
 			}
 
 			row.classList.toggle( COLLAPSED_CLASS, ! expanded );
 		} );
 
-		var state = toggle.querySelector( '.mocam-sr-state' );
+		var state = toggle.querySelector( '.wpamo-sr-state' );
 
 		if ( state ) {
-			state.textContent = expanded ? __( 'expanded', 'menu-organizer-collapsible-admin-menu' ) : __( 'collapsed', 'menu-organizer-collapsible-admin-menu' );
+			state.textContent = expanded ? __( 'expanded', 'wp-admin-menu-organizer' ) : __( 'collapsed', 'wp-admin-menu-organizer' );
 		}
 
 		if ( persist ) {
@@ -201,7 +201,7 @@
 	 * @return {void}
 	 */
 	function enhance( group ) {
-		var header = document.getElementById( 'mocam-group-' + group.id );
+		var header = document.getElementById( 'wpamo-group-' + group.id );
 
 		if ( ! header ) {
 			return;
@@ -210,11 +210,11 @@
 		// SPEC section 6.1: a header with nothing behind it must not be focusable.
 		// The server already omits empty groups, so this is a second guard.
 		var members = rowsFor( group.id ).filter( function ( row ) {
-			return ! row.classList.contains( 'mocam-group-header' );
+			return ! row.classList.contains( 'wpamo-group-header' );
 		} );
 
 		if ( ! members.length ) {
-			header.classList.add( 'mocam-group-empty' );
+			header.classList.add( 'wpamo-group-empty' );
 
 			return;
 		}
@@ -228,30 +228,30 @@
 		var toggle = document.createElement( 'button' );
 
 		toggle.type = 'button';
-		toggle.className = 'mocam-group-toggle';
-		toggle.id = 'mocam-toggle-' + group.id;
-		toggle.setAttribute( 'data-mocam-group', group.id );
+		toggle.className = 'wpamo-group-toggle';
+		toggle.id = 'wpamo-toggle-' + group.id;
+		toggle.setAttribute( 'data-wpamo-group', group.id );
 		toggle.setAttribute( 'aria-expanded', startsCollapsed ? 'false' : 'true' );
 
 		var icon = document.createElement( 'span' );
-		icon.className = 'mocam-toggle-icon';
+		icon.className = 'wpamo-toggle-icon';
 		icon.setAttribute( 'aria-hidden', 'true' );
 		toggle.appendChild( icon );
 
 		var label = document.createElement( 'span' );
-		label.className = 'mocam-toggle-label';
+		label.className = 'wpamo-toggle-label';
 		label.textContent = group.label;
 		toggle.appendChild( label );
 
 		if ( group.updates > 0 ) {
 			var badge = document.createElement( 'span' );
-			badge.className = 'mocam-toggle-badge';
+			badge.className = 'wpamo-toggle-badge';
 			badge.textContent = String( group.updates );
 			badge.setAttribute(
 				'aria-label',
 				sprintf(
 					/* translators: %s: Number of pending updates. */
-					__( '%s pending updates in this group', 'menu-organizer-collapsible-admin-menu' ),
+					__( '%s pending updates in this group', 'wp-admin-menu-organizer' ),
 					String( group.updates )
 				)
 			);
@@ -265,23 +265,23 @@
 		 * disclosure, and the redundancy costs nothing.
 		 */
 		var state = document.createElement( 'span' );
-		state.className = 'mocam-sr-only mocam-sr-state';
-		state.textContent = startsCollapsed ? __( 'collapsed', 'menu-organizer-collapsible-admin-menu' ) : __( 'expanded', 'menu-organizer-collapsible-admin-menu' );
+		state.className = 'wpamo-sr-only wpamo-sr-state';
+		state.textContent = startsCollapsed ? __( 'collapsed', 'wp-admin-menu-organizer' ) : __( 'expanded', 'wp-admin-menu-organizer' );
 		toggle.appendChild( state );
 
 		var chevron = document.createElement( 'span' );
-		chevron.className = 'mocam-toggle-chevron';
+		chevron.className = 'wpamo-toggle-chevron';
 		chevron.setAttribute( 'aria-hidden', 'true' );
 		toggle.appendChild( chevron );
 
 		// The catch-all is never collapsible, so it gets a label and no control.
 		if ( group.permanent ) {
 			var plain = document.createElement( 'span' );
-			plain.className = 'mocam-group-toggle mocam-group-static';
+			plain.className = 'wpamo-group-toggle wpamo-group-static';
 			plain.appendChild( icon );
 			plain.appendChild( label );
 			header.appendChild( plain );
-			header.classList.add( 'mocam-enhanced' );
+			header.classList.add( 'wpamo-enhanced' );
 
 			return;
 		}
@@ -305,7 +305,7 @@
 				return;
 			}
 
-			toggles = Array.prototype.slice.call( menu.querySelectorAll( '.mocam-group-toggle[data-mocam-group]' ) );
+			toggles = Array.prototype.slice.call( menu.querySelectorAll( '.wpamo-group-toggle[data-wpamo-group]' ) );
 
 			var index = toggles.indexOf( toggle );
 
@@ -324,7 +324,7 @@
 		} );
 
 		header.appendChild( toggle );
-		header.classList.add( 'mocam-enhanced' );
+		header.classList.add( 'wpamo-enhanced' );
 	}
 
 	data.groups.forEach( enhance );

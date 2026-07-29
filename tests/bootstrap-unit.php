@@ -10,20 +10,20 @@
  * Anything that reads an option, writes user meta, or calls a WordPress
  * function belongs in tests/integration/ instead.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
 declare( strict_types=1 );
 
-$mocam_autoload = dirname( __DIR__ ) . '/vendor/autoload.php';
+$wpamo_autoload = dirname( __DIR__ ) . '/vendor/autoload.php';
 
-if ( ! file_exists( $mocam_autoload ) ) {
+if ( ! file_exists( $wpamo_autoload ) ) {
 	echo 'Composer dependencies are not installed. Run "composer install" first.' . PHP_EOL;
 	exit( 1 );
 }
 
-require_once $mocam_autoload;
+require_once $wpamo_autoload;
 
 /*
  * Every plugin file opens with `defined( 'ABSPATH' ) || exit;`, which stops it
@@ -35,6 +35,6 @@ require_once $mocam_autoload;
 // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- Standing in for WordPress's own constant in a WordPress-free test run; see above.
 defined( 'ABSPATH' ) || define( 'ABSPATH', dirname( __DIR__ ) . '/' );
 
-if ( ! defined( 'MOCAM_PLUGIN_DIR' ) ) {
-	define( 'MOCAM_PLUGIN_DIR', dirname( __DIR__ ) . '/' );
+if ( ! defined( 'WPAMO_PLUGIN_DIR' ) ) {
+	define( 'WPAMO_PLUGIN_DIR', dirname( __DIR__ ) . '/' );
 }

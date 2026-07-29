@@ -30,6 +30,9 @@ tests
 docs
 bin
 SPEC.md
+# The GitHub-facing readme. WordPress.org uses readme.txt, and shipping both
+# confuses the directory's parser.
+README.md
 
 # Directory assets. These are uploaded to the WordPress.org assets/ SVN
 # directory, not bundled in the plugin itself.

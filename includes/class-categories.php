@@ -2,11 +2,11 @@
 /**
  * Category definitions and their translated labels.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
-namespace MOCAM;
+namespace WPAMO;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -52,7 +52,7 @@ final class Categories {
 			return self::$definitions;
 		}
 
-		$bundled = require MOCAM_PLUGIN_DIR . 'includes/data/categories.php';
+		$bundled = require WPAMO_PLUGIN_DIR . 'includes/data/categories.php';
 		$labels  = self::labels();
 
 		$defaults = array();
@@ -84,7 +84,7 @@ final class Categories {
 		 *
 		 * @param array $defaults List of category definitions.
 		 */
-		$filtered = apply_filters( 'mocam_category_definitions', $defaults );
+		$filtered = apply_filters( 'wpamo_category_definitions', $defaults );
 
 		self::$definitions = self::ensure_ungrouped( is_array( $filtered ) ? $filtered : $defaults );
 
@@ -136,7 +136,7 @@ final class Categories {
 	 * Clears the memoised definitions.
 	 *
 	 * Needed by the test suite, and by any caller that registers a
-	 * mocam_category_definitions filter after the definitions were first read.
+	 * wpamo_category_definitions filter after the definitions were first read.
 	 *
 	 * @since 1.0.0
 	 *
@@ -158,17 +158,17 @@ final class Categories {
 	 */
 	private static function labels(): array {
 		return array(
-			'dashboard'    => __( 'Dashboard', 'menu-organizer-collapsible-admin-menu' ),
-			'content'      => __( 'Content', 'menu-organizer-collapsible-admin-menu' ),
-			'commerce'     => __( 'Commerce', 'menu-organizer-collapsible-admin-menu' ),
-			'design'       => __( 'Design & Layout', 'menu-organizer-collapsible-admin-menu' ),
-			'seo'          => __( 'SEO & Marketing', 'menu-organizer-collapsible-admin-menu' ),
-			'security'     => __( 'Security & Backup', 'menu-organizer-collapsible-admin-menu' ),
-			'performance'  => __( 'Performance', 'menu-organizer-collapsible-admin-menu' ),
-			'users'        => __( 'Users & Access', 'menu-organizer-collapsible-admin-menu' ),
-			'integrations' => __( 'Integrations', 'menu-organizer-collapsible-admin-menu' ),
-			'tools'        => __( 'Tools & System', 'menu-organizer-collapsible-admin-menu' ),
-			'ungrouped'    => __( 'Other', 'menu-organizer-collapsible-admin-menu' ),
+			'dashboard'    => __( 'Dashboard', 'wp-admin-menu-organizer' ),
+			'content'      => __( 'Content', 'wp-admin-menu-organizer' ),
+			'commerce'     => __( 'Commerce', 'wp-admin-menu-organizer' ),
+			'design'       => __( 'Design & Layout', 'wp-admin-menu-organizer' ),
+			'seo'          => __( 'SEO & Marketing', 'wp-admin-menu-organizer' ),
+			'security'     => __( 'Security & Backup', 'wp-admin-menu-organizer' ),
+			'performance'  => __( 'Performance', 'wp-admin-menu-organizer' ),
+			'users'        => __( 'Users & Access', 'wp-admin-menu-organizer' ),
+			'integrations' => __( 'Integrations', 'wp-admin-menu-organizer' ),
+			'tools'        => __( 'Tools & System', 'wp-admin-menu-organizer' ),
+			'ungrouped'    => __( 'Other', 'wp-admin-menu-organizer' ),
 		);
 	}
 

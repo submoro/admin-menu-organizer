@@ -2,11 +2,11 @@
 /**
  * Activation and deactivation routines.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
-namespace MOCAM;
+namespace WPAMO;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -102,7 +102,7 @@ final class Activator {
 	 */
 	private static function activate_site(): void {
 		if ( ! get_option( Plugin::OPTION_VERSION ) ) {
-			add_option( Plugin::OPTION_VERSION, MOCAM_VERSION );
+			add_option( Plugin::OPTION_VERSION, WPAMO_VERSION );
 		}
 	}
 }

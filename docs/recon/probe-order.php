@@ -76,8 +76,8 @@ report( 'D - filter returns duplicates', function ( $o ) {
 
 // E: filter injects slugs that do not exist in $menu (e.g. our group headers).
 report( 'E - filter injects phantom slugs', function ( $o ) {
-	return array( 'mocam-hdr-content', 'index.php', 'edit.php', 'upload.php',
-		'mocam-hdr-commerce', 'woocommerce', 'wpseo_dashboard', 'options-general.php' );
+	return array( 'wpamo-hdr-content', 'index.php', 'edit.php', 'upload.php',
+		'wpamo-hdr-commerce', 'woocommerce', 'wpseo_dashboard', 'options-general.php' );
 } );
 
 // F: filter returns a non-array (a broken third-party filter downstream of us).

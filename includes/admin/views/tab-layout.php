@@ -5,121 +5,121 @@
  * Also serves the Personalise tab, which is the same editor scoped to the current
  * user's own meta rather than to the site option.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  *
  * @var string $tab          Current tab slug.
- * @var array  $mocam_layout Layout being edited.
- * @var array  $mocam_items  Index of every organizable menu item.
+ * @var array  $wpamo_layout Layout being edited.
+ * @var array  $wpamo_items  Index of every organizable menu item.
  */
 
-use MOCAM\Admin\Settings_Page;
-use MOCAM\Categories;
-use MOCAM\Layout_Repository;
+use WPAMO\Admin\Settings_Page;
+use WPAMO\Categories;
+use WPAMO\Layout_Repository;
 
 defined( 'ABSPATH' ) || exit;
 
-$mocam_personal = ( 'personal' === $tab );
-$mocam_action   = $mocam_personal ? 'save_personal' : 'save_layout';
-$mocam_nonce    = $mocam_personal ? Settings_Page::NONCE_PERSONAL : Settings_Page::NONCE_SITE;
+$wpamo_personal = ( 'personal' === $tab );
+$wpamo_action   = $wpamo_personal ? 'save_personal' : 'save_layout';
+$wpamo_nonce    = $wpamo_personal ? Settings_Page::NONCE_PERSONAL : Settings_Page::NONCE_SITE;
 
 // Which group each item currently sits in, so unplaced items can be pooled.
-$mocam_placed = array();
+$wpamo_placed = array();
 
-foreach ( (array) ( $mocam_layout['groups'] ?? array() ) as $mocam_group ) {
-	foreach ( (array) ( $mocam_group['items'] ?? array() ) as $mocam_slug ) {
-		$mocam_placed[ $mocam_slug ] = $mocam_group['id'];
+foreach ( (array) ( $wpamo_layout['groups'] ?? array() ) as $wpamo_group ) {
+	foreach ( (array) ( $wpamo_group['items'] ?? array() ) as $wpamo_slug ) {
+		$wpamo_placed[ $wpamo_slug ] = $wpamo_group['id'];
 	}
 }
 
-$mocam_group_choices = array();
+$wpamo_group_choices = array();
 
-foreach ( (array) ( $mocam_layout['groups'] ?? array() ) as $mocam_group ) {
-	$mocam_definition                          = Categories::get( $mocam_group['id'] );
-	$mocam_group_choices[ $mocam_group['id'] ] = $mocam_group['label']
-		?? ( $mocam_definition['label'] ?? $mocam_group['id'] );
+foreach ( (array) ( $wpamo_layout['groups'] ?? array() ) as $wpamo_group ) {
+	$wpamo_definition                          = Categories::get( $wpamo_group['id'] );
+	$wpamo_group_choices[ $wpamo_group['id'] ] = $wpamo_group['label']
+		?? ( $wpamo_definition['label'] ?? $wpamo_group['id'] );
 }
 ?>
 
-<?php if ( $mocam_personal ) : ?>
-	<p class="mocam-intro">
-		<?php echo esc_html__( 'Arrange your own sidebar. This affects only your account; everyone else keeps the site default.', 'menu-organizer-collapsible-admin-menu' ); ?>
+<?php if ( $wpamo_personal ) : ?>
+	<p class="wpamo-intro">
+		<?php echo esc_html__( 'Arrange your own sidebar. This affects only your account; everyone else keeps the site default.', 'wp-admin-menu-organizer' ); ?>
 	</p>
 <?php else : ?>
-	<p class="mocam-intro">
-		<?php echo esc_html__( 'Drag items between groups to arrange the sidebar for everyone. Every item stays reachable: anything you do not place appears in the Other group at the bottom.', 'menu-organizer-collapsible-admin-menu' ); ?>
+	<p class="wpamo-intro">
+		<?php echo esc_html__( 'Drag items between groups to arrange the sidebar for everyone. Every item stays reachable: anything you do not place appears in the Other group at the bottom.', 'wp-admin-menu-organizer' ); ?>
 	</p>
 <?php endif; ?>
 
-<form method="post" action="<?php echo esc_url( admin_url( 'options-general.php?page=' . Settings_Page::SLUG . '&tab=' . $tab ) ); ?>" class="mocam-editor-form">
-	<?php wp_nonce_field( $mocam_nonce ); ?>
-	<input type="hidden" name="mocam_action" value="<?php echo esc_attr( $mocam_action ); ?>">
+<form method="post" action="<?php echo esc_url( admin_url( 'options-general.php?page=' . Settings_Page::SLUG . '&tab=' . $tab ) ); ?>" class="wpamo-editor-form">
+	<?php wp_nonce_field( $wpamo_nonce ); ?>
+	<input type="hidden" name="wpamo_action" value="<?php echo esc_attr( $wpamo_action ); ?>">
 
-	<div class="mocam-editor">
-		<?php foreach ( (array) ( $mocam_layout['groups'] ?? array() ) as $mocam_group ) : ?>
+	<div class="wpamo-editor">
+		<?php foreach ( (array) ( $wpamo_layout['groups'] ?? array() ) as $wpamo_group ) : ?>
 			<?php
-			$mocam_id         = (string) $mocam_group['id'];
-			$mocam_definition = Categories::get( $mocam_id );
-			$mocam_label      = $mocam_group['label'] ?? ( $mocam_definition['label'] ?? $mocam_id );
-			$mocam_icon       = $mocam_group['icon'] ?? ( $mocam_definition['icon'] ?? 'dashicons-menu-alt' );
-			$mocam_members    = (array) ( $mocam_group['items'] ?? array() );
+			$wpamo_id         = (string) $wpamo_group['id'];
+			$wpamo_definition = Categories::get( $wpamo_id );
+			$wpamo_label      = $wpamo_group['label'] ?? ( $wpamo_definition['label'] ?? $wpamo_id );
+			$wpamo_icon       = $wpamo_group['icon'] ?? ( $wpamo_definition['icon'] ?? 'dashicons-menu-alt' );
+			$wpamo_members    = (array) ( $wpamo_group['items'] ?? array() );
 			?>
-			<section class="mocam-group" data-mocam-group="<?php echo esc_attr( $mocam_id ); ?>">
-				<h2 class="mocam-group-title">
-					<span class="dashicons <?php echo esc_attr( $mocam_icon ); ?>" aria-hidden="true"></span>
-					<?php echo esc_html( $mocam_label ); ?>
-					<?php if ( Categories::UNGROUPED === $mocam_id ) : ?>
-						<span class="mocam-badge-permanent"><?php echo esc_html__( 'always visible', 'menu-organizer-collapsible-admin-menu' ); ?></span>
+			<section class="wpamo-group" data-wpamo-group="<?php echo esc_attr( $wpamo_id ); ?>">
+				<h2 class="wpamo-group-title">
+					<span class="dashicons <?php echo esc_attr( $wpamo_icon ); ?>" aria-hidden="true"></span>
+					<?php echo esc_html( $wpamo_label ); ?>
+					<?php if ( Categories::UNGROUPED === $wpamo_id ) : ?>
+						<span class="wpamo-badge-permanent"><?php echo esc_html__( 'always visible', 'wp-admin-menu-organizer' ); ?></span>
 					<?php endif; ?>
 				</h2>
 
 				<ul
-					class="mocam-droplist"
-					data-mocam-group="<?php echo esc_attr( $mocam_id ); ?>"
+					class="wpamo-droplist"
+					data-wpamo-group="<?php echo esc_attr( $wpamo_id ); ?>"
 					aria-label="
 					<?php
 					echo esc_attr(
 						sprintf(
 							/* translators: %s: Group name. */
-							__( 'Items in %s', 'menu-organizer-collapsible-admin-menu' ),
-							$mocam_label
+							__( 'Items in %s', 'wp-admin-menu-organizer' ),
+							$wpamo_label
 						)
 					);
 					?>
 					"
 				>
-					<?php foreach ( $mocam_members as $mocam_slug ) : ?>
+					<?php foreach ( $wpamo_members as $wpamo_slug ) : ?>
 						<?php
-						if ( ! isset( $mocam_items[ $mocam_slug ] ) ) {
+						if ( ! isset( $wpamo_items[ $wpamo_slug ] ) ) {
 							continue;
 						}
 
-						$mocam_item = $mocam_items[ $mocam_slug ];
+						$wpamo_item = $wpamo_items[ $wpamo_slug ];
 						?>
-						<li class="mocam-chip" data-mocam-slug="<?php echo esc_attr( $mocam_slug ); ?>">
-							<span class="mocam-chip-handle dashicons dashicons-menu" aria-hidden="true"></span>
-							<span class="mocam-chip-label"><?php echo esc_html( $mocam_item['label'] ); ?></span>
-							<code class="mocam-chip-slug"><?php echo esc_html( $mocam_slug ); ?></code>
+						<li class="wpamo-chip" data-wpamo-slug="<?php echo esc_attr( $wpamo_slug ); ?>">
+							<span class="wpamo-chip-handle dashicons dashicons-menu" aria-hidden="true"></span>
+							<span class="wpamo-chip-label"><?php echo esc_html( $wpamo_item['label'] ); ?></span>
+							<code class="wpamo-chip-slug"><?php echo esc_html( $wpamo_slug ); ?></code>
 
 							<?php /* SPEC 7.2: every drag must have a keyboard equivalent. */ ?>
-							<label class="mocam-chip-move">
+							<label class="wpamo-chip-move">
 								<span class="screen-reader-text">
 									<?php
 									echo esc_html(
 										sprintf(
 											/* translators: %s: Menu item name. */
-											__( 'Move %s to group', 'menu-organizer-collapsible-admin-menu' ),
-											$mocam_item['label']
+											__( 'Move %s to group', 'wp-admin-menu-organizer' ),
+											$wpamo_item['label']
 										)
 									);
 									?>
 								</span>
-								<select class="mocam-move-select" data-mocam-slug="<?php echo esc_attr( $mocam_slug ); ?>">
-									<?php foreach ( $mocam_group_choices as $mocam_choice_id => $mocam_choice_label ) : ?>
+								<select class="wpamo-move-select" data-wpamo-slug="<?php echo esc_attr( $wpamo_slug ); ?>">
+									<?php foreach ( $wpamo_group_choices as $wpamo_choice_id => $wpamo_choice_label ) : ?>
 										<option
-											value="<?php echo esc_attr( $mocam_choice_id ); ?>"
-											<?php selected( $mocam_choice_id, $mocam_id ); ?>
-										><?php echo esc_html( $mocam_choice_label ); ?></option>
+											value="<?php echo esc_attr( $wpamo_choice_id ); ?>"
+											<?php selected( $wpamo_choice_id, $wpamo_id ); ?>
+										><?php echo esc_html( $wpamo_choice_label ); ?></option>
 									<?php endforeach; ?>
 								</select>
 							</label>
@@ -129,24 +129,24 @@ foreach ( (array) ( $mocam_layout['groups'] ?? array() ) as $mocam_group ) {
 
 				<input
 					type="hidden"
-					name="mocam_group_items[<?php echo esc_attr( $mocam_id ); ?>]"
-					value="<?php echo esc_attr( implode( ',', $mocam_members ) ); ?>"
-					data-mocam-group-input="<?php echo esc_attr( $mocam_id ); ?>"
+					name="wpamo_group_items[<?php echo esc_attr( $wpamo_id ); ?>]"
+					value="<?php echo esc_attr( implode( ',', $wpamo_members ) ); ?>"
+					data-wpamo-group-input="<?php echo esc_attr( $wpamo_id ); ?>"
 				>
 			</section>
 		<?php endforeach; ?>
 	</div>
 
 	<p class="submit">
-		<?php submit_button( __( 'Save layout', 'menu-organizer-collapsible-admin-menu' ), 'primary', 'submit', false ); ?>
+		<?php submit_button( __( 'Save layout', 'wp-admin-menu-organizer' ), 'primary', 'submit', false ); ?>
 
-		<?php if ( $mocam_personal && Layout_Repository::has_user_layout( get_current_user_id() ) ) : ?>
+		<?php if ( $wpamo_personal && Layout_Repository::has_user_layout( get_current_user_id() ) ) : ?>
 			<button
 				type="submit"
-				class="button button-secondary mocam-reset"
-				name="mocam_action"
+				class="button button-secondary wpamo-reset"
+				name="wpamo_action"
 				value="reset_personal"
-			><?php echo esc_html__( 'Reset to site default', 'menu-organizer-collapsible-admin-menu' ); ?></button>
+			><?php echo esc_html__( 'Reset to site default', 'wp-admin-menu-organizer' ); ?></button>
 		<?php endif; ?>
 	</p>
 </form>

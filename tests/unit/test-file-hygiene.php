@@ -2,7 +2,7 @@
 /**
  * Unit tests guarding against file-level defects that break WordPress silently.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 

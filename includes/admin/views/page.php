@@ -2,58 +2,58 @@
 /**
  * Settings screen shell.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  *
  * @var string                    $tab    Current tab slug, from Settings_Page::render().
- * @var \MOCAM\Menu_Reader        $reader Reader over the live menu.
+ * @var \WPAMO\Menu_Reader        $reader Reader over the live menu.
  */
 
-use MOCAM\Admin\Settings_Page;
-use MOCAM\Capabilities;
+use WPAMO\Admin\Settings_Page;
+use WPAMO\Capabilities;
 
 defined( 'ABSPATH' ) || exit;
 
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only status keyword used to pick a notice.
-$mocam_status = isset( $_GET['mocam-status'] ) ? sanitize_key( wp_unslash( $_GET['mocam-status'] ) ) : '';
-$mocam_notice = '' !== $mocam_status ? Settings_Page::notice_for( $mocam_status ) : null;
+$wpamo_status = isset( $_GET['wpamo-status'] ) ? sanitize_key( wp_unslash( $_GET['wpamo-status'] ) ) : '';
+$wpamo_notice = '' !== $wpamo_status ? Settings_Page::notice_for( $wpamo_status ) : null;
 
-$mocam_tabs   = array();
-$mocam_layout = Settings_Page::editing_layout( $tab, $reader );
-$mocam_items  = Settings_Page::item_index( $reader );
+$wpamo_tabs   = array();
+$wpamo_layout = Settings_Page::editing_layout( $tab, $reader );
+$wpamo_items  = Settings_Page::item_index( $reader );
 
 if ( Capabilities::current_user_can_manage() ) {
-	$mocam_tabs['layout']   = __( 'Layout', 'menu-organizer-collapsible-admin-menu' );
-	$mocam_tabs['groups']   = __( 'Groups', 'menu-organizer-collapsible-admin-menu' );
-	$mocam_tabs['roles']    = __( 'Roles', 'menu-organizer-collapsible-admin-menu' );
-	$mocam_tabs['advanced'] = __( 'Advanced', 'menu-organizer-collapsible-admin-menu' );
+	$wpamo_tabs['layout']   = __( 'Layout', 'wp-admin-menu-organizer' );
+	$wpamo_tabs['groups']   = __( 'Groups', 'wp-admin-menu-organizer' );
+	$wpamo_tabs['roles']    = __( 'Roles', 'wp-admin-menu-organizer' );
+	$wpamo_tabs['advanced'] = __( 'Advanced', 'wp-admin-menu-organizer' );
 }
 
 if ( Capabilities::current_user_can_personalise() ) {
-	$mocam_tabs['personal'] = __( 'Personalise my menu', 'menu-organizer-collapsible-admin-menu' );
+	$wpamo_tabs['personal'] = __( 'Personalise my menu', 'wp-admin-menu-organizer' );
 }
 ?>
-<div class="wrap mocam-settings">
-	<h1><?php echo esc_html__( 'Menu Organizer', 'menu-organizer-collapsible-admin-menu' ); ?></h1>
+<div class="wrap wpamo-settings">
+	<h1><?php echo esc_html__( 'Menu Organizer', 'wp-admin-menu-organizer' ); ?></h1>
 
-	<?php if ( null !== $mocam_notice ) : ?>
-		<div class="notice notice-<?php echo esc_attr( $mocam_notice['type'] ); ?> is-dismissible">
-			<p><?php echo esc_html( $mocam_notice['message'] ); ?></p>
+	<?php if ( null !== $wpamo_notice ) : ?>
+		<div class="notice notice-<?php echo esc_attr( $wpamo_notice['type'] ); ?> is-dismissible">
+			<p><?php echo esc_html( $wpamo_notice['message'] ); ?></p>
 		</div>
 	<?php endif; ?>
 
-	<nav class="nav-tab-wrapper wp-clearfix" aria-label="<?php echo esc_attr__( 'Menu Organizer sections', 'menu-organizer-collapsible-admin-menu' ); ?>">
-		<?php foreach ( $mocam_tabs as $mocam_slug => $mocam_label ) : ?>
-			<?php $mocam_is_current = ( $tab === $mocam_slug ); ?>
+	<nav class="nav-tab-wrapper wp-clearfix" aria-label="<?php echo esc_attr__( 'Menu Organizer sections', 'wp-admin-menu-organizer' ); ?>">
+		<?php foreach ( $wpamo_tabs as $wpamo_slug => $wpamo_label ) : ?>
+			<?php $wpamo_is_current = ( $tab === $wpamo_slug ); ?>
 			<a
-				href="<?php echo esc_url( admin_url( 'options-general.php?page=' . Settings_Page::SLUG . '&tab=' . $mocam_slug ) ); ?>"
-				class="<?php echo esc_attr( $mocam_is_current ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>"
+				href="<?php echo esc_url( admin_url( 'options-general.php?page=' . Settings_Page::SLUG . '&tab=' . $wpamo_slug ) ); ?>"
+				class="<?php echo esc_attr( $wpamo_is_current ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>"
 				<?php
-				if ( $mocam_is_current ) {
+				if ( $wpamo_is_current ) {
 					echo 'aria-current="page"';
 				}
 				?>
-			><?php echo esc_html( $mocam_label ); ?></a>
+			><?php echo esc_html( $wpamo_label ); ?></a>
 		<?php endforeach; ?>
 	</nav>
 

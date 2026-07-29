@@ -2,18 +2,18 @@
 /**
  * Capability mapping.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
-namespace MOCAM;
+namespace WPAMO;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Maps the plugin's meta capability.
  *
- * SPEC section 4.5 defines one new capability, mocam_personalise_menu, granted
+ * SPEC section 4.5 defines one new capability, wpamo_personalise_menu, granted
  * by default to any role that can read, and switchable off globally by an
  * administrator. It is a meta capability rather than a real one, so nothing is
  * written to the roles table and uninstalling leaves no capability residue on
@@ -33,7 +33,7 @@ final class Capabilities {
 	 * @since 1.0.0
 	 * @var string
 	 */
-	const PERSONALISE = 'mocam_personalise_menu';
+	const PERSONALISE = 'wpamo_personalise_menu';
 
 	/**
 	 * The capability required to change site-wide settings.

@@ -6,7 +6,7 @@
  * that uninstalling leaves no residue. Runs only when WordPress itself deletes
  * the plugin.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
@@ -27,8 +27,8 @@ require_once __DIR__ . '/includes/class-plugin.php';
  *
  * @return void
  */
-function mocam_uninstall_site() {
-	foreach ( MOCAM\Plugin::ALL_OPTIONS as $option ) {
+function wpamo_uninstall_site() {
+	foreach ( WPAMO\Plugin::ALL_OPTIONS as $option ) {
 		delete_option( $option );
 	}
 }
@@ -43,39 +43,39 @@ function mocam_uninstall_site() {
  *
  * @return void
  */
-function mocam_uninstall_user_meta() {
-	foreach ( MOCAM\Plugin::ALL_USER_META as $meta_key ) {
+function wpamo_uninstall_user_meta() {
+	foreach ( WPAMO\Plugin::ALL_USER_META as $meta_key ) {
 		delete_metadata( 'user', 0, $meta_key, '', true );
 	}
 }
 
 if ( is_multisite() ) {
-	$mocam_paged = 1;
+	$wpamo_paged = 1;
 
 	do {
-		$mocam_site_ids = get_sites(
+		$wpamo_site_ids = get_sites(
 			array(
 				'fields'                 => 'ids',
 				'number'                 => 100,
-				'paged'                  => $mocam_paged,
+				'paged'                  => $wpamo_paged,
 				'update_site_meta_cache' => false,
 			)
 		);
 
-		$mocam_batch_size = count( $mocam_site_ids );
+		$wpamo_batch_size = count( $wpamo_site_ids );
 
-		foreach ( $mocam_site_ids as $mocam_site_id ) {
-			switch_to_blog( (int) $mocam_site_id );
-			mocam_uninstall_site();
+		foreach ( $wpamo_site_ids as $wpamo_site_id ) {
+			switch_to_blog( (int) $wpamo_site_id );
+			wpamo_uninstall_site();
 			restore_current_blog();
 		}
 
-		++$mocam_paged;
-	} while ( 100 === $mocam_batch_size );
+		++$wpamo_paged;
+	} while ( 100 === $wpamo_batch_size );
 
-	unset( $mocam_paged, $mocam_site_ids, $mocam_site_id, $mocam_batch_size );
+	unset( $wpamo_paged, $wpamo_site_ids, $wpamo_site_id, $wpamo_batch_size );
 } else {
-	mocam_uninstall_site();
+	wpamo_uninstall_site();
 }
 
-mocam_uninstall_user_meta();
+wpamo_uninstall_user_meta();

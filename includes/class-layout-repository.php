@@ -2,11 +2,11 @@
 /**
  * Reading, resolving and saving layouts.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
-namespace MOCAM;
+namespace WPAMO;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -83,7 +83,7 @@ final class Layout_Repository {
 		 * @param Menu_Reader $reader  Reader over the live menu.
 		 * @param int         $user_id User the layout was resolved for.
 		 */
-		$layout = apply_filters( 'mocam_resolved_layout', $layout, $reader, $user_id );
+		$layout = apply_filters( 'wpamo_resolved_layout', $layout, $reader, $user_id );
 
 		self::$resolved[ $user_id ] = is_array( $layout ) ? $layout : array(
 			'schema' => 1,

@@ -5,12 +5,12 @@
  * WordPress.org treats the plugin header's Version and the readme's Stable tag
  * as separate sources of truth, and a mismatch between them is one of the most
  * common ways a release goes wrong: the directory serves whichever the stable
- * tag points at, regardless of what the header claims. MOCAM_VERSION is a third
+ * tag points at, regardless of what the header claims. WPAMO_VERSION is a third
  * copy that the plugin's own migration chain depends on.
  *
  * These parse the files directly, so they need no WordPress at all.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
@@ -88,7 +88,7 @@ final class Test_Version_Consistency extends TestCase {
 	}
 
 	/**
-	 * The plugin header, the MOCAM_VERSION constant and the readme's stable tag
+	 * The plugin header, the WPAMO_VERSION constant and the readme's stable tag
 	 * all state the same version.
 	 *
 	 * @since 1.0.0
@@ -96,14 +96,14 @@ final class Test_Version_Consistency extends TestCase {
 	 * @return void
 	 */
 	public function test_all_three_version_declarations_agree(): void {
-		$plugin_file = $this->read( 'menu-organizer-collapsible-admin-menu.php' );
+		$plugin_file = $this->read( 'wp-admin-menu-organizer.php' );
 		$readme      = $this->read( 'readme.txt' );
 
 		$header   = $this->capture( '/^\s*\*\s*Version:\s*(.+)$/m', $plugin_file, 'the Version plugin header' );
-		$constant = $this->capture( "/define\(\s*'MOCAM_VERSION',\s*'([^']+)'/", $plugin_file, 'the MOCAM_VERSION constant' );
+		$constant = $this->capture( "/define\(\s*'WPAMO_VERSION',\s*'([^']+)'/", $plugin_file, 'the WPAMO_VERSION constant' );
 		$stable   = $this->capture( '/^Stable tag:\s*(.+)$/m', $readme, 'the readme stable tag' );
 
-		$this->assertSame( $header, $constant, 'Plugin header Version and MOCAM_VERSION disagree.' );
+		$this->assertSame( $header, $constant, 'Plugin header Version and WPAMO_VERSION disagree.' );
 		$this->assertSame( $header, $stable, 'Plugin header Version and readme Stable tag disagree.' );
 	}
 
@@ -116,7 +116,7 @@ final class Test_Version_Consistency extends TestCase {
 	 * @return void
 	 */
 	public function test_version_is_semantic(): void {
-		$plugin_file = $this->read( 'menu-organizer-collapsible-admin-menu.php' );
+		$plugin_file = $this->read( 'wp-admin-menu-organizer.php' );
 		$header      = $this->capture( '/^\s*\*\s*Version:\s*(.+)$/m', $plugin_file, 'the Version plugin header' );
 
 		$this->assertMatchesRegularExpression( '/^\d+\.\d+\.\d+$/', $header );
@@ -131,7 +131,7 @@ final class Test_Version_Consistency extends TestCase {
 	 * @return void
 	 */
 	public function test_minimum_requirements_agree_across_header_and_readme(): void {
-		$plugin_file = $this->read( 'menu-organizer-collapsible-admin-menu.php' );
+		$plugin_file = $this->read( 'wp-admin-menu-organizer.php' );
 		$readme      = $this->read( 'readme.txt' );
 
 		$header_php = $this->capture( '/^\s*\*\s*Requires PHP:\s*(.+)$/m', $plugin_file, 'the Requires PHP header' );
@@ -144,7 +144,7 @@ final class Test_Version_Consistency extends TestCase {
 	}
 
 	/**
-	 * The MOCAM_MIN_PHP and MOCAM_MIN_WP constants match the declared headers,
+	 * The WPAMO_MIN_PHP and WPAMO_MIN_WP constants match the declared headers,
 	 * so the runtime guard cannot drift from what WordPress enforces at install.
 	 *
 	 * @since 1.0.0
@@ -152,14 +152,14 @@ final class Test_Version_Consistency extends TestCase {
 	 * @return void
 	 */
 	public function test_runtime_guard_constants_match_the_headers(): void {
-		$plugin_file = $this->read( 'menu-organizer-collapsible-admin-menu.php' );
+		$plugin_file = $this->read( 'wp-admin-menu-organizer.php' );
 
 		$header_php   = $this->capture( '/^\s*\*\s*Requires PHP:\s*(.+)$/m', $plugin_file, 'the Requires PHP header' );
-		$constant_php = $this->capture( "/define\(\s*'MOCAM_MIN_PHP',\s*'([^']+)'/", $plugin_file, 'the MOCAM_MIN_PHP constant' );
+		$constant_php = $this->capture( "/define\(\s*'WPAMO_MIN_PHP',\s*'([^']+)'/", $plugin_file, 'the WPAMO_MIN_PHP constant' );
 		$this->assertSame( $header_php, $constant_php );
 
 		$header_wp   = $this->capture( '/^\s*\*\s*Requires at least:\s*(.+)$/m', $plugin_file, 'the Requires at least header' );
-		$constant_wp = $this->capture( "/define\(\s*'MOCAM_MIN_WP',\s*'([^']+)'/", $plugin_file, 'the MOCAM_MIN_WP constant' );
+		$constant_wp = $this->capture( "/define\(\s*'WPAMO_MIN_WP',\s*'([^']+)'/", $plugin_file, 'the WPAMO_MIN_WP constant' );
 		$this->assertSame( $header_wp, $constant_wp );
 	}
 
@@ -172,13 +172,13 @@ final class Test_Version_Consistency extends TestCase {
 	 * @return void
 	 */
 	public function test_text_domain_matches_the_plugin_slug(): void {
-		$plugin_file = $this->read( 'menu-organizer-collapsible-admin-menu.php' );
+		$plugin_file = $this->read( 'wp-admin-menu-organizer.php' );
 
 		$domain = $this->capture( '/^\s*\*\s*Text Domain:\s*(.+)$/m', $plugin_file, 'the Text Domain header' );
 		$slug   = basename( rtrim( $this->root, '/' ) );
 
 		$this->assertSame( $slug, $domain );
-		$this->assertSame( 'menu-organizer-collapsible-admin-menu', $domain );
+		$this->assertSame( 'wp-admin-menu-organizer', $domain );
 	}
 
 	/**

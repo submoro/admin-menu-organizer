@@ -2,19 +2,19 @@
 /**
  * The settings screen.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
-namespace MOCAM\Admin;
+namespace WPAMO\Admin;
 
-use MOCAM\Capabilities;
-use MOCAM\Categories;
-use MOCAM\Detector;
-use MOCAM\Layout_Repository;
-use MOCAM\Layout_Sanitizer;
-use MOCAM\Menu_Reader;
-use MOCAM\Plugin;
+use WPAMO\Capabilities;
+use WPAMO\Categories;
+use WPAMO\Detector;
+use WPAMO\Layout_Repository;
+use WPAMO\Layout_Sanitizer;
+use WPAMO\Menu_Reader;
+use WPAMO\Plugin;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -28,7 +28,7 @@ defined( 'ABSPATH' ) || exit;
  * Every write goes through a nonce check and a capability check, in that order,
  * and every value through Layout_Sanitizer. The capability checked depends on what
  * is being written: the site-wide layout, groups and role presets need
- * manage_options, while a personal layout needs only mocam_personalise_menu, so a
+ * manage_options, while a personal layout needs only wpamo_personalise_menu, so a
  * subscriber can arrange their own sidebar without being able to touch anyone
  * else's.
  *
@@ -42,7 +42,7 @@ final class Settings_Page {
 	 * @since 1.0.0
 	 * @var string
 	 */
-	const SLUG = 'mocam';
+	const SLUG = 'wpamo';
 
 	/**
 	 * Nonce action for site-wide writes.
@@ -50,7 +50,7 @@ final class Settings_Page {
 	 * @since 1.0.0
 	 * @var string
 	 */
-	const NONCE_SITE = 'mocam_save_site';
+	const NONCE_SITE = 'wpamo_save_site';
 
 	/**
 	 * Nonce action for personal writes.
@@ -58,7 +58,7 @@ final class Settings_Page {
 	 * @since 1.0.0
 	 * @var string
 	 */
-	const NONCE_PERSONAL = 'mocam_save_personal';
+	const NONCE_PERSONAL = 'wpamo_save_personal';
 
 	/**
 	 * Registers the screen.
@@ -71,7 +71,7 @@ final class Settings_Page {
 		add_action( 'admin_menu', array( __CLASS__, 'add_page' ) );
 		add_action( 'admin_init', array( __CLASS__, 'handle_post' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue' ) );
-		add_filter( 'plugin_action_links_' . MOCAM_PLUGIN_BASENAME, array( __CLASS__, 'action_links' ) );
+		add_filter( 'plugin_action_links_' . WPAMO_PLUGIN_BASENAME, array( __CLASS__, 'action_links' ) );
 	}
 
 	/**
@@ -99,8 +99,8 @@ final class Settings_Page {
 		$capability = Capabilities::current_user_can_manage() ? Capabilities::MANAGE : Capabilities::PERSONALISE;
 
 		add_options_page(
-			__( 'Menu Organizer', 'menu-organizer-collapsible-admin-menu' ),
-			__( 'Menu Organizer', 'menu-organizer-collapsible-admin-menu' ),
+			__( 'Menu Organizer', 'wp-admin-menu-organizer' ),
+			__( 'Menu Organizer', 'wp-admin-menu-organizer' ),
 			$capability,
 			self::SLUG,
 			array( __CLASS__, 'render' )
@@ -121,7 +121,7 @@ final class Settings_Page {
 		$settings = sprintf(
 			'<a href="%s">%s</a>',
 			esc_url( admin_url( 'options-general.php?page=' . self::SLUG ) ),
-			esc_html__( 'Settings', 'menu-organizer-collapsible-admin-menu' )
+			esc_html__( 'Settings', 'wp-admin-menu-organizer' )
 		);
 
 		array_unshift( $links, $settings );
@@ -143,10 +143,10 @@ final class Settings_Page {
 		}
 
 		wp_enqueue_style(
-			'mocam-settings',
-			MOCAM_PLUGIN_URL . 'assets/css/settings.css',
+			'wpamo-settings',
+			WPAMO_PLUGIN_URL . 'assets/css/settings.css',
 			array( 'dashicons' ),
-			MOCAM_VERSION
+			WPAMO_VERSION
 		);
 
 		/*
@@ -155,17 +155,17 @@ final class Settings_Page {
 		 * plugin must not ship a copy of a library core already provides.
 		 */
 		wp_enqueue_script(
-			'mocam-settings',
-			MOCAM_PLUGIN_URL . 'assets/js/settings.js',
+			'wpamo-settings',
+			WPAMO_PLUGIN_URL . 'assets/js/settings.js',
 			array( 'jquery', 'jquery-ui-sortable', 'wp-i18n' ),
-			MOCAM_VERSION,
+			WPAMO_VERSION,
 			true
 		);
 
 		wp_set_script_translations(
-			'mocam-settings',
-			'menu-organizer-collapsible-admin-menu',
-			MOCAM_PLUGIN_DIR . 'languages'
+			'wpamo-settings',
+			'wp-admin-menu-organizer',
+			WPAMO_PLUGIN_DIR . 'languages'
 		);
 	}
 
@@ -196,14 +196,14 @@ final class Settings_Page {
 		$tabs = array();
 
 		if ( Capabilities::current_user_can_manage() ) {
-			$tabs['layout']   = __( 'Layout', 'menu-organizer-collapsible-admin-menu' );
-			$tabs['groups']   = __( 'Groups', 'menu-organizer-collapsible-admin-menu' );
-			$tabs['roles']    = __( 'Roles', 'menu-organizer-collapsible-admin-menu' );
-			$tabs['advanced'] = __( 'Advanced', 'menu-organizer-collapsible-admin-menu' );
+			$tabs['layout']   = __( 'Layout', 'wp-admin-menu-organizer' );
+			$tabs['groups']   = __( 'Groups', 'wp-admin-menu-organizer' );
+			$tabs['roles']    = __( 'Roles', 'wp-admin-menu-organizer' );
+			$tabs['advanced'] = __( 'Advanced', 'wp-admin-menu-organizer' );
 		}
 
 		if ( Capabilities::current_user_can_personalise() ) {
-			$tabs['personal'] = __( 'Personalise my menu', 'menu-organizer-collapsible-admin-menu' );
+			$tabs['personal'] = __( 'Personalise my menu', 'wp-admin-menu-organizer' );
 		}
 
 		return $tabs;
@@ -218,13 +218,13 @@ final class Settings_Page {
 	 */
 	public static function render(): void {
 		if ( ! Capabilities::current_user_can_manage() && ! Capabilities::current_user_can_personalise() ) {
-			wp_die( esc_html__( 'You are not allowed to access this page.', 'menu-organizer-collapsible-admin-menu' ), 403 );
+			wp_die( esc_html__( 'You are not allowed to access this page.', 'wp-admin-menu-organizer' ), 403 );
 		}
 
 		$tab    = self::current_tab();
 		$reader = Menu_Reader::from_globals();
 
-		require MOCAM_PLUGIN_DIR . 'includes/admin/views/page.php';
+		require WPAMO_PLUGIN_DIR . 'includes/admin/views/page.php';
 	}
 
 	/**
@@ -236,7 +236,7 @@ final class Settings_Page {
 	 */
 	public static function handle_post(): void {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- The action is only used to route; each branch verifies its own nonce before doing anything.
-		$action = isset( $_POST['mocam_action'] ) ? sanitize_key( wp_unslash( $_POST['mocam_action'] ) ) : '';
+		$action = isset( $_POST['wpamo_action'] ) ? sanitize_key( wp_unslash( $_POST['wpamo_action'] ) ) : '';
 
 		if ( '' === $action ) {
 			return;
@@ -306,7 +306,7 @@ final class Settings_Page {
 		check_admin_referer( self::NONCE_SITE );
 
 		if ( ! Capabilities::current_user_can_manage() ) {
-			wp_die( esc_html__( 'You are not allowed to change these settings.', 'menu-organizer-collapsible-admin-menu' ), 403 );
+			wp_die( esc_html__( 'You are not allowed to change these settings.', 'wp-admin-menu-organizer' ), 403 );
 		}
 	}
 
@@ -321,7 +321,7 @@ final class Settings_Page {
 		check_admin_referer( self::NONCE_PERSONAL );
 
 		if ( ! Capabilities::current_user_can_personalise() ) {
-			wp_die( esc_html__( 'You are not allowed to personalise your menu.', 'menu-organizer-collapsible-admin-menu' ), 403 );
+			wp_die( esc_html__( 'You are not allowed to personalise your menu.', 'wp-admin-menu-organizer' ), 403 );
 		}
 	}
 
@@ -403,7 +403,7 @@ final class Settings_Page {
 	private static function posted_layout(): array {
 		$groups = array();
 
-		foreach ( self::posted_map( 'mocam_group_items' ) as $group_id => $slug_list ) {
+		foreach ( self::posted_map( 'wpamo_group_items' ) as $group_id => $slug_list ) {
 			$groups[] = array(
 				'id'    => $group_id,
 				'items' => array_values( array_filter( array_map( 'trim', explode( ',', $slug_list ) ) ) ),
@@ -434,10 +434,10 @@ final class Settings_Page {
 			}
 		}
 
-		$order  = self::posted_text( 'mocam_group_order' );
-		$labels = self::posted_map( 'mocam_group_label' );
-		$icons  = self::posted_map( 'mocam_group_icon' );
-		$open   = self::posted_map( 'mocam_group_open' );
+		$order  = self::posted_text( 'wpamo_group_order' );
+		$labels = self::posted_map( 'wpamo_group_label' );
+		$icons  = self::posted_map( 'wpamo_group_icon' );
+		$open   = self::posted_map( 'wpamo_group_open' );
 
 		$ids = array_values(
 			array_filter(
@@ -479,7 +479,7 @@ final class Settings_Page {
 	 * @return void
 	 */
 	private static function save_roles( Menu_Reader $reader ): void {
-		foreach ( self::posted_map( 'mocam_role_source' ) as $role => $source ) {
+		foreach ( self::posted_map( 'wpamo_role_source' ) as $role => $source ) {
 			$source = Layout_Sanitizer::sanitize_key( $source );
 
 			if ( '' === $role ) {
@@ -511,7 +511,7 @@ final class Settings_Page {
 		$settings = is_array( $settings ) ? $settings : array();
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Caller verified the nonce.
-		$settings['personalisation'] = isset( $_POST['mocam_personalisation'] );
+		$settings['personalisation'] = isset( $_POST['wpamo_personalisation'] );
 
 		update_option( Plugin::OPTION_SETTINGS, $settings );
 	}
@@ -534,9 +534,9 @@ final class Settings_Page {
 		 * touches the braces, quotes or colons JSON needs.
 		 */
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Verified by the caller.
-		$json = isset( $_POST['mocam_import'] )
+		$json = isset( $_POST['wpamo_import'] )
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Verified by the caller.
-			? trim( sanitize_textarea_field( wp_unslash( $_POST['mocam_import'] ) ) )
+			? trim( sanitize_textarea_field( wp_unslash( $_POST['wpamo_import'] ) ) )
 			: '';
 
 		if ( '' === $json ) {
@@ -569,7 +569,7 @@ final class Settings_Page {
 				array(
 					'page'         => self::SLUG,
 					'tab'          => $tab,
-					'mocam-status' => $status,
+					'wpamo-status' => $status,
 				),
 				admin_url( 'options-general.php' )
 			)
@@ -589,19 +589,19 @@ final class Settings_Page {
 	public static function notice_for( string $status ): ?array {
 		$notices = array(
 			'saved'         => array(
-				'message' => __( 'Your changes have been saved.', 'menu-organizer-collapsible-admin-menu' ),
+				'message' => __( 'Your changes have been saved.', 'wp-admin-menu-organizer' ),
 				'type'    => 'success',
 			),
 			'reset'         => array(
-				'message' => __( 'The layout has been reset to the automatically detected default.', 'menu-organizer-collapsible-admin-menu' ),
+				'message' => __( 'The layout has been reset to the automatically detected default.', 'wp-admin-menu-organizer' ),
 				'type'    => 'success',
 			),
 			'imported'      => array(
-				'message' => __( 'The layout was imported.', 'menu-organizer-collapsible-admin-menu' ),
+				'message' => __( 'The layout was imported.', 'wp-admin-menu-organizer' ),
 				'type'    => 'success',
 			),
 			'import-failed' => array(
-				'message' => __( 'That layout could not be imported. Check that it is the JSON produced by the export button.', 'menu-organizer-collapsible-admin-menu' ),
+				'message' => __( 'That layout could not be imported. Check that it is the JSON produced by the export button.', 'wp-admin-menu-organizer' ),
 				'type'    => 'error',
 			),
 		);

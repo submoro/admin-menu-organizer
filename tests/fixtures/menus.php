@@ -7,7 +7,7 @@
  * titles, base64 SVG icons, post-type slugs carrying query strings, and items
  * registered by plugins that do not follow the documented array shape.
  *
- * @package MenuOrganizerCollapsibleAdminMenu
+ * @package WPAdminMenuOrganizer
  * @since   1.0.0
  */
 
@@ -23,7 +23,7 @@ declare( strict_types=1 );
  *
  * @return array
  */
-function mocam_fixture_core_menu(): array {
+function wpamo_fixture_core_menu(): array {
 	return array(
 		2  => array( 'Dashboard', 'read', 'index.php', '', 'menu-top menu-top-first menu-icon-dashboard', 'menu-dashboard', 'dashicons-dashboard' ),
 		4  => array( '', 'read', 'separator1', '', 'wp-menu-separator' ),
@@ -52,8 +52,8 @@ function mocam_fixture_core_menu(): array {
  *
  * @return array
  */
-function mocam_fixture_production_menu(): array {
-	$menu = mocam_fixture_core_menu();
+function wpamo_fixture_production_menu(): array {
+	$menu = wpamo_fixture_core_menu();
 
 	/*
 	 * Fractional positions are string keys, not floats. That is what core does:
@@ -129,7 +129,7 @@ function mocam_fixture_production_menu(): array {
  *
  * @return array
  */
-function mocam_fixture_malformed_menu(): array {
+function wpamo_fixture_malformed_menu(): array {
 	return array(
 		0  => array( 'Dashboard', 'read', 'index.php', '', '', 'menu-dashboard', 'dashicons-dashboard' ),
 		1  => 'not an array at all',
@@ -153,7 +153,7 @@ function mocam_fixture_malformed_menu(): array {
  *
  * @return array
  */
-function mocam_fixture_core_submenu(): array {
+function wpamo_fixture_core_submenu(): array {
 	return array(
 		'index.php'           => array(
 			array( 'Home', 'read', 'index.php' ),

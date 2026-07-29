@@ -41,12 +41,12 @@ A plugin that groups top-level admin menu items into named, collapsible categori
 
 ## 2. NAMING AND SLUG
 
-- Proposed slug: `menu-organizer-collapsible-admin-menu`
-- Proposed display name: `Menu Organizer - Collapsible Admin Menu`
+- Proposed slug: `wp-admin-menu-organizer`
+- Proposed display name: `WP Admin Menu Organizer`
 - Text domain: identical to the slug
-- PHP prefix: `MOCAM_` for constants, `mocam_` for functions, `MOCAM\` namespace for classes
-- CSS/JS/data prefix: `mocam-`
-- Option and meta prefix: `mocam_`
+- PHP prefix: `WPAMO_` for constants, `wpamo_` for functions, `WPAMO\` namespace for classes
+- CSS/JS/data prefix: `wpamo-`
+- Option and meta prefix: `wpamo_`
 
 Slug constraints you must respect:
 
@@ -84,9 +84,9 @@ Do not proceed on assumption. If your findings contradict anything in this spec,
 1. Hook `admin_menu` at priority `9999` (after every plugin has registered)
 2. Read the resolved layout (see section 4)
 3. Enable `custom_menu_order` (return `true`) and use the `menu_order` filter to output menu slugs in the resolved grouped order, so all members of a category are contiguous
-4. Append a plugin-specific class to index `4` of each `$menu` item: `mocam-item mocam-group-<group-id>`
+4. Append a plugin-specific class to index `4` of each `$menu` item: `wpamo-item wpamo-group-<group-id>`
 5. Inject one pseudo menu item per group to act as the accordion header, styled as a separator-class item so core renders it without a link target
-6. Print the collapsed state as classes on `<body>` via the `admin_body_class` filter: `mocam-collapsed-<group-id>`
+6. Print the collapsed state as classes on `<body>` via the `admin_body_class` filter: `wpamo-collapsed-<group-id>`
 7. CSS hides members of collapsed groups. Because state is server-rendered, there is no flash of an expanded menu on load
 8. JavaScript is progressive enhancement only - it toggles classes and persists state
 
@@ -116,8 +116,8 @@ Pick a strategy, document the reason in `docs/core-notes.md`, and state it to me
 - Never modify index `1` (capability) of any `$menu` item
 - If `$GLOBALS['menu']` is empty or malformed, bail silently
 - Escape hatches, both must work:
-  - Query parameter `?mocam=off` on any admin URL disables the plugin for that request
-  - Constant `define( 'MOCAM_DISABLE', true );` in `wp-config.php` disables it entirely
+  - Query parameter `?wpamo=off` on any admin URL disables the plugin for that request
+  - Constant `define( 'WPAMO_DISABLE', true );` in `wp-config.php` disables it entirely
 - Do not run on the login screen, front end, network admin, or during AJAX/REST/CRON/CLI requests
 - Do not run for users who cannot `read`
 
@@ -127,7 +127,7 @@ Pick a strategy, document the reason in `docs/core-notes.md`, and state it to me
 
 ### 4.1 Site-wide layout
 
-Option key: `mocam_layout` (autoloaded)
+Option key: `wpamo_layout` (autoloaded)
 
 ```json
 {
@@ -147,25 +147,25 @@ Option key: `mocam_layout` (autoloaded)
 
 ### 4.2 Per-user override
 
-User meta key: `mocam_user_layout` - same shape, or absent. Absent means "inherit site-wide".
+User meta key: `wpamo_user_layout` - same shape, or absent. Absent means "inherit site-wide".
 
 ### 4.3 Per-user collapsed state
 
-User meta key: `mocam_collapsed` - array of group IDs currently collapsed.
+User meta key: `wpamo_collapsed` - array of group IDs currently collapsed.
 
 ### 4.4 Per-role presets
 
-Option key: `mocam_role_layouts` - map of `role_slug => layout`. Resolution order:
+Option key: `wpamo_role_layouts` - map of `role_slug => layout`. Resolution order:
 
-1. `mocam_user_layout` (if present and the user has `mocam_personalise_menu`)
-2. `mocam_role_layouts[ primary_role ]`
-3. `mocam_layout`
+1. `wpamo_user_layout` (if present and the user has `wpamo_personalise_menu`)
+2. `wpamo_role_layouts[ primary_role ]`
+3. `wpamo_layout`
 4. Auto-detected default
 
 ### 4.5 Capabilities
 
 - `manage_options` - edit the site-wide layout and role presets
-- New meta capability `mocam_personalise_menu` - mapped by default to any role with `read`. Administrators can switch personalisation off globally with a checkbox
+- New meta capability `wpamo_personalise_menu` - mapped by default to any role with `read`. Administrators can switch personalisation off globally with a checkbox
 
 ### 4.6 Schema versioning
 
@@ -206,10 +206,10 @@ For each top-level menu item, evaluate in this order and stop at the first hit:
 - Ship the known-slug table as a PHP array in `includes/data/known-slugs.php`, not JSON, to avoid a filesystem read on every request
 - Never fetch rules from a remote server. The plugin must make zero outbound HTTP requests
 - Expose filters so other developers can extend without forking:
-  - `mocam_known_slugs` - array of slug => group id
-  - `mocam_category_definitions` - array of group definitions
-  - `mocam_resolve_group` - `( string $group_id, array $menu_item )`
-  - `mocam_resolved_layout` - final layout array before rendering
+  - `wpamo_known_slugs` - array of slug => group id
+  - `wpamo_category_definitions` - array of group definitions
+  - `wpamo_resolve_group` - `( string $group_id, array $menu_item )`
+  - `wpamo_resolved_layout` - final layout array before rendering
 
 ### 5.4 Detection must be non-destructive
 
@@ -221,7 +221,7 @@ Auto-detection runs once, on activation, to seed the initial layout. It also run
 
 ### 6.1 Group header markup
 
-- Rendered as a button, not a link: `<button type="button" class="mocam-group-toggle" aria-expanded="true" aria-controls="mocam-group-content">`
+- Rendered as a button, not a link: `<button type="button" class="wpamo-group-toggle" aria-expanded="true" aria-controls="wpamo-group-content">`
 - Contains a Dashicon, the group label, and a chevron
 - Screen-reader text conveys expand/collapse state
 - Never focusable when the group has zero visible members - hide the whole group instead
@@ -230,7 +230,7 @@ Auto-detection runs once, on activation, to seed the initial layout. It also run
 
 - Click or `Enter`/`Space` toggles the group
 - CSS transition on height, disabled under `@media (prefers-reduced-motion: reduce)`
-- State persists per user, saved via a debounced (400ms) authenticated REST call to `mocam/v1/state`, nonce protected
+- State persists per user, saved via a debounced (400ms) authenticated REST call to `wpamo/v1/state`, nonce protected
 - Optimistic UI - toggle instantly, save in the background, never block
 - If the save fails, keep the visual state and retry once. Do not show an error toast for a cosmetic preference
 
@@ -253,7 +253,7 @@ Auto-detection runs once, on activation, to seed the initial layout. It also run
 
 ## 7. SETTINGS SCREEN
 
-Location: `Settings > Menu Organizer` (`options-general.php?page=mocam`)
+Location: `Settings > Menu Organizer` (`options-general.php?page=wpamo`)
 
 ### 7.1 Tabs
 
@@ -273,7 +273,7 @@ Location: `Settings > Menu Organizer` (`options-general.php?page=mocam`)
 
 ### 7.3 Personal layout
 
-A "Personalise my menu" panel visible to any user with `mocam_personalise_menu`, offering the same editor scoped to their own user meta, plus a prominent "Reset to site default" button.
+A "Personalise my menu" panel visible to any user with `wpamo_personalise_menu`, offering the same editor scoped to their own user meta, plus a prominent "Reset to site default" button.
 
 ---
 
@@ -297,10 +297,10 @@ Non-negotiable. Every one of these will be checked in review.
 
 ## 9. INTERNATIONALISATION
 
-- Every user-facing string wrapped in `__()`, `_e()`, `esc_html__()`, `esc_attr__()`, `_n()`, or `_x()` with the text domain `menu-organizer-collapsible-admin-menu`
+- Every user-facing string wrapped in `__()`, `_e()`, `esc_html__()`, `esc_attr__()`, `_n()`, or `_x()` with the text domain `wp-admin-menu-organizer`
 - Text domain must be a literal string in every call - never a variable or constant
 - No string concatenation to build sentences. Use `printf` with numbered placeholders (`%1$s`, `%2$s`)
-- Generate `languages/menu-organizer-collapsible-admin-menu.pot` with WP-CLI: `wp i18n make-pot . languages/menu-organizer-collapsible-admin-menu.pot`
+- Generate `languages/wp-admin-menu-organizer.pot` with WP-CLI: `wp i18n make-pot . languages/wp-admin-menu-organizer.pot`
 - JavaScript strings via `wp_set_script_translations()` and `wp.i18n`
 - Ship an Arabic translation (`ar.po`/`ar.mo`) as a starter and confirm RTL rendering against it
 
@@ -318,7 +318,7 @@ Non-negotiable. Every one of these will be checked in review.
 
 ```php
 /**
- * Plugin Name:       Menu Organizer - Collapsible Admin Menu
+ * Plugin Name:       WP Admin Menu Organizer
  * Plugin URI:        https://example.com/menu-organizer
  * Description:       Groups WordPress admin menu items into named, collapsible categories. Auto-sorts known plugins and lets you rearrange everything by drag and drop.
  * Version:           1.0.0
@@ -328,7 +328,7 @@ Non-negotiable. Every one of these will be checked in review.
  * Author URI:        https://example.com
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       menu-organizer-collapsible-admin-menu
+ * Text Domain:       wp-admin-menu-organizer
  * Domain Path:       /languages
  */
 ```
@@ -377,8 +377,8 @@ The plugin must pass, with zero errors:
 ## 11. FILE STRUCTURE
 
 ```
-menu-organizer-collapsible-admin-menu/
-├── menu-organizer-collapsible-admin-menu.php   # bootstrap only, no logic
+wp-admin-menu-organizer/
+├── wp-admin-menu-organizer.php   # bootstrap only, no logic
 ├── uninstall.php                               # delete options and user meta
 ├── readme.txt
 ├── LICENSE
