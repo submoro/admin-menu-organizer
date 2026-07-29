@@ -51,10 +51,10 @@ if ( str_contains( $class, 'wp-menu-separator' ) ) {
 ```
 
 Rendering a separator item that carried the title `MY GROUP HEADER`, the icon
-`dashicons-admin-post` and the hookname `wpamo-hook` produced:
+`dashicons-admin-post` and the hookname `amorg-hook` produced:
 
 ```html
-<li class="wp-first-item wp-not-current-submenu wpamo-group-header wp-menu-separator" id="wpamo-hook" aria-hidden="true"><div class="separator"></div></li>
+<li class="wp-first-item wp-not-current-submenu amorg-group-header wp-menu-separator" id="amorg-hook" aria-hidden="true"><div class="separator"></div></li>
 ```
 
 **The title is discarded. The icon is discarded. `aria-hidden="true"` is forced
@@ -65,7 +65,7 @@ Two further separator hazards in `includes/menu.php`:
 
 - **Adjacent separators are silently deleted** (`:347–364`), matched by
   `stristr( $data[4], 'wp-menu-separator' )` — a substring test, so a compound
-  class like `wpamo-group-header wp-menu-separator` is still caught. Two
+  class like `amorg-group-header wp-menu-separator` is still caught. Two
   consecutive group headers (an empty group) would lose one.
 - **A trailing separator is deleted** (`:367–372`), but via strict equality
   (`'wp-menu-separator' === $menu[$k][4]`), so a compound class survives that one.
@@ -141,8 +141,8 @@ bare `<li>` that still carries our classes and id and is **not** `aria-hidden`.
 Verified:
 
 ```html
-<!-- slug 'secret.php', capability 'do_not_allow', class 'wpamo-item' -->
-<li class="wp-first-item wp-not-current-submenu wpamo-item"></li>
+<!-- slug 'secret.php', capability 'do_not_allow', class 'amorg-item' -->
+<li class="wp-first-item wp-not-current-submenu amorg-item"></li>
 ```
 
 We fail the **capability** half (`do_not_allow`, core's canonical never-cap)
@@ -170,8 +170,8 @@ applied at `:387` — the **last thing that touches `$menu`** before
 |---|---|---|
 | 1 | `custom_menu_order` | Return `true`. |
 | 2 | `menu_order` | Return every real slug, deduped, grouped contiguously. Always an array. |
-| 3 | `add_menu_classes` (late) | Append `wpamo-item wpamo-group-<id>` to index `4` of each real item; splice one inert header item per group at each group boundary. |
-| 4 | `admin_body_class` | Emit `wpamo-collapsed-<id>` per collapsed group. |
+| 3 | `add_menu_classes` (late) | Append `amorg-item amorg-group-<id>` to index `4` of each real item; splice one inert header item per group at each group boundary. |
+| 4 | `admin_body_class` | Emit `amorg-collapsed-<id>` per collapsed group. |
 | 5 | CSS | Hide members of collapsed groups. Reserve header row height. |
 | 6 | JS | Fill each empty header `<li>` with the `<button>`, toggle, persist. |
 
@@ -223,4 +223,4 @@ Two cosmetic changes to be aware of:
 `array_flip()` fatals on a non-array. We always return an array from
 `menu_order`, so we can never be the cause — but a broken plugin filtering after
 us can still white-screen the admin. This is the primary justification for the
-`?wpamo=off` and `WPAMO_DISABLE` escape hatches in SPEC §3.5.
+`?amorg=off` and `AMORG_DISABLE` escape hatches in SPEC §3.5.

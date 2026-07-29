@@ -166,7 +166,7 @@ foreach ( $msgids as $msgid ) {
 	}
 }
 
-$headers = "Project-Id-Version: WP Admin Menu Organizer 1.0.0\n"
+$headers = "Project-Id-Version: Admin Menu Organizer 1.0.0\n"
 	. "MIME-Version: 1.0\n"
 	. "Content-Type: text/plain; charset=UTF-8\n"
 	. "Content-Transfer-Encoding: 8bit\n"
@@ -175,7 +175,7 @@ $headers = "Project-Id-Version: WP Admin Menu Organizer 1.0.0\n"
 	. "X-Generator: bin/build-translation.php\n";
 
 // The .po, for translators to continue from.
-$po  = "# Arabic translation for WP Admin Menu Organizer.\n";
+$po  = "# Arabic translation for Admin Menu Organizer.\n";
 $po .= "# Copyright (C) 2026 Moamen Elabd\n";
 $po .= "# This file is distributed under the GPLv2 or later.\n";
 $po .= "msgid \"\"\nmsgstr \"\"\n";

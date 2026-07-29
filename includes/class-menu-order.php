@@ -2,11 +2,11 @@
 /**
  * Grouped reordering of the top-level admin menu.
  *
- * @package WPAdminMenuOrganizer
+ * @package AdminMenuOrganizer
  * @since   1.0.0
  */
 
-namespace WPAMO;
+namespace AMORG;
 
 defined( 'ABSPATH' ) || exit;
 

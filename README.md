@@ -1,13 +1,76 @@
-# WP Admin Menu Organizer
+# Admin Menu Organizer
 
 Groups WordPress admin menu items into named, collapsible categories inside the
 native sidebar. Sorts what it recognises automatically, and lets you rearrange
 everything else by drag and drop.
 
-[![CI](https://github.com/submoro/wp-admin-menu-organizer/actions/workflows/ci.yml/badge.svg)](https://github.com/submoro/wp-admin-menu-organizer/actions/workflows/ci.yml)
+[![CI](https://github.com/submoro/admin-menu-organizer/actions/workflows/ci.yml/badge.svg)](https://github.com/submoro/admin-menu-organizer/actions/workflows/ci.yml)
 &nbsp;License: GPLv2 or later &nbsp;·&nbsp; Requires WordPress 6.4+ &nbsp;·&nbsp; Requires PHP 7.4+
 
 ---
+
+## Installation
+
+Not yet on the WordPress.org directory, so install it from a zip for now.
+
+### From a release zip
+
+1. Download the latest `admin-menu-organizer.<version>.zip` from
+   [Releases](../../releases).
+2. In your dashboard go to **Plugins → Add New → Upload Plugin**.
+3. Choose the zip, click **Install Now**, then **Activate**.
+4. Your sidebar is grouped immediately, using the automatic rules. Nothing to
+   configure.
+5. To rearrange anything, go to **Settings → Menu Organizer**.
+
+### Building the zip yourself
+
+Requires PHP 7.4+ and [Composer](https://getcomposer.org/).
+
+```bash
+git clone https://github.com/submoro/admin-menu-organizer.git
+cd admin-menu-organizer
+composer install
+composer run build
+```
+
+That runs the full gate — linting, tests, security audit, readme validation —
+then writes `build/admin-menu-organizer.<version>.zip`. Upload that as above.
+
+### Installing directly into a site
+
+If you have filesystem access, clone straight into your plugins directory. The
+repository folder name must be `admin-menu-organizer`, because WordPress derives
+the text domain from it:
+
+```bash
+cd wp-content/plugins
+git clone https://github.com/submoro/admin-menu-organizer.git
+```
+
+Then activate it from the **Plugins** screen. No `composer install` is needed to
+*run* the plugin — it has no runtime dependencies. Composer is only for the
+development tooling.
+
+### With WP-CLI
+
+```bash
+wp plugin install /path/to/admin-menu-organizer.1.0.0.zip --activate
+```
+
+### Requirements
+
+| | |
+|---|---|
+| WordPress | 6.4 or newer |
+| PHP | 7.4 or newer |
+| Multisite | Works per-site. The network admin menu is deliberately left untouched. |
+
+### Uninstalling
+
+Deactivating restores the stock sidebar exactly and keeps your saved
+arrangement, so reactivating brings it back. Deleting the plugin removes every
+option and user meta key it created — there is no residue.
 
 ## The problem
 
@@ -66,10 +129,10 @@ lands in the always-visible *Other* group.
 Extend it without forking:
 
 ```php
-add_filter( 'wpamo_known_slugs',          function ( $map ) { $map['my-plugin'] = 'commerce'; return $map; } );
-add_filter( 'wpamo_category_definitions', function ( $groups ) { /* add your own */ return $groups; } );
-add_filter( 'wpamo_resolve_group',        function ( $group_id, $item ) { return $group_id; }, 10, 2 );
-add_filter( 'wpamo_resolved_layout',      function ( $layout ) { return $layout; } );
+add_filter( 'amorg_known_slugs',          function ( $map ) { $map['my-plugin'] = 'commerce'; return $map; } );
+add_filter( 'amorg_category_definitions', function ( $groups ) { /* add your own */ return $groups; } );
+add_filter( 'amorg_resolve_group',        function ( $group_id, $item ) { return $group_id; }, 10, 2 );
+add_filter( 'amorg_resolved_layout',      function ( $layout ) { return $layout; } );
 ```
 
 ## If something goes wrong
@@ -78,8 +141,8 @@ Two escape hatches, both of which always work and neither of which discards your
 saved arrangement:
 
 ```
-?wpamo=off                          # disables it for one page load
-define( 'WPAMO_DISABLE', true );    # in wp-config.php, disables it entirely
+?amorg=off                          # disables it for one page load
+define( 'AMORG_DISABLE', true );    # in wp-config.php, disables it entirely
 ```
 
 ## How it works

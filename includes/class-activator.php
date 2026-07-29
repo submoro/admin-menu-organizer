@@ -2,11 +2,11 @@
 /**
  * Activation and deactivation routines.
  *
- * @package WPAdminMenuOrganizer
+ * @package AdminMenuOrganizer
  * @since   1.0.0
  */
 
-namespace WPAMO;
+namespace AMORG;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -102,7 +102,7 @@ final class Activator {
 	 */
 	private static function activate_site(): void {
 		if ( ! get_option( Plugin::OPTION_VERSION ) ) {
-			add_option( Plugin::OPTION_VERSION, WPAMO_VERSION );
+			add_option( Plugin::OPTION_VERSION, AMORG_VERSION );
 		}
 	}
 }

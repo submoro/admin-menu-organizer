@@ -11,13 +11,13 @@
  * before this runs. See includes/class-menu-renderer.php for why core cannot be
  * made to emit a button itself.
  *
- * @package WPAdminMenuOrganizer
+ * @package AdminMenuOrganizer
  */
 
 ( function () {
 	'use strict';
 
-	var data = window.wpamoMenu || {};
+	var data = window.amorgMenu || {};
 
 	/**
 	 * Translates a string, falling back to the original when wp.i18n is absent.
@@ -52,7 +52,7 @@
 		return template.replace( '%s', value );
 	}
 
-	var COLLAPSED_CLASS = 'wpamo-collapsed-member';
+	var COLLAPSED_CLASS = 'amorg-collapsed-member';
 	var SAVE_DEBOUNCE_MS = 400;
 
 	var menu = document.getElementById( 'adminmenu' );
@@ -72,7 +72,7 @@
 	 */
 	function rowsFor( groupId ) {
 		return Array.prototype.slice.call(
-			menu.querySelectorAll( 'li.wpamo-group-' + cssEscape( groupId ) )
+			menu.querySelectorAll( 'li.amorg-group-' + cssEscape( groupId ) )
 		);
 	}
 
@@ -105,7 +105,7 @@
 	function collapsedIds() {
 		return data.groups
 			.filter( function ( group ) {
-				var toggle = document.getElementById( 'wpamo-toggle-' + group.id );
+				var toggle = document.getElementById( 'amorg-toggle-' + group.id );
 
 				return toggle && 'false' === toggle.getAttribute( 'aria-expanded' );
 			} )
@@ -171,22 +171,22 @@
 	 * @return {void}
 	 */
 	function setExpanded( toggle, expanded, persist ) {
-		var groupId = toggle.getAttribute( 'data-wpamo-group' );
+		var groupId = toggle.getAttribute( 'data-amorg-group' );
 
 		toggle.setAttribute( 'aria-expanded', expanded ? 'true' : 'false' );
 
 		rowsFor( groupId ).forEach( function ( row ) {
-			if ( row.classList.contains( 'wpamo-group-header' ) ) {
+			if ( row.classList.contains( 'amorg-group-header' ) ) {
 				return;
 			}
 
 			row.classList.toggle( COLLAPSED_CLASS, ! expanded );
 		} );
 
-		var state = toggle.querySelector( '.wpamo-sr-state' );
+		var state = toggle.querySelector( '.amorg-sr-state' );
 
 		if ( state ) {
-			state.textContent = expanded ? __( 'expanded', 'wp-admin-menu-organizer' ) : __( 'collapsed', 'wp-admin-menu-organizer' );
+			state.textContent = expanded ? __( 'expanded', 'admin-menu-organizer' ) : __( 'collapsed', 'admin-menu-organizer' );
 		}
 
 		if ( persist ) {
@@ -201,7 +201,7 @@
 	 * @return {void}
 	 */
 	function enhance( group ) {
-		var header = document.getElementById( 'wpamo-group-' + group.id );
+		var header = document.getElementById( 'amorg-group-' + group.id );
 
 		if ( ! header ) {
 			return;
@@ -210,11 +210,11 @@
 		// SPEC section 6.1: a header with nothing behind it must not be focusable.
 		// The server already omits empty groups, so this is a second guard.
 		var members = rowsFor( group.id ).filter( function ( row ) {
-			return ! row.classList.contains( 'wpamo-group-header' );
+			return ! row.classList.contains( 'amorg-group-header' );
 		} );
 
 		if ( ! members.length ) {
-			header.classList.add( 'wpamo-group-empty' );
+			header.classList.add( 'amorg-group-empty' );
 
 			return;
 		}
@@ -228,30 +228,30 @@
 		var toggle = document.createElement( 'button' );
 
 		toggle.type = 'button';
-		toggle.className = 'wpamo-group-toggle';
-		toggle.id = 'wpamo-toggle-' + group.id;
-		toggle.setAttribute( 'data-wpamo-group', group.id );
+		toggle.className = 'amorg-group-toggle';
+		toggle.id = 'amorg-toggle-' + group.id;
+		toggle.setAttribute( 'data-amorg-group', group.id );
 		toggle.setAttribute( 'aria-expanded', startsCollapsed ? 'false' : 'true' );
 
 		var icon = document.createElement( 'span' );
-		icon.className = 'wpamo-toggle-icon';
+		icon.className = 'amorg-toggle-icon';
 		icon.setAttribute( 'aria-hidden', 'true' );
 		toggle.appendChild( icon );
 
 		var label = document.createElement( 'span' );
-		label.className = 'wpamo-toggle-label';
+		label.className = 'amorg-toggle-label';
 		label.textContent = group.label;
 		toggle.appendChild( label );
 
 		if ( group.updates > 0 ) {
 			var badge = document.createElement( 'span' );
-			badge.className = 'wpamo-toggle-badge';
+			badge.className = 'amorg-toggle-badge';
 			badge.textContent = String( group.updates );
 			badge.setAttribute(
 				'aria-label',
 				sprintf(
 					/* translators: %s: Number of pending updates. */
-					__( '%s pending updates in this group', 'wp-admin-menu-organizer' ),
+					__( '%s pending updates in this group', 'admin-menu-organizer' ),
 					String( group.updates )
 				)
 			);
@@ -265,23 +265,23 @@
 		 * disclosure, and the redundancy costs nothing.
 		 */
 		var state = document.createElement( 'span' );
-		state.className = 'wpamo-sr-only wpamo-sr-state';
-		state.textContent = startsCollapsed ? __( 'collapsed', 'wp-admin-menu-organizer' ) : __( 'expanded', 'wp-admin-menu-organizer' );
+		state.className = 'amorg-sr-only amorg-sr-state';
+		state.textContent = startsCollapsed ? __( 'collapsed', 'admin-menu-organizer' ) : __( 'expanded', 'admin-menu-organizer' );
 		toggle.appendChild( state );
 
 		var chevron = document.createElement( 'span' );
-		chevron.className = 'wpamo-toggle-chevron';
+		chevron.className = 'amorg-toggle-chevron';
 		chevron.setAttribute( 'aria-hidden', 'true' );
 		toggle.appendChild( chevron );
 
 		// The catch-all is never collapsible, so it gets a label and no control.
 		if ( group.permanent ) {
 			var plain = document.createElement( 'span' );
-			plain.className = 'wpamo-group-toggle wpamo-group-static';
+			plain.className = 'amorg-group-toggle amorg-group-static';
 			plain.appendChild( icon );
 			plain.appendChild( label );
 			header.appendChild( plain );
-			header.classList.add( 'wpamo-enhanced' );
+			header.classList.add( 'amorg-enhanced' );
 
 			return;
 		}
@@ -305,7 +305,7 @@
 				return;
 			}
 
-			toggles = Array.prototype.slice.call( menu.querySelectorAll( '.wpamo-group-toggle[data-wpamo-group]' ) );
+			toggles = Array.prototype.slice.call( menu.querySelectorAll( '.amorg-group-toggle[data-amorg-group]' ) );
 
 			var index = toggles.indexOf( toggle );
 
@@ -324,7 +324,7 @@
 		} );
 
 		header.appendChild( toggle );
-		header.classList.add( 'wpamo-enhanced' );
+		header.classList.add( 'amorg-enhanced' );
 	}
 
 	data.groups.forEach( enhance );

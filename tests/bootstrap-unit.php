@@ -10,20 +10,20 @@
  * Anything that reads an option, writes user meta, or calls a WordPress
  * function belongs in tests/integration/ instead.
  *
- * @package WPAdminMenuOrganizer
+ * @package AdminMenuOrganizer
  * @since   1.0.0
  */
 
 declare( strict_types=1 );
 
-$wpamo_autoload = dirname( __DIR__ ) . '/vendor/autoload.php';
+$amorg_autoload = dirname( __DIR__ ) . '/vendor/autoload.php';
 
-if ( ! file_exists( $wpamo_autoload ) ) {
+if ( ! file_exists( $amorg_autoload ) ) {
 	echo 'Composer dependencies are not installed. Run "composer install" first.' . PHP_EOL;
 	exit( 1 );
 }
 
-require_once $wpamo_autoload;
+require_once $amorg_autoload;
 
 /*
  * Every plugin file opens with `defined( 'ABSPATH' ) || exit;`, which stops it
@@ -35,6 +35,6 @@ require_once $wpamo_autoload;
 // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- Standing in for WordPress's own constant in a WordPress-free test run; see above.
 defined( 'ABSPATH' ) || define( 'ABSPATH', dirname( __DIR__ ) . '/' );
 
-if ( ! defined( 'WPAMO_PLUGIN_DIR' ) ) {
-	define( 'WPAMO_PLUGIN_DIR', dirname( __DIR__ ) . '/' );
+if ( ! defined( 'AMORG_PLUGIN_DIR' ) ) {
+	define( 'AMORG_PLUGIN_DIR', dirname( __DIR__ ) . '/' );
 }

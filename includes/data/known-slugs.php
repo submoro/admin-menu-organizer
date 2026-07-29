@@ -17,9 +17,9 @@
  * Returned as a PHP array rather than JSON, per SPEC section 5.3, so opcache
  * holds it and nothing is decoded per request.
  *
- * Extend through the wpamo_known_slugs filter rather than editing this file.
+ * Extend through the amorg_known_slugs filter rather than editing this file.
  *
- * @package WPAdminMenuOrganizer
+ * @package AdminMenuOrganizer
  * @since   1.0.0
  */
 

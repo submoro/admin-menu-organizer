@@ -2,11 +2,11 @@
 /**
  * Safe reading of the WordPress admin menu globals.
  *
- * @package WPAdminMenuOrganizer
+ * @package AdminMenuOrganizer
  * @since   1.0.0
  */
 
-namespace WPAMO;
+namespace AMORG;
 
 defined( 'ABSPATH' ) || exit;
 

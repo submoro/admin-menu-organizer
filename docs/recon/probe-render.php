@@ -42,7 +42,7 @@ function probe( $label, array $menu, array $submenu = array() ) {
 // and is marked aria-hidden. (SPEC 3.3 step 5 proposes exactly this as the
 // accordion header carrier.)
 probe( 'CLAIM 1 - separator-class item WITH a title and icon', array(
-	array( 'MY GROUP HEADER', 'read', 'wpamo-group-content', '', 'wpamo-group-header wp-menu-separator', 'wpamo-hook', 'dashicons-admin-post' ),
+	array( 'MY GROUP HEADER', 'read', 'amorg-group-content', '', 'amorg-group-header wp-menu-separator', 'amorg-hook', 'dashicons-admin-post' ),
 ) );
 
 // CLAIM 2: menu titles are emitted RAW (never escaped) on output.
@@ -59,7 +59,7 @@ probe( 'CLAIM 2b - raw HTML in title, item WITH submenu', array(
 // CLAIM 3: an item with an EMPTY slug and no submenu renders as an empty <li>
 // that still carries our classes and id, and is NOT aria-hidden.
 probe( 'CLAIM 3 - empty slug, custom class, no submenu', array(
-	array( 'MY GROUP HEADER', 'read', '', '', 'wpamo-group-header wpamo-group-content', 'wpamo_group_content', '' ),
+	array( 'MY GROUP HEADER', 'read', '', '', 'amorg-group-header amorg-group-content', 'amorg_group_content', '' ),
 ) );
 
 // CLAIM 4: index 4 (classes) IS escaped, so no HTML can be smuggled through it.
@@ -70,5 +70,5 @@ probe( 'CLAIM 4 - attempted HTML injection via index 4 (classes)', array(
 // CLAIM 5: capability at index 1 is honoured at render time - an item the user
 // cannot access emits a bare <li> with classes but no link.
 probe( 'CLAIM 5 - item whose capability the user lacks', array(
-	array( 'Secret', 'do_not_allow', 'secret.php', '', 'wpamo-item', '', '' ),
+	array( 'Secret', 'do_not_allow', 'secret.php', '', 'amorg-item', '', '' ),
 ) );

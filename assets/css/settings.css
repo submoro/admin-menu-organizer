@@ -4,10 +4,10 @@
  * Logical properties throughout, so the editor mirrors in RTL alongside the
  * sidebar it configures.
  *
- * @package WPAdminMenuOrganizer
+ * @package AdminMenuOrganizer
  */
 
-.wpamo-settings .wpamo-intro {
+.amorg-settings .amorg-intro {
 	max-width: 70ch;
 	font-size: 14px;
 }
@@ -17,14 +17,14 @@
  * with four groups and a site with twenty both look deliberate.
  * ---------------------------------------------------------------------- */
 
-.wpamo-editor {
+.amorg-editor {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 	gap: 16px;
 	margin-block: 20px;
 }
 
-.wpamo-group {
+.amorg-group {
 	display: flex;
 	flex-direction: column;
 	border: 1px solid #c3c4c7;
@@ -32,7 +32,7 @@
 	background: #fff;
 }
 
-.wpamo-group-title {
+.amorg-group-title {
 	display: flex;
 	align-items: center;
 	gap: 8px;
@@ -44,7 +44,7 @@
 	font-weight: 600;
 }
 
-.wpamo-badge-permanent {
+.amorg-badge-permanent {
 	margin-inline-start: auto;
 	padding: 2px 8px;
 	border-radius: 9px;
@@ -55,7 +55,7 @@
 	text-transform: lowercase;
 }
 
-.wpamo-droplist {
+.amorg-droplist {
 	flex: 1 1 auto;
 	min-height: 56px;
 	margin: 0;
@@ -63,7 +63,7 @@
 	list-style: none;
 }
 
-.wpamo-chip {
+.amorg-chip {
 	display: flex;
 	align-items: center;
 	gap: 8px;
@@ -74,21 +74,21 @@
 	background: #fff;
 }
 
-.wpamo-chip:last-child {
+.amorg-chip:last-child {
 	margin-block-end: 0;
 }
 
-.wpamo-chip-handle {
+.amorg-chip-handle {
 	color: #8c8f94;
 	cursor: grab;
 }
 
-.wpamo-chip-label {
+.amorg-chip-label {
 	flex: 1 1 auto;
 	font-weight: 500;
 }
 
-.wpamo-chip-slug {
+.amorg-chip-slug {
 	flex: 0 0 auto;
 	max-width: 14ch;
 	overflow: hidden;
@@ -99,12 +99,12 @@
 	white-space: nowrap;
 }
 
-.wpamo-chip-move select {
+.amorg-chip-move select {
 	max-width: 15ch;
 	font-size: 12px;
 }
 
-.wpamo-chip-placeholder {
+.amorg-chip-placeholder {
 	height: 34px;
 	margin: 0 0 6px;
 	border: 1px dashed #2271b1;
@@ -112,7 +112,7 @@
 	background: #f0f6fc;
 }
 
-.wpamo-empty-note {
+.amorg-empty-note {
 	margin: 0;
 	padding: 0 12px 10px;
 }
@@ -121,19 +121,19 @@
  * Groups table.
  * ---------------------------------------------------------------------- */
 
-.wpamo-groups-table .wpamo-order-cell {
+.amorg-groups-table .amorg-order-cell {
 	display: flex;
 	align-items: center;
 	gap: 8px;
 	white-space: nowrap;
 }
 
-.wpamo-drag-handle {
+.amorg-drag-handle {
 	color: #8c8f94;
 	cursor: grab;
 }
 
-.wpamo-groups-table td {
+.amorg-groups-table td {
 	vertical-align: middle;
 }
 
@@ -142,30 +142,30 @@
  * ring here makes the keyboard route unusable.
  * ---------------------------------------------------------------------- */
 
-.wpamo-settings :focus-visible {
+.amorg-settings :focus-visible {
 	outline: 2px solid #2271b1;
 	outline-offset: 1px;
 }
 
 @media (forced-colors: active) {
 
-	.wpamo-group,
-	.wpamo-chip {
+	.amorg-group,
+	.amorg-chip {
 		border: 1px solid CanvasText;
 	}
 
-	.wpamo-chip-placeholder {
+	.amorg-chip-placeholder {
 		border: 1px dashed CanvasText;
 	}
 
-	.wpamo-settings :focus-visible {
+	.amorg-settings :focus-visible {
 		outline: 2px solid Highlight;
 	}
 }
 
 @media (prefers-reduced-motion: reduce) {
 
-	.wpamo-settings * {
+	.amorg-settings * {
 		transition: none !important;
 		animation: none !important;
 	}
@@ -178,20 +178,20 @@
 
 @media screen and (max-width: 782px) {
 
-	.wpamo-editor {
+	.amorg-editor {
 		grid-template-columns: 1fr;
 	}
 
-	.wpamo-chip {
+	.amorg-chip {
 		flex-wrap: wrap;
 	}
 
-	.wpamo-chip-slug {
+	.amorg-chip-slug {
 		display: none;
 	}
 
-	.wpamo-chip-move,
-	.wpamo-chip-move select {
+	.amorg-chip-move,
+	.amorg-chip-move select {
 		width: 100%;
 		max-width: none;
 	}

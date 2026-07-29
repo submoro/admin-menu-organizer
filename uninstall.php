@@ -6,7 +6,7 @@
  * that uninstalling leaves no residue. Runs only when WordPress itself deletes
  * the plugin.
  *
- * @package WPAdminMenuOrganizer
+ * @package AdminMenuOrganizer
  * @since   1.0.0
  */
 
@@ -27,8 +27,8 @@ require_once __DIR__ . '/includes/class-plugin.php';
  *
  * @return void
  */
-function wpamo_uninstall_site() {
-	foreach ( WPAMO\Plugin::ALL_OPTIONS as $option ) {
+function amorg_uninstall_site() {
+	foreach ( AMORG\Plugin::ALL_OPTIONS as $option ) {
 		delete_option( $option );
 	}
 }
@@ -43,39 +43,39 @@ function wpamo_uninstall_site() {
  *
  * @return void
  */
-function wpamo_uninstall_user_meta() {
-	foreach ( WPAMO\Plugin::ALL_USER_META as $meta_key ) {
+function amorg_uninstall_user_meta() {
+	foreach ( AMORG\Plugin::ALL_USER_META as $meta_key ) {
 		delete_metadata( 'user', 0, $meta_key, '', true );
 	}
 }
 
 if ( is_multisite() ) {
-	$wpamo_paged = 1;
+	$amorg_paged = 1;
 
 	do {
-		$wpamo_site_ids = get_sites(
+		$amorg_site_ids = get_sites(
 			array(
 				'fields'                 => 'ids',
 				'number'                 => 100,
-				'paged'                  => $wpamo_paged,
+				'paged'                  => $amorg_paged,
 				'update_site_meta_cache' => false,
 			)
 		);
 
-		$wpamo_batch_size = count( $wpamo_site_ids );
+		$amorg_batch_size = count( $amorg_site_ids );
 
-		foreach ( $wpamo_site_ids as $wpamo_site_id ) {
-			switch_to_blog( (int) $wpamo_site_id );
-			wpamo_uninstall_site();
+		foreach ( $amorg_site_ids as $amorg_site_id ) {
+			switch_to_blog( (int) $amorg_site_id );
+			amorg_uninstall_site();
 			restore_current_blog();
 		}
 
-		++$wpamo_paged;
-	} while ( 100 === $wpamo_batch_size );
+		++$amorg_paged;
+	} while ( 100 === $amorg_batch_size );
 
-	unset( $wpamo_paged, $wpamo_site_ids, $wpamo_site_id, $wpamo_batch_size );
+	unset( $amorg_paged, $amorg_site_ids, $amorg_site_id, $amorg_batch_size );
 } else {
-	wpamo_uninstall_site();
+	amorg_uninstall_site();
 }
 
-wpamo_uninstall_user_meta();
+amorg_uninstall_user_meta();

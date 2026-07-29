@@ -27,6 +27,40 @@ preg_match( '/^Tags:\s*(.*)$/m', $readme, $tm );
 $tags = array_filter( array_map( 'trim', explode( ',', $tm[1] ?? '' ) ) );
 check( 'Tags count <= 5', count( $tags ) <= 5, count( $tags ) . ' tags' );
 
+/*
+ * "Tested up to" takes a major version only. Plugin Check rejects a patch
+ * number here: "Tested up to: 7.0.2 The version number should only include
+ * major versions 7.0."
+ */
+preg_match( '/^Tested up to:\s*(.*)$/m', $readme, $tu );
+$tested = trim( $tu[1] ?? '' );
+check(
+	'Tested up to is a major version only',
+	1 === preg_match( '/^\d+\.\d+$/', $tested ),
+	$tested
+);
+
+/*
+ * WordPress.org forbids these terms outright in the plugin name and slug, for
+ * new submissions, regardless of what older grandfathered plugins do.
+ */
+preg_match( '/^=== (.+) ===$/m', $readme, $nm );
+$plugin_name = strtolower( $nm[1] ?? '' );
+$restricted  = array( 'wordpress', 'wp', 'plugin', 'woocommerce' );
+$found       = array();
+
+foreach ( $restricted as $term ) {
+	if ( preg_match( '/\b' . preg_quote( $term, '/' ) . '\b/', $plugin_name ) ) {
+		$found[] = $term;
+	}
+}
+
+check(
+	'Plugin name uses no restricted term',
+	array() === $found,
+	$found ? 'found: ' . implode( ', ', $found ) : $nm[1] ?? ''
+);
+
 // Short description: the first non-empty line after the header block.
 if ( preg_match( '/^License URI:.*$\R+(.+?)$/m', $readme, $sm ) ) {
 	$len = strlen( trim( $sm[1] ) );

@@ -173,21 +173,39 @@ jobs:
             | tar --strip-components=1 -zxf - -C "${CORE_DIR}"
 
           # The test library, from the matching develop tag.
+          #
+          # strip-components must be 3, not 2. The archive paths are
+          # wordpress-develop-<tag>/tests/phpunit/includes/..., so stripping two
+          # components leaves the library at ${TESTS_DIR}/phpunit/includes,
+          # one level below where the bootstrap looks for it. tar still exits 0,
+          # so the mistake surfaces only as "could not find the test library".
           curl -fsSL "https://github.com/WordPress/wordpress-develop/archive/refs/tags/${WP_TAG}.tar.gz" \
-            | tar --strip-components=2 -zxf - -C "${TESTS_DIR}" \
+            | tar --strip-components=3 -zxf - -C "${TESTS_DIR}" \
               "wordpress-develop-${WP_TAG}/tests/phpunit/includes" \
               "wordpress-develop-${WP_TAG}/tests/phpunit/data"
 
-          curl -fsSL -o "${TESTS_DIR}/wp-tests-config.php" \
-            "https://raw.githubusercontent.com/WordPress/wordpress-develop/${WP_TAG}/wp-tests-config-sample.php"
+          test -f "${TESTS_DIR}/includes/functions.php" \
+            || { echo "::error::Test library layout unexpected"; find "${TESTS_DIR}" -maxdepth 2 -type d; exit 1; }
 
-          sed -i \
-            -e "s!dirname( __FILE__ ) . '/src/'!'${CORE_DIR}/'!" \
-            -e "s/youremptytestdbnamehere/wordpress_test/" \
-            -e "s/yourusernamehere/root/" \
-            -e "s/yourpasswordhere//" \
-            -e "s/localhost/127.0.0.1/" \
-            "${TESTS_DIR}/wp-tests-config.php"
+          # Written here rather than sed-ed out of wp-tests-config-sample.php,
+          # whose internal paths change between releases.
+          cat > "${TESTS_DIR}/wp-tests-config.php" <<PHPEOF
+          <?php
+          define( 'ABSPATH', '${CORE_DIR}/' );
+          define( 'WP_DEFAULT_THEME', 'default' );
+          define( 'WP_TESTS_DOMAIN', 'example.org' );
+          define( 'WP_TESTS_EMAIL', 'admin@example.org' );
+          define( 'WP_TESTS_TITLE', 'Test Blog' );
+          define( 'WP_PHP_BINARY', 'php' );
+          define( 'DB_NAME', 'wordpress_test' );
+          define( 'DB_USER', 'root' );
+          define( 'DB_PASSWORD', '' );
+          define( 'DB_HOST', '127.0.0.1:3306' );
+          define( 'DB_CHARSET', 'utf8' );
+          define( 'DB_COLLATE', '' );
+          define( 'WP_DEBUG', true );
+          \$table_prefix = 'wptests_';
+          PHPEOF
 
           echo "WP_TESTS_DIR=${TESTS_DIR}" >> "${GITHUB_ENV}"
 
@@ -195,16 +213,38 @@ jobs:
         run: composer run test:integration
 
   # SPEC 10.5: the official Plugin Check plugin, both check sets, zero errors.
+  #
+  # Runs against the BUILT PLUGIN, not the repository. Pointing it at the repo
+  # root makes it audit the test suite, the build scripts, the recon harnesses,
+  # .github and SPEC.md — none of which ship — and it duly reported missing
+  # ABSPATH guards in PHPUnit tests, mt_rand() in a property-based test, and
+  # "hidden files are not permitted" for .gitattributes. All noise, and it
+  # drowned the two findings that were real.
   plugin-check:
     name: Plugin Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Build the distributable
+        run: |
+          set -euo pipefail
+          php bin/build-zip.php "${RUNNER_TEMP}/dist"
+          mkdir -p "${RUNNER_TEMP}/plugin"
+          unzip -q "${RUNNER_TEMP}"/dist/*.zip -d "${RUNNER_TEMP}/plugin"
+          echo "Checking these files:"
+          find "${RUNNER_TEMP}/plugin" -type f | sed "s!${RUNNER_TEMP}/plugin/!  !"
+
       - name: Run Plugin Check
         uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: './'
+          build-dir: ${{ runner.temp }}/plugin/admin-menu-organizer
           categories: |
             general
             plugin_repo
@@ -227,11 +267,15 @@ jobs:
 
           PATTERN='wp_remote_|curl_init|curl_exec|fsockopen|file_get_contents\s*\(\s*["'"'"']https\?:|fopen\s*\(\s*["'"'"']https\?:'
 
-          # docs/ and tests/ are not shipped; .distignore excludes them.
+          # Only shipped code is in scope, so every directory .distignore
+          # excludes is excluded here too. bin/ matters especially:
+          # bin/security-audit.php holds this very pattern as a string literal,
+          # so scanning it made the check match its own detector and fail.
           if grep -rnE "${PATTERN}" \
                --include='*.php' --include='*.js' \
                --exclude-dir=vendor --exclude-dir=node_modules \
-               --exclude-dir=docs --exclude-dir=tests \
+               --exclude-dir=docs --exclude-dir=tests --exclude-dir=bin \
+               --exclude-dir=.github \
                . ; then
             echo "::error::Found an outbound network call in shipped code. SPEC section 8 forbids this."
             exit 1

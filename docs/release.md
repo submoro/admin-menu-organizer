@@ -54,7 +54,7 @@ click through every screen. Zero notices, warnings or deprecations.
 php bin/build-zip.php
 ```
 
-Writes `build/wp-admin-menu-organizer.<version>.zip`, taking its
+Writes `build/admin-menu-organizer.<version>.zip`, taking its
 exclusions from `.distignore` so the result matches what `wp dist-archive` would
 produce. The script then verifies its own output: it fails if anything that must
 never ship has crept in, or if anything the plugin cannot run without is absent.
@@ -98,11 +98,11 @@ viewport and the default admin colour scheme.
 ## Publishing to SVN, once approved
 
 You will be given an SVN URL of the form
-`https://plugins.svn.wordpress.org/wp-admin-menu-organizer/`.
+`https://plugins.svn.wordpress.org/admin-menu-organizer/`.
 
 ```bash
-svn checkout https://plugins.svn.wordpress.org/wp-admin-menu-organizer/ wpamo-svn
-cd wpamo-svn
+svn checkout https://plugins.svn.wordpress.org/admin-menu-organizer/ amorg-svn
+cd amorg-svn
 ```
 
 The repository has three directories, and what goes where matters:
@@ -116,8 +116,8 @@ The repository has three directories, and what goes where matters:
 ```bash
 # Unpack the built zip into trunk, replacing what is there.
 rm -rf trunk/*
-unzip -j -o /path/to/wp-admin-menu-organizer.1.0.0.zip -d /tmp/wpamo
-cp -R /tmp/wpamo/wp-admin-menu-organizer/* trunk/
+unzip -j -o /path/to/admin-menu-organizer.1.0.0.zip -d /tmp/amorg
+cp -R /tmp/amorg/admin-menu-organizer/* trunk/
 
 # Directory assets go in assets/, not trunk/.
 cp /path/to/.wordpress-org/*.png assets/
@@ -135,11 +135,11 @@ at a tag that does not exist, the directory serves `trunk/` instead; if it point
 at an old tag, your new release is invisible no matter what you committed. This
 is the single most common way a WordPress.org release goes wrong, which is why
 `tests/unit/test-version-consistency.php` asserts the stable tag, the plugin
-header and `WPAMO_VERSION` all agree.
+header and `AMORG_VERSION` all agree.
 
 ## Subsequent releases
 
-1. Bump the version in **both** the plugin header and `WPAMO_VERSION`, and the
+1. Bump the version in **both** the plugin header and `AMORG_VERSION`, and the
    `Stable tag` in `readme.txt`. The unit suite fails if these three disagree.
 2. Add a `== Changelog ==` entry. The suite fails if the current version has none.
 3. Update `Tested up to:` if you have tested against a newer WordPress.

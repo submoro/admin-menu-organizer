@@ -2,11 +2,11 @@
 /**
  * Automatic category detection for admin menu items.
  *
- * @package WPAdminMenuOrganizer
+ * @package AdminMenuOrganizer
  * @since   1.0.0
  */
 
-namespace WPAMO;
+namespace AMORG;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -117,7 +117,7 @@ final class Detector {
 	 *
 	 * Injected rather than calling apply_filters() directly, so this class stays
 	 * free of WordPress. create() supplies a callback that runs the
-	 * wpamo_resolve_group filter.
+	 * amorg_resolve_group filter.
 	 *
 	 * @since 1.0.0
 	 * @var callable|null
@@ -174,7 +174,7 @@ final class Detector {
 		 *
 		 * @param array $known_slugs Map of menu slug to group ID.
 		 */
-		$known_slugs = apply_filters( 'wpamo_known_slugs', require WPAMO_PLUGIN_DIR . 'includes/data/known-slugs.php' );
+		$known_slugs = apply_filters( 'amorg_known_slugs', require AMORG_PLUGIN_DIR . 'includes/data/known-slugs.php' );
 
 		/**
 		 * Filters the heuristic signal tables.
@@ -183,7 +183,7 @@ final class Detector {
 		 *
 		 * @param array $heuristics Signal tables, as per includes/data/keyword-map.php.
 		 */
-		$heuristics = apply_filters( 'wpamo_keyword_map', require WPAMO_PLUGIN_DIR . 'includes/data/keyword-map.php' );
+		$heuristics = apply_filters( 'amorg_keyword_map', require AMORG_PLUGIN_DIR . 'includes/data/keyword-map.php' );
 
 		$filter = static function ( string $group, array $item ): string {
 			/**
@@ -194,7 +194,7 @@ final class Detector {
 			 * @param string $group The resolved group ID.
 			 * @param array  $item  Normalized menu item from Menu_Reader.
 			 */
-			return (string) apply_filters( 'wpamo_resolve_group', $group, $item );
+			return (string) apply_filters( 'amorg_resolve_group', $group, $item );
 		};
 
 		return new self(
@@ -266,7 +266,7 @@ final class Detector {
 			if ( $filtered !== $result['group'] && $this->is_valid( $filtered ) ) {
 				$result['group']    = $filtered;
 				$result['layer']    = 'filter';
-				$result['evidence'] = 'wpamo_resolve_group';
+				$result['evidence'] = 'amorg_resolve_group';
 			}
 		}
 

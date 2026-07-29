@@ -2,14 +2,14 @@
 /**
  * Unit tests for the detection cascade.
  *
- * @package WPAdminMenuOrganizer
+ * @package AdminMenuOrganizer
  * @since   1.0.0
  */
 
 declare( strict_types=1 );
 
-use WPAMO\Detector;
-use WPAMO\Menu_Reader;
+use AMORG\Detector;
+use AMORG\Menu_Reader;
 use PHPUnit\Framework\TestCase;
 
 require_once dirname( __DIR__ ) . '/fixtures/menus.php';
@@ -579,7 +579,7 @@ final class Test_Detector extends TestCase {
 	 * @return void
 	 */
 	public function test_detects_every_item_in_the_production_menu(): void {
-		$reader   = new Menu_Reader( wpamo_fixture_production_menu() );
+		$reader   = new Menu_Reader( amorg_fixture_production_menu() );
 		$detected = $this->detector()->detect_all( $reader );
 
 		$this->assertSame( $reader->organizable_slugs(), array_keys( $detected ) );
@@ -601,7 +601,7 @@ final class Test_Detector extends TestCase {
 	 * @return void
 	 */
 	public function test_production_menu_is_filed_sensibly(): void {
-		$reader   = new Menu_Reader( wpamo_fixture_production_menu() );
+		$reader   = new Menu_Reader( amorg_fixture_production_menu() );
 		$detected = $this->detector()->detect_all( $reader );
 
 		$expected = array(
@@ -662,7 +662,7 @@ final class Test_Detector extends TestCase {
 	 * @return void
 	 */
 	public function test_production_menu_needs_almost_no_manual_filing(): void {
-		$reader   = new Menu_Reader( wpamo_fixture_production_menu() );
+		$reader   = new Menu_Reader( amorg_fixture_production_menu() );
 		$detected = $this->detector()->detect_all( $reader );
 
 		$ungrouped = array_keys( $detected, 'ungrouped', true );

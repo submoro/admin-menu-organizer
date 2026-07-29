@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="WP Admin Menu Organizer">
+<ruleset name="Admin Menu Organizer">
 
 	<description>Coding standards for Menu Organizer, per SPEC section 10.5.</description>
 
@@ -49,8 +49,8 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
-				<element value="WPAMO"/>
-				<element value="wpamo"/>
+				<element value="AMORG"/>
+				<element value="amorg"/>
 			</property>
 		</properties>
 	</rule>
@@ -59,7 +59,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="wp-admin-menu-organizer"/>
+				<element value="admin-menu-organizer"/>
 			</property>
 		</properties>
 	</rule>
@@ -71,10 +71,10 @@
 		plugin uses, and it must not be flagged for it.
 	-->
 	<rule ref="PHPCompatibility.FunctionDeclarations.NewParamTypeDeclarations">
-		<exclude-pattern>wp-admin-menu-organizer.php</exclude-pattern>
+		<exclude-pattern>admin-menu-organizer.php</exclude-pattern>
 	</rule>
 	<rule ref="PHPCompatibility.FunctionDeclarations.NewReturnTypeDeclarations">
-		<exclude-pattern>wp-admin-menu-organizer.php</exclude-pattern>
+		<exclude-pattern>admin-menu-organizer.php</exclude-pattern>
 	</rule>
 
 	<!-- The test suite is not held to the plugin's file-naming convention. -->

@@ -2,14 +2,14 @@
 /**
  * Unit tests for grouped reordering.
  *
- * @package WPAdminMenuOrganizer
+ * @package AdminMenuOrganizer
  * @since   1.0.0
  */
 
 declare( strict_types=1 );
 
-use WPAMO\Menu_Order;
-use WPAMO\Menu_Reader;
+use AMORG\Menu_Order;
+use AMORG\Menu_Reader;
 use PHPUnit\Framework\TestCase;
 
 require_once dirname( __DIR__ ) . '/fixtures/menus.php';
@@ -84,7 +84,7 @@ final class Test_Menu_Order extends TestCase {
 	 * @return void
 	 */
 	public function test_core_menu_keeps_every_slug(): void {
-		$reader = new Menu_Reader( wpamo_fixture_core_menu() );
+		$reader = new Menu_Reader( amorg_fixture_core_menu() );
 		$in     = $reader->slugs();
 
 		$out = Menu_Order::order(
@@ -109,7 +109,7 @@ final class Test_Menu_Order extends TestCase {
 	 * @return void
 	 */
 	public function test_production_menu_keeps_every_slug(): void {
-		$reader = new Menu_Reader( wpamo_fixture_production_menu() );
+		$reader = new Menu_Reader( amorg_fixture_production_menu() );
 		$in     = $reader->slugs();
 
 		$out = Menu_Order::order(
@@ -135,7 +135,7 @@ final class Test_Menu_Order extends TestCase {
 	 * @return void
 	 */
 	public function test_empty_layout_keeps_every_slug(): void {
-		$reader = new Menu_Reader( wpamo_fixture_production_menu() );
+		$reader = new Menu_Reader( amorg_fixture_production_menu() );
 		$in     = $reader->slugs();
 
 		$this->assertIsPermutationOf( $in, Menu_Order::order( $in, $reader, array() ) );
@@ -154,7 +154,7 @@ final class Test_Menu_Order extends TestCase {
 	 * @return void
 	 */
 	public function test_hostile_layouts_keep_every_slug(): void {
-		$reader = new Menu_Reader( wpamo_fixture_production_menu() );
+		$reader = new Menu_Reader( amorg_fixture_production_menu() );
 		$in     = $reader->slugs();
 
 		$hostile = array(
@@ -299,7 +299,7 @@ final class Test_Menu_Order extends TestCase {
 	 * @return void
 	 */
 	public function test_group_members_are_contiguous(): void {
-		$reader = new Menu_Reader( wpamo_fixture_production_menu() );
+		$reader = new Menu_Reader( amorg_fixture_production_menu() );
 
 		$assignments = array(
 			'content'  => array( 'edit.php', 'upload.php', 'edit-comments.php' ),
@@ -335,7 +335,7 @@ final class Test_Menu_Order extends TestCase {
 	 * @return void
 	 */
 	public function test_groups_are_emitted_in_layout_order(): void {
-		$reader = new Menu_Reader( wpamo_fixture_core_menu() );
+		$reader = new Menu_Reader( amorg_fixture_core_menu() );
 
 		$out = Menu_Order::order(
 			$reader->slugs(),
@@ -363,7 +363,7 @@ final class Test_Menu_Order extends TestCase {
 	 * @return void
 	 */
 	public function test_items_follow_layout_order_within_a_group(): void {
-		$reader = new Menu_Reader( wpamo_fixture_core_menu() );
+		$reader = new Menu_Reader( amorg_fixture_core_menu() );
 
 		$out = Menu_Order::order(
 			$reader->slugs(),
@@ -386,7 +386,7 @@ final class Test_Menu_Order extends TestCase {
 	 * @return void
 	 */
 	public function test_ungrouped_is_always_last(): void {
-		$reader = new Menu_Reader( wpamo_fixture_core_menu() );
+		$reader = new Menu_Reader( amorg_fixture_core_menu() );
 
 		$out = Menu_Order::order(
 			$reader->slugs(),
@@ -467,7 +467,7 @@ final class Test_Menu_Order extends TestCase {
 	 * @return void
 	 */
 	public function test_detected_assignments_place_unlisted_slugs(): void {
-		$reader = new Menu_Reader( wpamo_fixture_core_menu() );
+		$reader = new Menu_Reader( amorg_fixture_core_menu() );
 
 		$out = Menu_Order::order(
 			$reader->slugs(),
@@ -501,7 +501,7 @@ final class Test_Menu_Order extends TestCase {
 	 * @return void
 	 */
 	public function test_detected_group_outside_the_layout_falls_to_ungrouped(): void {
-		$reader = new Menu_Reader( wpamo_fixture_core_menu() );
+		$reader = new Menu_Reader( amorg_fixture_core_menu() );
 		$in     = $reader->slugs();
 
 		$out = Menu_Order::order(
@@ -526,7 +526,7 @@ final class Test_Menu_Order extends TestCase {
 	 * @return void
 	 */
 	public function test_incoming_order_is_preserved_within_a_group(): void {
-		$reader = new Menu_Reader( wpamo_fixture_core_menu() );
+		$reader = new Menu_Reader( amorg_fixture_core_menu() );
 
 		// Another plugin has already put comments before media before posts.
 		$incoming = array( 'edit-comments.php', 'upload.php', 'edit.php', 'tools.php' );
@@ -554,7 +554,7 @@ final class Test_Menu_Order extends TestCase {
 	 * @return void
 	 */
 	public function test_explicit_placement_beats_incoming_order(): void {
-		$reader = new Menu_Reader( wpamo_fixture_core_menu() );
+		$reader = new Menu_Reader( amorg_fixture_core_menu() );
 
 		$incoming = array( 'edit-comments.php', 'upload.php', 'edit.php' );
 
@@ -582,7 +582,7 @@ final class Test_Menu_Order extends TestCase {
 	 * @return void
 	 */
 	public function test_incoming_duplicates_are_collapsed(): void {
-		$reader = new Menu_Reader( wpamo_fixture_core_menu() );
+		$reader = new Menu_Reader( amorg_fixture_core_menu() );
 
 		$out = Menu_Order::order(
 			array( 'edit.php', 'upload.php', 'edit.php', 'tools.php', 'upload.php' ),
@@ -601,7 +601,7 @@ final class Test_Menu_Order extends TestCase {
 	 * @return void
 	 */
 	public function test_incoming_junk_is_discarded(): void {
-		$reader = new Menu_Reader( wpamo_fixture_core_menu() );
+		$reader = new Menu_Reader( amorg_fixture_core_menu() );
 
 		$out = Menu_Order::order(
 			array( 'edit.php', null, 42, array( 'x' ), '', false, 'tools.php' ),
@@ -634,7 +634,7 @@ final class Test_Menu_Order extends TestCase {
 	 * @return void
 	 */
 	public function test_separators_move_to_the_end(): void {
-		$reader = new Menu_Reader( wpamo_fixture_core_menu() );
+		$reader = new Menu_Reader( amorg_fixture_core_menu() );
 		$in     = $reader->slugs();
 
 		$out = Menu_Order::order( $in, $reader, $this->layout( array( 'content' => array( 'edit.php' ) ) ) );
@@ -659,7 +659,7 @@ final class Test_Menu_Order extends TestCase {
 	 * @return void
 	 */
 	public function test_a_layout_cannot_place_a_separator_inside_a_group(): void {
-		$reader = new Menu_Reader( wpamo_fixture_core_menu() );
+		$reader = new Menu_Reader( amorg_fixture_core_menu() );
 
 		$out = Menu_Order::order(
 			$reader->slugs(),

@@ -2,14 +2,14 @@
 /**
  * Tests for the plugin container, its guards and its activation routine.
  *
- * @package WPAdminMenuOrganizer
+ * @package AdminMenuOrganizer
  * @since   1.0.0
  */
 
 declare( strict_types=1 );
 
-use WPAMO\Activator;
-use WPAMO\Plugin;
+use AMORG\Activator;
+use AMORG\Plugin;
 
 /**
  * Covers the Phase 2 skeleton: constants, autoloading, the two escape hatches
@@ -38,7 +38,7 @@ class Test_Plugin extends WP_UnitTestCase {
 		$instance->setAccessible( true );
 		$instance->setValue( null, null );
 
-		unset( $_GET['wpamo'] );
+		unset( $_GET['amorg'] );
 	}
 
 	/**
@@ -49,7 +49,7 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function tear_down(): void {
-		unset( $_GET['wpamo'] );
+		unset( $_GET['amorg'] );
 
 		parent::tear_down();
 	}
@@ -62,13 +62,13 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_bootstrap_defines_its_constants(): void {
-		$this->assertTrue( defined( 'WPAMO_VERSION' ) );
-		$this->assertTrue( defined( 'WPAMO_MIN_PHP' ) );
-		$this->assertTrue( defined( 'WPAMO_MIN_WP' ) );
-		$this->assertTrue( defined( 'WPAMO_PLUGIN_FILE' ) );
-		$this->assertTrue( defined( 'WPAMO_PLUGIN_DIR' ) );
-		$this->assertTrue( defined( 'WPAMO_PLUGIN_URL' ) );
-		$this->assertTrue( defined( 'WPAMO_PLUGIN_BASENAME' ) );
+		$this->assertTrue( defined( 'AMORG_VERSION' ) );
+		$this->assertTrue( defined( 'AMORG_MIN_PHP' ) );
+		$this->assertTrue( defined( 'AMORG_MIN_WP' ) );
+		$this->assertTrue( defined( 'AMORG_PLUGIN_FILE' ) );
+		$this->assertTrue( defined( 'AMORG_PLUGIN_DIR' ) );
+		$this->assertTrue( defined( 'AMORG_PLUGIN_URL' ) );
+		$this->assertTrue( defined( 'AMORG_PLUGIN_BASENAME' ) );
 	}
 
 	/**
@@ -84,9 +84,9 @@ class Test_Plugin extends WP_UnitTestCase {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		$data = get_plugin_data( WPAMO_PLUGIN_FILE, false, false );
+		$data = get_plugin_data( AMORG_PLUGIN_FILE, false, false );
 
-		$this->assertSame( WPAMO_VERSION, $data['Version'] );
+		$this->assertSame( AMORG_VERSION, $data['Version'] );
 	}
 
 	/**
@@ -98,11 +98,11 @@ class Test_Plugin extends WP_UnitTestCase {
 	 */
 	public function test_version_constant_matches_the_readme_stable_tag(): void {
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file in a test, not a remote fetch.
-		$readme = file_get_contents( WPAMO_PLUGIN_DIR . 'readme.txt' );
+		$readme = file_get_contents( AMORG_PLUGIN_DIR . 'readme.txt' );
 
 		$this->assertIsString( $readme );
 		$this->assertSame( 1, preg_match( '/^Stable tag:\s*(.+)$/m', $readme, $matches ) );
-		$this->assertSame( WPAMO_VERSION, trim( $matches[1] ) );
+		$this->assertSame( AMORG_VERSION, trim( $matches[1] ) );
 	}
 
 	/**
@@ -156,7 +156,7 @@ class Test_Plugin extends WP_UnitTestCase {
 		$keys = array_merge( Plugin::ALL_OPTIONS, Plugin::ALL_USER_META );
 
 		foreach ( $keys as $key ) {
-			$this->assertStringStartsWith( 'wpamo_', $key );
+			$this->assertStringStartsWith( 'amorg_', $key );
 		}
 	}
 
@@ -179,7 +179,7 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_query_parameter_escape_hatch_disables_the_plugin(): void {
-		$_GET['wpamo'] = 'off';
+		$_GET['amorg'] = 'off';
 
 		$this->assertTrue( Plugin::instance()->is_disabled() );
 	}
@@ -192,7 +192,7 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_query_parameter_ignores_other_values(): void {
-		$_GET['wpamo'] = 'on';
+		$_GET['amorg'] = 'on';
 
 		$this->assertFalse( Plugin::instance()->is_disabled() );
 	}
@@ -205,7 +205,7 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_boot_registers_nothing_when_disabled(): void {
-		$_GET['wpamo'] = 'off';
+		$_GET['amorg'] = 'off';
 
 		Plugin::instance()->boot();
 
@@ -290,7 +290,7 @@ class Test_Plugin extends WP_UnitTestCase {
 
 		Activator::activate();
 
-		$this->assertSame( WPAMO_VERSION, get_option( Plugin::OPTION_VERSION ) );
+		$this->assertSame( AMORG_VERSION, get_option( Plugin::OPTION_VERSION ) );
 	}
 
 	/**
@@ -316,10 +316,10 @@ class Test_Plugin extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_deactivation_preserves_saved_data(): void {
-		update_option( Plugin::OPTION_VERSION, WPAMO_VERSION );
+		update_option( Plugin::OPTION_VERSION, AMORG_VERSION );
 
 		Activator::deactivate();
 
-		$this->assertSame( WPAMO_VERSION, get_option( Plugin::OPTION_VERSION ) );
+		$this->assertSame( AMORG_VERSION, get_option( Plugin::OPTION_VERSION ) );
 	}
 }

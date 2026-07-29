@@ -2,13 +2,13 @@
 /**
  * Unit tests for the layout sanitiser.
  *
- * @package WPAdminMenuOrganizer
+ * @package AdminMenuOrganizer
  * @since   1.0.0
  */
 
 declare( strict_types=1 );
 
-use WPAMO\Layout_Sanitizer;
+use AMORG\Layout_Sanitizer;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -116,7 +116,7 @@ ksort( $entries );
 $pot  = "# Copyright (C) 2026 Moamen Elabd\n";
 $pot .= "# This file is distributed under the GPLv2 or later.\n";
 $pot .= "msgid \"\"\nmsgstr \"\"\n";
-$pot .= "\"Project-Id-Version: WP Admin Menu Organizer 1.0.0\\n\"\n";
+$pot .= "\"Project-Id-Version: Admin Menu Organizer 1.0.0\\n\"\n";
 $pot .= "\"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/$domain/\\n\"\n";
 $pot .= "\"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n\"\n";
 $pot .= "\"Language-Team: LANGUAGE <LL@li.org>\\n\"\n";

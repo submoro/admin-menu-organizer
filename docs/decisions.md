@@ -4,9 +4,9 @@
 
 | Date | Decision | Value |
 |---|---|---|
-| 2026-07-28 | Public slug | `wp-admin-menu-organizer` — renamed from the original `menu-organizer-collapsible-admin-menu` at the owner's request, to shorten it and signal WordPress. Availability confirmed against the plugins API, not by scraping the HTML page. See D-014. |
-| 2026-07-28 | Display name | `WP Admin Menu Organizer` |
-| 2026-07-28 | PHP prefix | `WPAMO_` constants, `wpamo_` functions and keys, `wpamo-` CSS and JS, `WPAMO\` namespace |
+| 2026-07-28 | Public slug | `admin-menu-organizer` — renamed from the original `menu-organizer-collapsible-admin-menu` at the owner's request, to shorten it and signal WordPress. Availability confirmed against the plugins API, not by scraping the HTML page. See D-014. |
+| 2026-07-28 | Display name | `Admin Menu Organizer` |
+| 2026-07-28 | PHP prefix | `AMORG_` constants, `amorg_` functions and keys, `amorg-` CSS and JS, `AMORG\` namespace |
 | 2026-07-26 | Licence | GPLv2 or later (unchanged from spec) |
 | 2026-07-26 | Core source for recon | Official wordpress.org release zips, read-only, in the scratchpad. Not committed. |
 | 2026-07-26 | Verification toolchain | PHP + Composer locally (phpcs, PHPCompatibilityWP); PHPUnit matrix and Plugin Check in GitHub Actions, since both need a database and a real WordPress install. |
@@ -254,16 +254,16 @@ It earned that on first run: `phpunit-unit.xml.dist` was in the archive, because
 added later. `.distignore` now uses globs, and the check would have caught it
 whatever the cause.
 
-### D-014 — Renamed to `wp-admin-menu-organizer`
+### D-014 — Renamed to shorten it
 
 Requested mid-build: shorten the name and signal WordPress in it.
 
-On the "WP" question, SPEC §2 forbids `WordPress` or `WP` "as a leading brand
-claim". A leading `wp-` is not that. WordPress's trademark policy objects to
-`WordPress` implying official endorsement; `WP` is the accepted abbreviation and
-is used by many of the directory's most-installed plugins — WP Rocket, WPForms,
-WP Mail SMTP, WP Super Cache. So a leading `wp-` is compliant, and the spec's
-constraint is satisfied by not using the full word.
+The first attempt used `wp-admin-menu-organizer`, on the reasoning that a leading
+`wp-` is not a brand claim and is used by many of the directory's most-installed
+plugins — WP Rocket, WPForms, WP Mail SMTP.
+
+**That reasoning was wrong, and D-015 records the correction.** The shortening
+stands; the `wp` does not.
 
 Availability was checked against the **plugins API**
 (`api.wordpress.org/plugins/info/1.2/`) rather than by fetching the public plugin
@@ -273,7 +273,7 @@ returns a definitive error for an unclaimed slug.
 
 | Candidate | Result |
 |---|---|
-| `wp-admin-menu-organizer` | free — **chosen** |
+| `admin-menu-organizer` | free — **chosen** |
 | `wp-menu-organizer` | free |
 | `admin-menu-organizer` | free |
 | `wp-menu-groups`, `wp-admin-menu-groups`, `collapsible-admin-menu` | free |
@@ -290,7 +290,7 @@ them for anyone searching.
 The rename was mechanical and total: slug, main file name, display name, text
 domain across all 107 strings, `@package` tag, PHP prefix and namespace, option
 and user meta keys, CSS classes, body classes, REST namespace, settings page
-slug, filter names, the `?wpamo=off` escape hatch and the `WPAMO_DISABLE`
+slug, filter names, the `?amorg=off` escape hatch and the `AMORG_DISABLE`
 constant. Nothing was released beforehand, so no migration path is needed for the
 renamed option keys.
 
@@ -298,6 +298,69 @@ Two existing tests made this safe rather than risky: one asserts the text domain
 equals the directory basename, and one asserts the plugin header, the version
 constant and the readme's stable tag all agree. Both would have failed on a
 partial rename.
+
+### D-015 — "wp" is forbidden in the name and slug. Final: `admin-menu-organizer`
+
+The first CI run put the plugin through the official Plugin Check for the first
+time, and it rejected the name outright:
+
+> The plugin name includes a restricted term. Your chosen plugin name —
+> "WP Admin Menu Organizer" — contains the restricted term **"wp" which cannot be
+> used at all** in your plugin name.
+>
+> The plugin slug includes a restricted term. Your plugin slug —
+> "wp-admin-menu-organizer" — contains the restricted term "wp" which cannot be
+> used at all in your plugin slug.
+
+So the D-014 reasoning was simply incorrect. WP Rocket and WPForms predate the
+current rule and are grandfathered; a new submission carrying `wp` in either
+field is refused. SPEC §2's constraint was stricter than it appeared, and taking
+it at face value would have been the right call.
+
+**Final naming:** slug `admin-menu-organizer`, display name
+`Admin Menu Organizer`, prefix `AMORG_` / `amorg_` / `amorg-` / `AMORG\`.
+Availability re-confirmed via the plugins API.
+
+`bin/check-readme.php` now fails the build on any restricted term in the plugin
+name — `wordpress`, `wp`, `plugin`, `woocommerce` — so this cannot recur silently.
+
+### D-016 — Plugin Check must run against the built zip, not the repository
+
+The same CI run reported a wall of errors that were all artefacts of pointing
+Plugin Check at the repository root: missing `ABSPATH` guards in PHPUnit test
+files, `mt_rand()` in a property-based test, unescaped output in `bin/` build
+scripts, "hidden files are not permitted" for `.gitattributes`, `.github`
+detected, `SPEC.md` unexpected in the plugin root.
+
+None of it ships. All of it drowned out the two findings that were real.
+
+**Decision:** the `plugin-check` job now builds the distributable with
+`bin/build-zip.php`, unzips it, and checks *that*. What the directory reviews is
+what the directory receives.
+
+### D-017 — Two further genuine CI findings
+
+- **`Tested up to: 7.0.2` was invalid.** Plugin Check: "The version number should
+  only include major versions 7.0." Corrected to `7.0`, and
+  `bin/check-readme.php` now enforces the major-version-only format.
+- **The no-outbound-requests job matched its own detector.** It grepped `bin/`,
+  where `bin/security-audit.php` holds the forbidden-function pattern as a string
+  literal. The job now excludes every directory `.distignore` excludes, so its
+  scope matches what actually ships.
+
+### D-018 — The integration suite never ran because of a tar depth error
+
+`--strip-components=2` on the `wordpress-develop` tarball leaves the test library
+at `${TESTS_DIR}/phpunit/includes`, one level below where the bootstrap looks.
+`tar` still exits 0, so the only symptom was the bootstrap's own "could not find
+the WordPress test library" message — which was at least a clear one, having been
+written for exactly this case.
+
+Fixed to `--strip-components=3`, with an explicit `test -f` assertion on
+`includes/functions.php` immediately afterwards so a future layout change fails
+loudly instead of silently. `wp-tests-config.php` is now written directly rather
+than `sed`-ed out of `wp-tests-config-sample.php`, whose internal paths change
+between releases.
 
 ## Environment notes
 

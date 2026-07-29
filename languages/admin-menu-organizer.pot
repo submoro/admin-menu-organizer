@@ -2,8 +2,8 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Admin Menu Organizer 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-admin-menu-organizer/\n"
+"Project-Id-Version: Admin Menu Organizer 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/admin-menu-organizer/\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-07-27T00:00:00+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Domain: wp-admin-menu-organizer\n"
+"X-Domain: admin-menu-organizer\n"
 
 #. translators: 1: Number of items grouped automatically, 2: Total number of items.
 #: includes/admin/views/tab-advanced.php:143
@@ -219,12 +219,12 @@ msgid "Menu Organizer"
 msgstr ""
 
 #. translators: 1: Required PHP version, 2: PHP version running on the server.
-#: wp-admin-menu-organizer.php:85
+#: admin-menu-organizer.php:85
 msgid "Menu Organizer requires PHP %1$s or newer. This site is running PHP %2$s, so the plugin has not been loaded."
 msgstr ""
 
 #. translators: 1: Required WordPress version, 2: WordPress version running on the site.
-#: wp-admin-menu-organizer.php:92
+#: admin-menu-organizer.php:92
 msgid "Menu Organizer requires WordPress %1$s or newer. This site is running WordPress %2$s, so the plugin has not been loaded."
 msgstr ""
 

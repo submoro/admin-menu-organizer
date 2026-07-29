@@ -11,7 +11,7 @@
  * handler does. That is a hard accessibility requirement, not a nicety: a
  * drag-only editor is unusable with a keyboard and would fail review.
  *
- * @package WPAdminMenuOrganizer
+ * @package AdminMenuOrganizer
  */
 
 ( function ( $ ) {
@@ -61,17 +61,17 @@
 	 * @return {void}
 	 */
 	function syncGroup( groupId ) {
-		var $list = $( '.wpamo-droplist[data-wpamo-group="' + groupId + '"]' );
-		var $input = $( '[data-wpamo-group-input="' + groupId + '"]' );
+		var $list = $( '.amorg-droplist[data-amorg-group="' + groupId + '"]' );
+		var $input = $( '[data-amorg-group-input="' + groupId + '"]' );
 
 		if ( ! $list.length || ! $input.length ) {
 			return;
 		}
 
 		var slugs = $list
-			.children( '.wpamo-chip' )
+			.children( '.amorg-chip' )
 			.map( function () {
-				return $( this ).attr( 'data-wpamo-slug' );
+				return $( this ).attr( 'data-amorg-slug' );
 			} )
 			.get();
 
@@ -84,8 +84,8 @@
 	 * @return {void}
 	 */
 	function syncAll() {
-		$( '.wpamo-droplist' ).each( function () {
-			syncGroup( $( this ).attr( 'data-wpamo-group' ) );
+		$( '.amorg-droplist' ).each( function () {
+			syncGroup( $( this ).attr( 'data-amorg-group' ) );
 		} );
 	}
 
@@ -95,17 +95,17 @@
 	 * @return {void}
 	 */
 	function refreshCounts() {
-		$( '.wpamo-group' ).each( function () {
+		$( '.amorg-group' ).each( function () {
 			var $group = $( this );
-			var count = $group.find( '.wpamo-droplist > .wpamo-chip' ).length;
-			var $empty = $group.find( '.wpamo-empty-note' );
+			var count = $group.find( '.amorg-droplist > .amorg-chip' ).length;
+			var $empty = $group.find( '.amorg-empty-note' );
 
 			if ( 0 === count ) {
 				if ( ! $empty.length ) {
-					$group.find( '.wpamo-droplist' ).after(
+					$group.find( '.amorg-droplist' ).after(
 						$( '<p/>', {
-							'class': 'wpamo-empty-note description',
-							text: __( 'Empty. This group will not appear in the sidebar.', 'wp-admin-menu-organizer' )
+							'class': 'amorg-empty-note description',
+							text: __( 'Empty. This group will not appear in the sidebar.', 'admin-menu-organizer' )
 						} )
 					);
 				}
@@ -123,17 +123,17 @@
 	 * @return {void}
 	 */
 	function moveChip( slug, groupId ) {
-		var $chip = $( '.wpamo-chip[data-wpamo-slug="' + slug + '"]' );
-		var $target = $( '.wpamo-droplist[data-wpamo-group="' + groupId + '"]' );
+		var $chip = $( '.amorg-chip[data-amorg-slug="' + slug + '"]' );
+		var $target = $( '.amorg-droplist[data-amorg-group="' + groupId + '"]' );
 
 		if ( ! $chip.length || ! $target.length ) {
 			return;
 		}
 
-		var from = $chip.closest( '.wpamo-droplist' ).attr( 'data-wpamo-group' );
+		var from = $chip.closest( '.amorg-droplist' ).attr( 'data-amorg-group' );
 
 		$target.append( $chip );
-		$chip.find( '.wpamo-move-select' ).val( groupId );
+		$chip.find( '.amorg-move-select' ).val( groupId );
 
 		syncGroup( from );
 		syncGroup( groupId );
@@ -146,10 +146,10 @@
 		 * would land back at the top of the document and the user would have to
 		 * find their place again.
 		 */
-		$chip.find( '.wpamo-move-select' ).trigger( 'focus' );
+		$chip.find( '.amorg-move-select' ).trigger( 'focus' );
 
 		announce(
-			__( 'Moved to group', 'wp-admin-menu-organizer' ) + ': ' + $target.closest( '.wpamo-group' ).find( '.wpamo-group-title' ).text().trim()
+			__( 'Moved to group', 'admin-menu-organizer' ) + ': ' + $target.closest( '.amorg-group' ).find( '.amorg-group-title' ).text().trim()
 		);
 	}
 
@@ -170,11 +170,11 @@
 
 	$( function () {
 		// The layout editor.
-		if ( $( '.wpamo-droplist' ).length ) {
-			$( '.wpamo-droplist' ).sortable( {
-				connectWith: '.wpamo-droplist',
-				handle: '.wpamo-chip-handle',
-				placeholder: 'wpamo-chip-placeholder',
+		if ( $( '.amorg-droplist' ).length ) {
+			$( '.amorg-droplist' ).sortable( {
+				connectWith: '.amorg-droplist',
+				handle: '.amorg-chip-handle',
+				placeholder: 'amorg-chip-placeholder',
 				forcePlaceholderSize: true,
 				tolerance: 'pointer',
 				update: function () {
@@ -183,16 +183,16 @@
 					markDirty();
 				},
 				receive: function ( event, ui ) {
-					var groupId = $( this ).attr( 'data-wpamo-group' );
+					var groupId = $( this ).attr( 'data-amorg-group' );
 
 					// Keep the item's own select honest after a drag, so the two
 					// input methods never disagree about where the item is.
-					ui.item.find( '.wpamo-move-select' ).val( groupId );
+					ui.item.find( '.amorg-move-select' ).val( groupId );
 				}
 			} );
 
-			$( document ).on( 'change', '.wpamo-move-select', function () {
-				moveChip( $( this ).attr( 'data-wpamo-slug' ), $( this ).val() );
+			$( document ).on( 'change', '.amorg-move-select', function () {
+				moveChip( $( this ).attr( 'data-amorg-slug' ), $( this ).val() );
 			} );
 
 			syncAll();
@@ -200,9 +200,9 @@
 		}
 
 		// The groups table.
-		if ( $( '.wpamo-group-rows' ).length ) {
-			$( '.wpamo-group-rows' ).sortable( {
-				handle: '.wpamo-drag-handle',
+		if ( $( '.amorg-group-rows' ).length ) {
+			$( '.amorg-group-rows' ).sortable( {
+				handle: '.amorg-drag-handle',
 				axis: 'y',
 				containment: 'parent',
 				update: function () {
@@ -211,10 +211,10 @@
 				}
 			} );
 
-			$( document ).on( 'change', '.wpamo-position', function () {
+			$( document ).on( 'change', '.amorg-position', function () {
 				var $row = $( this ).closest( 'tr' );
 				var target = parseInt( $( this ).val(), 10 );
-				var $rows = $( '.wpamo-group-rows tr' );
+				var $rows = $( '.amorg-group-rows tr' );
 
 				if ( isNaN( target ) || target < 1 || target > $rows.length ) {
 					syncGroupOrder();
@@ -225,7 +225,7 @@
 				var $reference = $rows.not( $row ).eq( target - 1 );
 
 				if ( ! $reference.length ) {
-					$( '.wpamo-group-rows' ).append( $row );
+					$( '.amorg-group-rows' ).append( $row );
 				} else if ( target - 1 >= $rows.index( $row ) ) {
 					$reference.after( $row );
 				} else {
@@ -234,17 +234,17 @@
 
 				syncGroupOrder();
 				markDirty();
-				$row.find( '.wpamo-position' ).trigger( 'focus' );
+				$row.find( '.amorg-position' ).trigger( 'focus' );
 			} );
 
 			syncGroupOrder();
 		}
 
-		$( '.wpamo-settings form' ).on( 'submit', function () {
+		$( '.amorg-settings form' ).on( 'submit', function () {
 			dirty = false;
 		} );
 
-		$( '.wpamo-settings' ).on( 'change input', 'input, select, textarea', markDirty );
+		$( '.amorg-settings' ).on( 'change input', 'input, select, textarea', markDirty );
 	} );
 
 	/**
@@ -253,16 +253,16 @@
 	 * @return {void}
 	 */
 	function syncGroupOrder() {
-		var ids = $( '.wpamo-group-rows tr' )
+		var ids = $( '.amorg-group-rows tr' )
 			.map( function () {
-				return $( this ).attr( 'data-wpamo-group' );
+				return $( this ).attr( 'data-amorg-group' );
 			} )
 			.get();
 
-		$( '#wpamo-group-order' ).val( ids.join( ',' ) );
+		$( '#amorg-group-order' ).val( ids.join( ',' ) );
 
-		$( '.wpamo-group-rows tr' ).each( function ( index ) {
-			$( this ).find( '.wpamo-position' ).val( index + 1 );
+		$( '.amorg-group-rows tr' ).each( function ( index ) {
+			$( this ).find( '.amorg-position' ).val( index + 1 );
 		} );
 	}
 

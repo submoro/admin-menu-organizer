@@ -2,17 +2,17 @@
 /**
  * Integration tests for the security guarantees that need a real WordPress.
  *
- * @package WPAdminMenuOrganizer
+ * @package AdminMenuOrganizer
  * @since   1.0.0
  */
 
 declare( strict_types=1 );
 
-use WPAMO\Capabilities;
-use WPAMO\Layout_Repository;
-use WPAMO\Menu_Reader;
-use WPAMO\Plugin;
-use WPAMO\Rest_Controller;
+use AMORG\Capabilities;
+use AMORG\Layout_Repository;
+use AMORG\Menu_Reader;
+use AMORG\Plugin;
+use AMORG\Rest_Controller;
 
 /**
  * Covers the capability gates and the zero-outbound-requests guarantee.
@@ -63,7 +63,7 @@ class Test_Security extends WP_UnitTestCase {
 	public function intercept( $preempt, $args, $url ) {
 		$this->intercepted[] = $url;
 
-		return new WP_Error( 'wpamo_test_blocked', 'Blocked by the test tripwire.' );
+		return new WP_Error( 'amorg_test_blocked', 'Blocked by the test tripwire.' );
 	}
 
 	/**
@@ -118,7 +118,7 @@ class Test_Security extends WP_UnitTestCase {
 		$result = Rest_Controller::can_save_site_layout();
 
 		$this->assertInstanceOf( WP_Error::class, $result );
-		$this->assertSame( 'wpamo_forbidden', $result->get_error_code() );
+		$this->assertSame( 'amorg_forbidden', $result->get_error_code() );
 	}
 
 	/**
@@ -190,7 +190,7 @@ class Test_Security extends WP_UnitTestCase {
 
 		wp_set_current_user( $attacker );
 
-		$request = new WP_REST_Request( 'POST', '/wpamo/v1/state' );
+		$request = new WP_REST_Request( 'POST', '/amorg/v1/state' );
 		$request->set_param( 'collapsed', array( 'commerce' ) );
 		$request->set_param( 'user_id', $victim );
 
@@ -243,7 +243,7 @@ class Test_Security extends WP_UnitTestCase {
 			$this->assertArrayNotHasKey(
 				Capabilities::PERSONALISE,
 				(array) $role['capabilities'],
-				"Role {$role_name} has a stored wpamo capability."
+				"Role {$role_name} has a stored amorg capability."
 			);
 		}
 	}
@@ -301,10 +301,10 @@ class Test_Security extends WP_UnitTestCase {
 		}
 
 		if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-			define( 'WP_UNINSTALL_PLUGIN', WPAMO_PLUGIN_BASENAME );
+			define( 'WP_UNINSTALL_PLUGIN', AMORG_PLUGIN_BASENAME );
 		}
 
-		require WPAMO_PLUGIN_DIR . 'uninstall.php';
+		require AMORG_PLUGIN_DIR . 'uninstall.php';
 
 		foreach ( Plugin::ALL_OPTIONS as $option ) {
 			$this->assertFalse( get_option( $option ), "Option {$option} survived uninstall." );
