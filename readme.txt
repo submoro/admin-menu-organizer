@@ -4,7 +4,7 @@ Tags: admin menu, menu order, sidebar, accordion, admin
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,12 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 
 == Changelog ==
 
+= 1.1.1 =
+* Fixed: long group names broke in the middle of a word. "Integrations" rendered as "INTEGRATION" above a lone "S", and "Tools & Settings" ran to four lines ending in "GS". Names now wrap between words, and a name too long for two lines is shortened with an ellipsis rather than growing the row without limit. The full name is shown on hover.
+* Group names have more room to begin with: the header row spends fewer pixels on spacing and on the update badge, which is enough for every default name to fit on one or two lines.
+* The line connecting a group's items was too faint to see against the default colour scheme, so the indent was doing the work of showing the hierarchy on its own. It is now visible.
+* Filtering keeps the heading of each group that has a match, so a result tells you which category it came from instead of appearing in an unlabelled list. Headings with no matches are hidden, as before.
+
 = 1.1.0 =
 * New: a filter box at the top of the sidebar. Start typing and the menu narrows to matching items across every group, open or closed. Escape clears it, Enter follows the first match.
 * Expanding a group now scrolls it to the top of the sidebar, so what you just opened is where you are looking.
@@ -143,6 +149,9 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.1.1 =
+Fixes long group names breaking mid-word, makes the group hierarchy visible, and shows which category each filter result belongs to.
 
 = 1.1.0 =
 Adds a filter box to the sidebar, scrolls a group to the top when you open it, and stops long group names being cut off.

@@ -81,14 +81,17 @@ body.admin-color-light #adminmenu {
 	display: block;
 	box-sizing: border-box;
 	min-height: var(--amorg-row-height);
-	padding: 7px 12px 7px 10px;
-	padding-inline: 10px 12px;
+	padding: 7px 8px 7px 10px;
+	padding-inline: 10px 8px;
 	color: var(--amorg-header-color);
 	font-family: dashicons, sans-serif;
-	font-size: 12px;
+	font-size: 11px;
 	font-weight: 600;
-	letter-spacing: 0.04em;
+	line-height: 1.35;
 	text-transform: uppercase;
+	overflow-wrap: break-word;
+	word-break: normal;
+	hyphens: none;
 	opacity: 0.72;
 }
 
@@ -96,32 +99,47 @@ body.admin-color-light #adminmenu {
 	content: none;
 }
 
-/* The interactive header, injected by the script. */
+/*
+ * The interactive header, injected by the script.
+ *
+ * The measurements here are a width budget, not decoration. The sidebar is
+ * 160px and every pixel the row spends on chrome is a pixel the label cannot
+ * use, so an over-generous gap or letter-spacing does not merely look loose —
+ * it forces a label that would otherwise have fitted onto a second or third
+ * line. The earlier values (8px gaps, 12px end padding, 0.04em tracking) left
+ * 90px for the label, which is why "Tools & Settings" rendered over four lines.
+ * These leave 110px, enough for every default label on two lines at most.
+ */
 #adminmenu .amorg-group-toggle {
 	display: flex;
 	align-items: center;
-	gap: 8px;
+	gap: 6px;
 	box-sizing: border-box;
 	width: 100%;
 	min-height: var(--amorg-row-height);
 	margin: 0;
-	padding: 7px 12px 7px 10px;
-	padding-inline: 10px 12px;
+	padding: 7px 8px 7px 10px;
+	padding-inline: 10px 8px;
 	border: 0;
 	border-radius: 0;
 	background: transparent;
 	box-shadow: none;
 	color: var(--amorg-header-color);
 	font-family: inherit;
-	font-size: 12px;
+	font-size: 11px;
 	font-weight: 600;
-	letter-spacing: 0.04em;
-	line-height: 1.4;
+	line-height: 1.35;
 	text-align: start;
 	text-transform: uppercase;
 	cursor: pointer;
 	opacity: 0.72;
 	transition: opacity 0.15s ease-in-out;
+}
+
+/* The catch-all's header is a label, not a control, so it must not claim to be
+ * clickable. */
+#adminmenu .amorg-group-toggle.amorg-group-static {
+	cursor: default;
 }
 
 #adminmenu .amorg-group-toggle:hover,
@@ -156,25 +174,44 @@ body.admin-color-light #adminmenu {
 }
 
 /*
- * The label wraps rather than truncating.
+ * The label wraps, on word boundaries, to at most two lines.
  *
- * It used to be nowrap with text-overflow: ellipsis, which silently clipped
- * every compound default — "Design & Layout" rendered as "DESIGN & LA...". The
- * defaults were shortened, but a label is stored per group, so any site that
- * saved a layout before that change keeps the long one, and a user is free to
- * type a long name of their own at any time. Truncation is therefore not a
- * problem that can be solved by choosing better defaults; the label simply has
- * to survive being longer than the sidebar is wide.
+ * Three earlier attempts each fixed half of this. It began as nowrap with
+ * text-overflow: ellipsis, which clipped every compound default — "Design &
+ * Layout" rendered as "DESIGN & LA...". Shortening the defaults did not help,
+ * because a label is stored per group: a site that saved a layout beforehand
+ * keeps the long one, and a user may type a long name at any time. Wrapping
+ * with `overflow-wrap: anywhere` then stopped the clipping but broke words
+ * mid-character, so "Integrations" became "INTEGRATION" over "S" and "Tools &
+ * Settings" became four lines ending in "GS".
  *
- * Wrapping to a second line costs a few pixels of height on the rare long label
- * and never hides a character. overflow-wrap catches a single unbroken word that
- * is wider than the sidebar, which ellipsis would also have hidden.
+ * `break-word` is the important difference from `anywhere`: it only breaks
+ * inside a word when that word cannot fit on a line of its own, so a label made
+ * of ordinary words wraps between them and never orphans a character. Nothing
+ * else here permits a break — `word-break: normal` and `hyphens: none` are
+ * stated because core sets `word-break: break-word` and `hyphens: auto` on
+ * `div.wp-menu-name`, and inheriting either of those would undo the above.
+ *
+ * The two-line clamp is the backstop. Wrapping alone has no upper bound, and an
+ * unbounded header row is its own defect: a pathological label pushes the rest
+ * of the menu down the page, which is worse than shortening it. Two lines fit
+ * every default and every plausible custom label; beyond that the label is
+ * ellipsised, and the full text stays reachable through the title attribute the
+ * script sets and through the button's accessible name, so nothing is lost —
+ * only wrapped or, in the extreme, shortened.
  */
 #adminmenu .amorg-group-toggle .amorg-toggle-label {
+	display: -webkit-box;
 	flex: 1 1 auto;
 	min-width: 0;
-	overflow-wrap: anywhere;
+	overflow: hidden;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	line-clamp: 2;
+	overflow-wrap: break-word;
 	white-space: normal;
+	word-break: normal;
+	hyphens: none;
 }
 
 /* Chevron. Rotates rather than swapping glyphs, so the motion reads as one
@@ -199,17 +236,24 @@ body.admin-color-light #adminmenu {
 	transform: rotate(-180deg);
 }
 
-/* Aggregated update count for a collapsed group. SPEC section 6.3. */
+/*
+ * Aggregated update count for a collapsed group. SPEC section 6.3.
+ *
+ * Deliberately small. This sits on the same line as the label and takes its
+ * width from it, so a roomy badge is paid for in label lines — the four-line
+ * "Tools & Settings" was a three-item update count squeezing a sixteen
+ * character label. Two digits still fit comfortably.
+ */
 #adminmenu .amorg-group-toggle .amorg-toggle-badge {
 	flex: 0 0 auto;
-	min-width: 18px;
-	padding: 0 6px;
-	border-radius: 10px;
+	min-width: 16px;
+	padding: 0 4px;
+	border-radius: 8px;
 	background: #d63638;
 	color: #fff;
-	font-size: 10px;
+	font-size: 9px;
 	font-weight: 600;
-	line-height: 18px;
+	line-height: 16px;
 	text-align: center;
 }
 
@@ -310,11 +354,9 @@ body.admin-color-light #adminmenu .amorg-filter-input {
 }
 
 /*
- * While filtering, every group is shown open and every header is hidden. A
- * header is a disclosure control, and disclosure is meaningless when the visible
- * set is decided by a query rather than by the user's clicks. Hiding the headers
- * also stops a group whose members have all been filtered out from leaving a
- * stray heading behind, without needing to count matches per group.
+ * While filtering, a group's rows are revealed whether or not the group was
+ * collapsed — that is the whole point of the box, since an item you cannot see
+ * is behind a closed header and you may not know which one.
  *
  * The :not() is load-bearing, not defensive. This selector carries one more
  * class than the .amorg-filter-hidden rule above, so without the exclusion it
@@ -322,21 +364,33 @@ body.admin-color-light #adminmenu .amorg-filter-input {
  * inside a collapsed group — the filter would appear to do nothing for exactly
  * the groups it is most useful for.
  */
-#adminmenu.amorg-filtering li.amorg-group-header {
-	display: none;
-}
-
 #adminmenu.amorg-filtering li.amorg-collapsed-member:not(.amorg-filter-hidden) {
 	display: block;
 }
 
-/* Flat list while filtering: the indent belongs to a hierarchy that is not
- * being shown. */
-#adminmenu.amorg-filtering li.amorg-item > a {
-	padding-inline-start: 0;
+/*
+ * Headers stay while filtering, and keep the indent under them.
+ *
+ * They used to all be hidden, which flattened the results into an unlabelled
+ * list. That answered "is it here" but not "where is it" — and "where is it" is
+ * the question someone hunting through collapsed groups actually has. A header
+ * whose every member filtered out would have been left stranded above nothing,
+ * so the script marks those hidden individually instead; the group a match
+ * belongs to is then visible without the user opening anything.
+ *
+ * What does change is that the header stops being a control. Disclosure is
+ * meaningless while the visible set is decided by a query rather than by clicks,
+ * so the chevron and the aggregate badge go and the row reads as the heading it
+ * has become. It is still a <button>, and still keeps its accessible name, so
+ * nothing is removed from the accessibility tree mid-interaction.
+ */
+#adminmenu.amorg-filtering .amorg-group-toggle {
+	cursor: default;
+	pointer-events: none;
 }
 
-#adminmenu.amorg-filtering li.amorg-item::before {
+#adminmenu.amorg-filtering .amorg-group-toggle .amorg-toggle-chevron,
+#adminmenu.amorg-filtering .amorg-group-toggle .amorg-toggle-badge {
 	display: none;
 }
 
@@ -371,6 +425,14 @@ body.admin-color-light #adminmenu .amorg-filter-input {
 	padding-inline-start: var(--amorg-indent);
 }
 
+/*
+ * Opacity 0.28 rather than 0.16. At 0.16 over the Fresh scheme's #1d2327 the
+ * rule computes to roughly #3a3f43, which is close enough to the background to
+ * be invisible on anything but a good monitor — so the hierarchy rested on the
+ * 14px indent alone and read as a slight misalignment rather than a structure.
+ * This is still subordinate to the menu text, which is what a connecting rule
+ * should be, but it is now actually present.
+ */
 #adminmenu li.amorg-item::before {
 	content: "";
 	position: absolute;
@@ -378,7 +440,7 @@ body.admin-color-light #adminmenu .amorg-filter-input {
 	inset-inline-start: var(--amorg-rule-inset);
 	width: 1px;
 	background: currentcolor;
-	opacity: 0.16;
+	opacity: 0.28;
 	pointer-events: none;
 }
 
@@ -498,10 +560,19 @@ body.admin-color-light #adminmenu .amorg-filter-input {
 
 	/* Core un-folds the menu again at this breakpoint, so the labels come back
 	 * and the accordion becomes meaningful once more. */
-	.auto-fold #adminmenu .amorg-group-toggle .amorg-toggle-label,
 	.auto-fold #adminmenu .amorg-group-toggle .amorg-toggle-chevron,
 	.auto-fold #adminmenu .amorg-group-toggle .amorg-toggle-badge {
 		display: block;
+	}
+
+	/*
+	 * Restored to -webkit-box, not block, because that display type is what
+	 * carries the line clamp. Setting it to block here would quietly drop the
+	 * two-line cap on exactly the narrow viewports where a long label does the
+	 * most damage.
+	 */
+	.auto-fold #adminmenu .amorg-group-toggle .amorg-toggle-label {
+		display: -webkit-box;
 	}
 
 	.auto-fold #adminmenu .amorg-group-toggle {

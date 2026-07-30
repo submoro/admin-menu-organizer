@@ -241,6 +241,17 @@
 		var label = document.createElement( 'span' );
 		label.className = 'amorg-toggle-label';
 		label.textContent = group.label;
+
+		/*
+		 * The stylesheet clamps the label to two lines, so a label long enough to
+		 * exceed that is ellipsised. The title attribute is what keeps the full
+		 * text reachable in that case. Set unconditionally rather than only when
+		 * the clamp bites, because measuring for overflow here would mean reading
+		 * layout during setup for every group, and a title on a short label costs
+		 * nothing. The button's accessible name is unaffected either way: it comes
+		 * from the label's text content, which is complete.
+		 */
+		label.setAttribute( 'title', group.label );
 		toggle.appendChild( label );
 
 		if ( group.updates > 0 ) {
@@ -437,6 +448,7 @@
 		var status = document.createElement( 'span' );
 		var inputId = 'amorg-filter-input';
 		var rows = null;
+		var groupIndex = null;
 
 		item.className = 'amorg-filter';
 
@@ -465,6 +477,42 @@
 		menu.insertBefore( item, menu.firstChild );
 
 		/**
+		 * Indexes the rows once, and the header each group's rows belong to.
+		 *
+		 * Built on first use rather than at setup, because the menu does not change
+		 * after load and a query may never be typed.
+		 *
+		 * @return {void}
+		 */
+		function buildCache() {
+			rows = allRows().map( function ( row ) {
+				var name = row.querySelector( '.wp-menu-name' );
+
+				return {
+					el: row,
+					text: ( name ? name.textContent : row.textContent ).trim().toLowerCase()
+				};
+			} );
+
+			/*
+			 * classList.contains() takes a literal token, so the group ID needs no
+			 * selector escaping here — unlike rowsFor(), which builds a selector.
+			 */
+			groupIndex = data.groups
+				.map( function ( group ) {
+					return {
+						header: document.getElementById( 'amorg-group-' + group.id ),
+						rows: rows.filter( function ( row ) {
+							return row.el.classList.contains( 'amorg-group-' + group.id );
+						} )
+					};
+				} )
+				.filter( function ( entry ) {
+					return !! entry.header;
+				} );
+		}
+
+		/**
 		 * Applies the current query.
 		 *
 		 * @return {void}
@@ -473,16 +521,8 @@
 			var query = input.value.trim().toLowerCase();
 			var matches = 0;
 
-			// Cached on first use, because the menu does not change after load.
 			if ( null === rows ) {
-				rows = allRows().map( function ( row ) {
-					var name = row.querySelector( '.wp-menu-name' );
-
-					return {
-						el: row,
-						text: ( name ? name.textContent : row.textContent ).trim().toLowerCase()
-					};
-				} );
+				buildCache();
 			}
 
 			menu.classList.toggle( 'amorg-filtering', '' !== query );
@@ -490,6 +530,9 @@
 			if ( '' === query ) {
 				rows.forEach( function ( row ) {
 					row.el.classList.remove( 'amorg-filter-hidden' );
+				} );
+				groupIndex.forEach( function ( entry ) {
+					entry.header.classList.remove( 'amorg-filter-hidden' );
 				} );
 				status.textContent = '';
 
@@ -504,6 +547,20 @@
 				if ( hit ) {
 					matches++;
 				}
+			} );
+
+			/*
+			 * Headers are kept so a match is shown under the group it belongs to,
+			 * which is the question someone hunting through collapsed groups
+			 * actually has. A header whose members all filtered out would be
+			 * stranded above nothing, so that one is hidden instead.
+			 */
+			groupIndex.forEach( function ( entry ) {
+				var kept = entry.rows.some( function ( row ) {
+					return ! row.el.classList.contains( 'amorg-filter-hidden' );
+				} );
+
+				entry.header.classList.toggle( 'amorg-filter-hidden', ! kept );
 			} );
 
 			status.textContent = sprintf(
