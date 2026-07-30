@@ -424,6 +424,36 @@ final class Menu_Renderer {
 
 		$rules = array();
 
+		/*
+		 * The member indent and its connecting rule are printed inline, not left
+		 * to admin-menu.css alone.
+		 *
+		 * This looks like duplication and is deliberate. A site reported that
+		 * after updating, the Plugins screen showed the new version while the
+		 * sidebar still rendered without the indent. The cause was a stale
+		 * OPcache: the old compiled PHP was still running, so the version
+		 * constant evaluated to the previous release, the stylesheet was
+		 * requested at its old URL, and the browser served a cached copy that
+		 * predated these rules. Nothing in a plugin can flush someone's OPcache.
+		 *
+		 * What a plugin can do is stop depending on a cacheable file for the part
+		 * that matters. This block is emitted fresh on every admin request, so
+		 * the hierarchy is correct even when the external stylesheet is stale,
+		 * and identical declarations in the two places are harmless.
+		 */
+		$rules[] = '#adminmenu li.amorg-item>a{padding-inline-start:var(--amorg-indent,14px)}';
+		$rules[] = '#adminmenu li.amorg-item{position:relative}';
+		$rules[] = '#adminmenu li.amorg-item::before{content:"";position:absolute;'
+			. 'inset-block:0;inset-inline-start:var(--amorg-rule-inset,7px);'
+			. 'width:1px;background:currentColor;opacity:.16;pointer-events:none}';
+		$rules[] = '#adminmenu li.amorg-group-last::before{inset-block-end:50%}';
+		$rules[] = '.folded #adminmenu li.amorg-item>a{padding-inline-start:0}';
+		$rules[] = '.folded #adminmenu li.amorg-item::before{display:none}';
+
+		// Long labels wrap instead of being clipped. See admin-menu.css for why.
+		$rules[] = '#adminmenu .amorg-toggle-label{min-width:0;white-space:normal;'
+			. 'overflow-wrap:anywhere;word-break:break-word}';
+
 		foreach ( $groups as $group ) {
 			if ( $group['count_members'] < 1 ) {
 				continue;

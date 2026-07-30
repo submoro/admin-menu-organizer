@@ -18,6 +18,11 @@ msgstr ""
 msgid "%1$d of %2$d items were grouped automatically."
 msgstr ""
 
+#. translators: %s: Number of matching menu items.
+#: assets/js/admin-menu.js:511
+msgid "%s items match"
+msgstr ""
+
 #. translators: %s: Number of pending updates.
 #: assets/js/admin-menu.js:254
 msgid "%s pending updates in this group"
@@ -122,6 +127,14 @@ msgstr ""
 
 #: includes/admin/views/tab-advanced.php:43
 msgid "Export"
+msgstr ""
+
+#: assets/js/admin-menu.js:445
+msgid "Filter menu items"
+msgstr ""
+
+#: assets/js/admin-menu.js:451
+msgid "Filter menu…"
 msgstr ""
 
 #: includes/admin/views/tab-roles.php:22

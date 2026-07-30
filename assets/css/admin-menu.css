@@ -155,11 +155,27 @@ body.admin-color-light #adminmenu {
 	content: var(--amorg-icon, "\f228");
 }
 
+/*
+ * The label wraps rather than truncating.
+ *
+ * It used to be nowrap with text-overflow: ellipsis, which silently clipped
+ * every compound default — "Design & Layout" rendered as "DESIGN & LA...". The
+ * defaults were shortened, but a label is stored per group, so any site that
+ * saved a layout before that change keeps the long one, and a user is free to
+ * type a long name of their own at any time. Truncation is therefore not a
+ * problem that can be solved by choosing better defaults; the label simply has
+ * to survive being longer than the sidebar is wide.
+ *
+ * Wrapping to a second line costs a few pixels of height on the rare long label
+ * and never hides a character. overflow-wrap catches a single unbroken word that
+ * is wider than the sidebar, which ellipsis would also have hidden.
+ */
 #adminmenu .amorg-group-toggle .amorg-toggle-label {
 	flex: 1 1 auto;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	min-width: 0;
+	overflow-wrap: anywhere;
+	white-space: normal;
+	word-break: break-word;
 }
 
 /* Chevron. Rotates rather than swapping glyphs, so the motion reads as one
@@ -244,6 +260,84 @@ body.admin-color-light #adminmenu {
 	#adminmenu .amorg-group-toggle .amorg-toggle-chevron {
 		transition: none;
 	}
+}
+
+/* -------------------------------------------------------------------------
+ * Filter box.
+ *
+ * Sits at the top of the sidebar, above the first group. Injected by the script,
+ * so it is absent with JavaScript off and the menu is simply a grouped list.
+ * ---------------------------------------------------------------------- */
+
+#adminmenu li.amorg-filter {
+	margin: 0;
+	padding: 8px 10px;
+}
+
+#adminmenu .amorg-filter-input {
+	box-sizing: border-box;
+	width: 100%;
+	min-height: 30px;
+	margin: 0;
+	padding-block: 4px;
+	padding-inline: 8px 6px;
+	border: 1px solid currentColor;
+	border-radius: 3px;
+	background: rgba(0, 0, 0, 0.18);
+	box-shadow: none;
+	color: var(--amorg-header-color);
+	font-size: 13px;
+	line-height: 1.4;
+}
+
+#adminmenu .amorg-filter-input::placeholder {
+	color: currentColor;
+	opacity: 0.6;
+}
+
+#adminmenu .amorg-filter-input:focus {
+	outline: 2px solid currentColor;
+	outline-offset: -2px;
+	box-shadow: none;
+}
+
+/* The Light scheme has a pale sidebar, so a dark wash would be wrong. */
+body.admin-color-light #adminmenu .amorg-filter-input {
+	background: rgba(255, 255, 255, 0.9);
+}
+
+#adminmenu li.amorg-filter-hidden {
+	display: none;
+}
+
+/*
+ * While filtering, every group is shown open and every header is hidden. A
+ * header is a disclosure control, and disclosure is meaningless when the visible
+ * set is decided by a query rather than by the user's clicks. Hiding the headers
+ * also stops a group whose members have all been filtered out from leaving a
+ * stray heading behind, without needing to count matches per group.
+ */
+#adminmenu.amorg-filtering li.amorg-group-header {
+	display: none;
+}
+
+#adminmenu.amorg-filtering li.amorg-collapsed-member {
+	display: block;
+}
+
+/* Flat list while filtering: the indent belongs to a hierarchy that is not
+ * being shown. */
+#adminmenu.amorg-filtering li.amorg-item > a {
+	padding-inline-start: 0;
+}
+
+#adminmenu.amorg-filtering li.amorg-item::before {
+	display: none;
+}
+
+/* The filter box is useless at 36px wide and its own row would waste space. */
+.folded #adminmenu li.amorg-filter {
+	display: none;
 }
 
 /* -------------------------------------------------------------------------
@@ -387,6 +481,11 @@ body.admin-color-light #adminmenu {
 	.auto-fold #adminmenu li.amorg-item::before {
 		display: none;
 	}
+
+	/* No room for the filter box while auto-folded to icons. */
+	.auto-fold #adminmenu li.amorg-filter {
+		display: none;
+	}
 }
 
 @media screen and (max-width: 782px) {
@@ -423,6 +522,16 @@ body.admin-color-light #adminmenu {
 	.auto-fold #adminmenu li.amorg-item::before {
 		display: block;
 		inset-inline-start: 10px;
+	}
+
+	/* Labels are back, so the filter box is useful again. */
+	.auto-fold #adminmenu li.amorg-filter {
+		display: block;
+	}
+
+	#adminmenu .amorg-filter-input {
+		min-height: 40px;
+		font-size: 16px; /* Prevents iOS zooming the viewport on focus. */
 	}
 
 	#adminmenu li.amorg-group-header::before {

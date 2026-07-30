@@ -14,6 +14,9 @@ msgstr ""
 msgid "%1$d of %2$d items were grouped automatically."
 msgstr ""
 
+msgid "%s items match"
+msgstr ""
+
 msgid "%s pending updates in this group"
 msgstr ""
 
@@ -88,6 +91,12 @@ msgstr "فارغة. لن تظهر هذه المجموعة في الشريط ال
 
 msgid "Export"
 msgstr "تصدير"
+
+msgid "Filter menu items"
+msgstr "تصفية عناصر القائمة"
+
+msgid "Filter menu…"
+msgstr "تصفية القائمة…"
 
 msgid "Give a role its own arrangement, or let it inherit the site-wide layout. A role with its own copy can then be edited independently on the Layout tab while that role is selected."
 msgstr ""
