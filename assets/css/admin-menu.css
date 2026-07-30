@@ -91,6 +91,7 @@ body.admin-color-light #adminmenu {
 	text-transform: uppercase;
 	overflow-wrap: break-word;
 	word-break: normal;
+	-webkit-hyphens: none;
 	hyphens: none;
 	opacity: 0.72;
 }
@@ -211,6 +212,7 @@ body.admin-color-light #adminmenu {
 	overflow-wrap: break-word;
 	white-space: normal;
 	word-break: normal;
+	-webkit-hyphens: none;
 	hyphens: none;
 }
 
