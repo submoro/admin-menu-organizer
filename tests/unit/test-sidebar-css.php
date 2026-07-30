@@ -224,9 +224,9 @@ final class Test_Sidebar_CSS extends TestCase {
 	 * @return void
 	 */
 	public function test_stylesheet_declares_label_wrapping( string $declaration ): void {
-		$this->assertStringContainsString(
+		$this->assertContains(
 			$declaration,
-			$this->stylesheet(),
+			self::declarations_of( $this->stylesheet(), '.amorg-toggle-label' ),
 			'assets/css/admin-menu.css must declare ' . $declaration . ' on the group label.'
 		);
 	}
@@ -242,9 +242,9 @@ final class Test_Sidebar_CSS extends TestCase {
 	 * @return void
 	 */
 	public function test_inline_block_repeats_label_wrapping( string $declaration ): void {
-		$this->assertStringContainsString(
+		$this->assertContains(
 			$declaration,
-			$this->inline_rules(),
+			self::declarations_of( $this->inline_rules(), '.amorg-toggle-label' ),
 			'print_inline_styles() wins the cascade tie, so it must also declare ' . $declaration . '.'
 		);
 	}
@@ -281,22 +281,31 @@ final class Test_Sidebar_CSS extends TestCase {
 	 * explicit ellipsis paired with nowrap is the old single-line truncation that
 	 * clipped "Design & Layout" to "DESIGN & LA...".
 	 *
+	 * Scoped to the label rule, unlike
+	 * test_neither_source_uses_overflow_wrap_anywhere below. `white-space` is not
+	 * the kind of declaration another rule has any business being judged on — a
+	 * nowrap somewhere else in the sidebar is legitimate and unrelated — whereas
+	 * `overflow-wrap: anywhere` would reach the label by inheritance from any
+	 * ancestor, so that one is deliberately checked over the whole file.
+	 *
 	 * @since 1.1.1
 	 *
 	 * @return void
 	 */
 	public function test_label_is_not_single_line_truncated(): void {
-		$stylesheet = $this->stylesheet();
+		$label = self::declarations_of( $this->stylesheet(), '.amorg-toggle-label' );
 
-		$this->assertStringNotContainsString(
+		$this->assertNotEmpty( $label, 'No stylesheet .amorg-toggle-label rule found.' );
+
+		$this->assertNotContains(
 			'white-space:nowrap',
-			$stylesheet,
+			$label,
 			'A nowrap group label truncates instead of wrapping.'
 		);
 
-		$this->assertStringContainsString(
+		$this->assertContains(
 			'white-space:normal',
-			$stylesheet,
+			$label,
 			'The group label must be allowed to wrap.'
 		);
 	}
