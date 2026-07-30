@@ -76,6 +76,30 @@ foreach ( array( 'Description', 'Installation', 'Frequently Asked Questions', 'S
 check( 'States no external requests', (bool) preg_match( '/no external HTTP requests/i', $readme ) );
 check( 'States no data collected', (bool) preg_match( '/collects no data/i', $readme ) );
 
+/*
+ * Upgrade notices are capped at 300 characters by the directory, and anything
+ * longer is silently truncated where users read it. Plugin Check reports this as
+ * upgrade_notice_limit; it is checked here so it fails locally and in CI rather
+ * than only after a build has been uploaded, which is how a 341-character 1.1.1
+ * notice reached the directory's checker.
+ */
+$notice_limit = 300;
+
+if ( preg_match( '/^== Upgrade Notice ==$(.*?)(?=^== |\z)/ms', $readme, $un ) ) {
+	preg_match_all( '/^=\s*(.+?)\s*=\s*$(.*?)(?=^=\s|\z)/ms', $un[1], $notices, PREG_SET_ORDER );
+
+	foreach ( $notices as $notice ) {
+		$version = $notice[1];
+		$length  = strlen( trim( $notice[2] ) );
+
+		check(
+			"Upgrade notice $version <= {$notice_limit} chars",
+			$length <= $notice_limit,
+			"$length chars"
+		);
+	}
+}
+
 // Screenshot captions must be numbered contiguously from 1.
 preg_match( '/^== Screenshots ==$(.*?)^== /ms', $readme, $ss );
 preg_match_all( '/^(\d+)\.\s+/m', $ss[1] ?? '', $nums );

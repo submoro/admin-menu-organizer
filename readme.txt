@@ -152,7 +152,7 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 == Upgrade Notice ==
 
 = 1.1.1 =
-Renamed to Admin Menu Categories, because the old name was taken in the directory. Also fixes long group names breaking mid-word, makes the group hierarchy visible, and shows which category each filter result belongs to. Your saved arrangement is kept, but this installs alongside the old build rather than over it, so deactivate that first.
+Renamed to Admin Menu Categories. Your saved arrangement is kept, but this installs alongside the old build rather than over it, so deactivate that one first. Also fixes long group names breaking mid-word, makes the hierarchy visible, and shows which category a filter result came from.
 
 = 1.1.0 =
 Adds a filter box to the sidebar, scrolls a group to the top when you open it, and stops long group names being cut off.
