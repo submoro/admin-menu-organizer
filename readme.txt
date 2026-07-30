@@ -112,11 +112,12 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 
 == Screenshots ==
 
-1. The admin sidebar with items grouped into collapsible categories.
-2. A collapsed group showing an aggregated update count on its header.
-3. The drag-and-drop layout editor under Settings > Menu Organizer.
-4. The Groups tab, where categories are created, renamed and given icons.
-5. The personal layout panel, where a user overrides the site default.
+1. The admin sidebar on a live WooCommerce site, grouped into collapsible categories. Collapsed groups carry an aggregated count of the pending updates inside them.
+2. The Layout tab. Drag items between groups to arrange the sidebar for everyone. Every item also has a "Move to group" control, so no arrangement requires a mouse.
+3. The Groups tab. Rename groups, choose their icons, set which ones start open, and drag them into the order you want.
+4. The Roles tab. Give a role its own arrangement, or let it inherit the site-wide layout.
+5. The Advanced tab. Reset to the automatically detected grouping, or export and import a layout as JSON to move it between sites.
+6. The personal layout panel, where a user arranges their own sidebar without affecting anyone else.
 
 == Changelog ==
 

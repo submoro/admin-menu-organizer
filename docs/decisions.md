@@ -232,7 +232,27 @@ rows, one group collapsed — so the artwork says what the plugin does without
 needing text, which also means it survives the directory rendering the plugin
 name over the banner.
 
-### D-012 — Screenshots cannot be produced here
+### D-012a — Resolved: six screenshots captured from a live site
+
+Captured on a production WooCommerce marketplace and committed to
+`.wordpress-org/` as `screenshot-1.png` through `screenshot-6.png`, with captions
+in `readme.txt` rewritten to describe the images that actually exist rather than
+the five that were originally planned. Six is fine; the directory shows as many
+as are numbered contiguously from 1.
+
+**One caveat, recorded so it is not forgotten.** `screenshot-1.png` was captured
+on 1.0.0, *before* the label shortening in 1.0.1, so the sidebar in it reads
+`DESIGN & LA…`, `SEO & …`, `USERS & ACC…`. It advertises the exact defect that
+1.0.1 fixed, in the plugin's most important image. It should be re-taken on 1.0.1
+before or shortly after submission. Everything it needs to show — the grouping,
+the collapsed and expanded states, the aggregated `3` and `7` update badges — is
+already framed correctly; only the labels are stale.
+
+`.wordpress-org/` remains excluded from the distribution zip. Directory assets
+belong in the `assets/` directory of the plugin's SVN repository, alongside
+`trunk/` rather than inside it.
+
+### D-012 — Original: screenshots could not be produced on the build machine
 
 `readme.txt` describes five screenshots and `.wordpress-org/` holds the icons and
 banners, but not `screenshot-1.png` … `screenshot-5.png`. Capturing them requires
