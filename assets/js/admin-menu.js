@@ -329,6 +329,222 @@
 
 	data.groups.forEach( enhance );
 
+	/**
+	 * Scrolls a group's header to the top of the scrollable sidebar.
+	 *
+	 * A long sidebar with several groups expanded means opening one near the
+	 * bottom reveals its members below the fold, so the click appears to do
+	 * nothing. Bringing the header to the top puts what was just opened where the
+	 * eye already is.
+	 *
+	 * Only ever called on expand. Doing it on collapse would yank the page around
+	 * for no reason.
+	 *
+	 * @param {HTMLElement} header The group's list item.
+	 */
+	function revealAtTop( header ) {
+		var wrap = document.getElementById( 'adminmenuwrap' );
+		var scroller;
+		var reduced = window.matchMedia && window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
+
+		if ( ! header ) {
+			return;
+		}
+
+		/*
+		 * Which element actually scrolls depends on the viewport. On a tall
+		 * desktop nothing does, and scrolling would be wrong; below that the
+		 * document scrolls; core's own sticky-menu handling can make the wrap
+		 * scroll instead. Pick whichever is genuinely overflowing.
+		 */
+		if ( wrap && wrap.scrollHeight > wrap.clientHeight + 4 ) {
+			scroller = wrap;
+		}
+
+		if ( scroller ) {
+			scroller.scrollTo( {
+				top: header.offsetTop - scroller.offsetTop,
+				behavior: reduced ? 'auto' : 'smooth'
+			} );
+
+			return;
+		}
+
+		// Nothing to do if the whole menu already fits on screen.
+		if ( header.getBoundingClientRect().top >= 0 && document.documentElement.scrollHeight <= window.innerHeight ) {
+			return;
+		}
+
+		header.scrollIntoView( {
+			block: 'start',
+			behavior: reduced ? 'auto' : 'smooth'
+		} );
+	}
+
+	/*
+	 * Reveal on expand. Bound after enhance() has created every button, and via
+	 * delegation so it cannot double-bind.
+	 */
+	menu.addEventListener( 'click', function ( event ) {
+		var toggle = event.target.closest ? event.target.closest( '.amorg-group-toggle[data-amorg-group]' ) : null;
+
+		if ( ! toggle ) {
+			return;
+		}
+
+		// Read after the handler that flips it has run.
+		window.setTimeout( function () {
+			if ( 'true' === toggle.getAttribute( 'aria-expanded' ) ) {
+				revealAtTop( toggle.parentNode );
+			}
+		}, 0 );
+	} );
+
+	/* ---------------------------------------------------------------------
+	 * Filter box.
+	 *
+	 * A grouped sidebar trades scanning for clicking: an item you cannot see is
+	 * behind a collapsed header, and on a thirty-plugin site you may not know
+	 * which. Typing is faster than guessing.
+	 *
+	 * Injected by script rather than rendered server-side for the same reason the
+	 * group headers are: core gives no hook that can place markup inside
+	 * #adminmenu, and the one field it emits unescaped must never carry input.
+	 * With JavaScript off there is no box, and the sidebar is a plain grouped
+	 * menu, which is a fair degradation for a convenience.
+	 * ------------------------------------------------------------------ */
+
+	/**
+	 * Returns every real menu row, group members and ungrouped items alike.
+	 *
+	 * @return {HTMLElement[]} The rows.
+	 */
+	function allRows() {
+		return Array.prototype.slice.call(
+			menu.querySelectorAll( 'li.menu-top:not(.amorg-group-header)' )
+		);
+	}
+
+	/**
+	 * Builds the filter box and wires it up.
+	 *
+	 * @return {void}
+	 */
+	function buildFilter() {
+		var item = document.createElement( 'li' );
+		var input = document.createElement( 'input' );
+		var label = document.createElement( 'label' );
+		var status = document.createElement( 'span' );
+		var inputId = 'amorg-filter-input';
+		var rows = null;
+
+		item.className = 'amorg-filter';
+
+		label.className = 'amorg-sr-only';
+		label.setAttribute( 'for', inputId );
+		label.textContent = __( 'Filter menu items', 'admin-menu-organizer' );
+
+		input.type = 'search';
+		input.id = inputId;
+		input.className = 'amorg-filter-input';
+		input.autocomplete = 'off';
+		input.setAttribute( 'placeholder', __( 'Filter menu…', 'admin-menu-organizer' ) );
+
+		/*
+		 * A live region, so a screen-reader user hears how many items matched.
+		 * Without it, typing silently rearranges the menu underneath them.
+		 */
+		status.className = 'amorg-sr-only';
+		status.setAttribute( 'role', 'status' );
+		status.setAttribute( 'aria-live', 'polite' );
+
+		item.appendChild( label );
+		item.appendChild( input );
+		item.appendChild( status );
+
+		menu.insertBefore( item, menu.firstChild );
+
+		/**
+		 * Applies the current query.
+		 *
+		 * @return {void}
+		 */
+		function apply() {
+			var query = input.value.trim().toLowerCase();
+			var matches = 0;
+
+			// Cached on first use, because the menu does not change after load.
+			if ( null === rows ) {
+				rows = allRows().map( function ( row ) {
+					var name = row.querySelector( '.wp-menu-name' );
+
+					return {
+						el: row,
+						text: ( name ? name.textContent : row.textContent ).trim().toLowerCase()
+					};
+				} );
+			}
+
+			menu.classList.toggle( 'amorg-filtering', '' !== query );
+
+			if ( '' === query ) {
+				rows.forEach( function ( row ) {
+					row.el.classList.remove( 'amorg-filter-hidden' );
+				} );
+				status.textContent = '';
+
+				return;
+			}
+
+			rows.forEach( function ( row ) {
+				var hit = -1 !== row.text.indexOf( query );
+
+				row.el.classList.toggle( 'amorg-filter-hidden', ! hit );
+
+				if ( hit ) {
+					matches++;
+				}
+			} );
+
+			status.textContent = sprintf(
+				/* translators: %s: Number of matching menu items. */
+				__( '%s items match', 'admin-menu-organizer' ),
+				String( matches )
+			);
+		}
+
+		input.addEventListener( 'input', apply );
+
+		input.addEventListener( 'keydown', function ( event ) {
+			if ( 'Escape' === event.key ) {
+				input.value = '';
+				apply();
+
+				return;
+			}
+
+			/*
+			 * Enter follows the first match, which is what anyone who has used a
+			 * command palette expects, and saves a reach for the mouse.
+			 */
+			if ( 'Enter' === event.key ) {
+				var first = menu.querySelector(
+					'li.menu-top:not(.amorg-group-header):not(.amorg-filter-hidden) > a'
+				);
+
+				if ( first ) {
+					event.preventDefault();
+					first.click();
+				}
+			}
+		} );
+	}
+
+	// Not worth a filter box for a menu short enough to read at a glance.
+	if ( allRows().length >= 8 ) {
+		buildFilter();
+	}
+
 	/*
 	 * Core re-runs its own menu sizing when the sidebar is folded or the viewport
 	 * crosses a breakpoint. Nothing here needs to react to that, because the

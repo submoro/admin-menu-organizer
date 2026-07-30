@@ -100,6 +100,10 @@ return array(
 	'Your changes have been saved.' => 'تم حفظ التغييرات.',
 	'The layout was imported.'      => 'تم استيراد التنسيق.',
 
+	// Filter box, from JavaScript.
+	'Filter menu items'             => 'تصفية عناصر القائمة',
+	'Filter menu…'                  => 'تصفية القائمة…',
+
 	// Accordion, from JavaScript.
 	'expanded'                      => 'موسّع',
 	'collapsed'                     => 'مطوي',

@@ -4,7 +4,7 @@ Tags: admin menu, menu order, sidebar, accordion, admin
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.3
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,12 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 
 == Changelog ==
 
+= 1.1.0 =
+* New: a filter box at the top of the sidebar. Start typing and the menu narrows to matching items across every group, open or closed. Escape clears it, Enter follows the first match.
+* Expanding a group now scrolls it to the top of the sidebar, so what you just opened is where you are looking.
+* Long group names wrap onto a second line instead of being cut off with an ellipsis. This holds for names you type as well as the defaults.
+* The member indent is now also written inline on every page load, so a cached stylesheet can no longer leave the sidebar looking flat.
+
 = 1.0.3 =
 * Stylesheet and script URLs now change whenever the files change, not only when the version number does. On a server with a stale OPcache this was making an update look like it had applied while the old styles were still being served.
 
@@ -137,6 +143,9 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+Adds a filter box to the sidebar, scrolls a group to the top when you open it, and stops long group names being cut off.
 
 = 1.0.3 =
 Fixes an update appearing to apply while the old stylesheet was still served, on servers with a stale OPcache.
