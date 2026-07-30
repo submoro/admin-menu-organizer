@@ -12,7 +12,7 @@
  * Exits non-zero when the version has no entry, so a tag pushed before the
  * changelog was written fails the release rather than publishing empty notes.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  */
 
 $version = $argv[1] ?? '';

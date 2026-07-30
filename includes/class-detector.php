@@ -2,7 +2,7 @@
 /**
  * Automatic category detection for admin menu items.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 

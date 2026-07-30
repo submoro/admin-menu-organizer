@@ -18,8 +18,47 @@ if ( ! extension_loaded( 'zip' ) ) {
 }
 
 $root = str_replace( '\\', '/', dirname( __DIR__ ) );
-$slug = basename( $root );
 $dest = rtrim( $argv[1] ?? ( $root . '/build' ), '/\\' );
+
+/*
+ * The slug comes from the Text Domain header, not from the directory name.
+ *
+ * WordPress.org requires the text domain to equal the plugin slug, so that header
+ * is the authoritative statement of what the slug is. Reading basename( $root )
+ * instead tied the build to whatever the checkout happened to be called — which
+ * broke the moment the plugin was renamed and the repository was not, and would
+ * equally break for anyone who cloned into a differently named directory.
+ *
+ * Every file whose name carries the slug is found through this: the main plugin
+ * file, the POT, and the zip's single top-level directory.
+ */
+$slug       = '';
+$main_files = glob( $root . '/*.php' ) ?: array();
+
+foreach ( $main_files as $candidate ) {
+	$head = (string) file_get_contents( $candidate, false, null, 0, 8192 );
+
+	if ( ! preg_match( '/^\s*\*\s*Plugin Name:\s*\S/m', $head ) ) {
+		continue;
+	}
+
+	if ( preg_match( '/^\s*\*\s*Text Domain:\s*(.+)$/m', $head, $domain ) ) {
+		$slug = trim( $domain[1] );
+	}
+
+	break;
+}
+
+if ( '' === $slug ) {
+	echo "Could not read a Text Domain header from the main plugin file.\n";
+	exit( 1 );
+}
+
+if ( ! is_file( "{$root}/{$slug}.php" ) ) {
+	echo "Text Domain is '{$slug}' but {$slug}.php does not exist. "
+		. "WordPress.org requires the main file, the text domain and the slug to agree.\n";
+	exit( 1 );
+}
 
 if ( ! is_dir( $dest ) ) {
 	mkdir( $dest, 0755, true );

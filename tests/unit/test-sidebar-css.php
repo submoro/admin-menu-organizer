@@ -2,7 +2,7 @@
 /**
  * Unit tests pinning the sidebar's label and hierarchy CSS.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.1.1
  */
 

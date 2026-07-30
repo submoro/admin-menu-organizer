@@ -1,5 +1,5 @@
 /**
- * Menu Organizer - settings screen editor.
+ * Menu Categories - settings screen editor.
  *
  * Built on jquery-ui-sortable, which ships with WordPress. Bundling SortableJS or
  * React would breach both SPEC section 7.2 and the directory's rule against
@@ -11,7 +11,7 @@
  * handler does. That is a hard accessibility requirement, not a nicety: a
  * drag-only editor is unusable with a keyboard and would fail review.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  */
 
 ( function ( $ ) {
@@ -105,7 +105,7 @@
 					$group.find( '.amorg-droplist' ).after(
 						$( '<p/>', {
 							'class': 'amorg-empty-note description',
-							text: __( 'Empty. This group will not appear in the sidebar.', 'admin-menu-organizer' )
+							text: __( 'Empty. This group will not appear in the sidebar.', 'admin-menu-categories' )
 						} )
 					);
 				}
@@ -149,7 +149,7 @@
 		$chip.find( '.amorg-move-select' ).trigger( 'focus' );
 
 		announce(
-			__( 'Moved to group', 'admin-menu-organizer' ) + ': ' + $target.closest( '.amorg-group' ).find( '.amorg-group-title' ).text().trim()
+			__( 'Moved to group', 'admin-menu-categories' ) + ': ' + $target.closest( '.amorg-group' ).find( '.amorg-group-title' ).text().trim()
 		);
 	}
 

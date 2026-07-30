@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<ruleset name="Admin Menu Organizer">
+<ruleset name="Admin Menu Categories">
 
-	<description>Coding standards for Menu Organizer, per SPEC section 10.5.</description>
+	<description>Coding standards for Menu Categories, per SPEC section 10.5.</description>
 
 	<!-- Scan the whole plugin by default. -->
 	<file>.</file>
@@ -59,7 +59,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="admin-menu-organizer"/>
+				<element value="admin-menu-categories"/>
 			</property>
 		</properties>
 	</rule>
@@ -71,10 +71,10 @@
 		plugin uses, and it must not be flagged for it.
 	-->
 	<rule ref="PHPCompatibility.FunctionDeclarations.NewParamTypeDeclarations">
-		<exclude-pattern>admin-menu-organizer.php</exclude-pattern>
+		<exclude-pattern>admin-menu-categories.php</exclude-pattern>
 	</rule>
 	<rule ref="PHPCompatibility.FunctionDeclarations.NewReturnTypeDeclarations">
-		<exclude-pattern>admin-menu-organizer.php</exclude-pattern>
+		<exclude-pattern>admin-menu-categories.php</exclude-pattern>
 	</rule>
 
 	<!-- The test suite is not held to the plugin's file-naming convention. -->

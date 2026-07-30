@@ -10,7 +10,7 @@
  *
  * These parse the files directly, so they need no WordPress at all.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 
@@ -96,7 +96,7 @@ final class Test_Version_Consistency extends TestCase {
 	 * @return void
 	 */
 	public function test_all_three_version_declarations_agree(): void {
-		$plugin_file = $this->read( 'admin-menu-organizer.php' );
+		$plugin_file = $this->read( 'admin-menu-categories.php' );
 		$readme      = $this->read( 'readme.txt' );
 
 		$header   = $this->capture( '/^\s*\*\s*Version:\s*(.+)$/m', $plugin_file, 'the Version plugin header' );
@@ -116,7 +116,7 @@ final class Test_Version_Consistency extends TestCase {
 	 * @return void
 	 */
 	public function test_version_is_semantic(): void {
-		$plugin_file = $this->read( 'admin-menu-organizer.php' );
+		$plugin_file = $this->read( 'admin-menu-categories.php' );
 		$header      = $this->capture( '/^\s*\*\s*Version:\s*(.+)$/m', $plugin_file, 'the Version plugin header' );
 
 		$this->assertMatchesRegularExpression( '/^\d+\.\d+\.\d+$/', $header );
@@ -131,7 +131,7 @@ final class Test_Version_Consistency extends TestCase {
 	 * @return void
 	 */
 	public function test_minimum_requirements_agree_across_header_and_readme(): void {
-		$plugin_file = $this->read( 'admin-menu-organizer.php' );
+		$plugin_file = $this->read( 'admin-menu-categories.php' );
 		$readme      = $this->read( 'readme.txt' );
 
 		$header_php = $this->capture( '/^\s*\*\s*Requires PHP:\s*(.+)$/m', $plugin_file, 'the Requires PHP header' );
@@ -152,7 +152,7 @@ final class Test_Version_Consistency extends TestCase {
 	 * @return void
 	 */
 	public function test_runtime_guard_constants_match_the_headers(): void {
-		$plugin_file = $this->read( 'admin-menu-organizer.php' );
+		$plugin_file = $this->read( 'admin-menu-categories.php' );
 
 		$header_php   = $this->capture( '/^\s*\*\s*Requires PHP:\s*(.+)$/m', $plugin_file, 'the Requires PHP header' );
 		$constant_php = $this->capture( "/define\(\s*'AMORG_MIN_PHP',\s*'([^']+)'/", $plugin_file, 'the AMORG_MIN_PHP constant' );
@@ -164,21 +164,35 @@ final class Test_Version_Consistency extends TestCase {
 	}
 
 	/**
-	 * The text domain in the plugin header matches the plugin's directory slug,
-	 * which WordPress.org requires.
+	 * The text domain matches the main plugin file's name, which is the slug.
+	 *
+	 * WordPress.org requires the slug, the main plugin file's name and the text
+	 * domain to be the same string, because language packs are served by slug and
+	 * loaded by domain — a mismatch means translations silently never load.
+	 *
+	 * Asserted against the main file rather than the containing directory. The
+	 * directory a developer clones into is arbitrary and does not ship: what ships
+	 * is the zip's single top-level folder, which bin/build-zip.php derives from
+	 * this same header. Checking basename( $this->root ) instead made the suite
+	 * fail purely because the plugin had been renamed and the repository had not,
+	 * which says nothing about the plugin.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
 	public function test_text_domain_matches_the_plugin_slug(): void {
-		$plugin_file = $this->read( 'admin-menu-organizer.php' );
+		$plugin_file = $this->read( 'admin-menu-categories.php' );
 
 		$domain = $this->capture( '/^\s*\*\s*Text Domain:\s*(.+)$/m', $plugin_file, 'the Text Domain header' );
-		$slug   = basename( rtrim( $this->root, '/' ) );
 
-		$this->assertSame( $slug, $domain );
-		$this->assertSame( 'admin-menu-organizer', $domain );
+		$this->assertSame( 'admin-menu-categories', $domain );
+
+		// The main file is named for the domain, so the two cannot drift apart.
+		$this->assertFileExists(
+			rtrim( $this->root, '/' ) . '/' . $domain . '.php',
+			"The main plugin file must be named {$domain}.php to match the text domain."
+		);
 	}
 
 	/**

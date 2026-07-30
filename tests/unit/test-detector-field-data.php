@@ -2,7 +2,7 @@
 /**
  * Detector regression tests built from a real production site.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 

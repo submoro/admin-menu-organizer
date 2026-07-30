@@ -2,7 +2,7 @@
 /**
  * Plugin container and hook registration.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 

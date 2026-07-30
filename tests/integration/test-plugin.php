@@ -2,7 +2,7 @@
 /**
  * Tests for the plugin container, its guards and its activation routine.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 

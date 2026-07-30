@@ -2,7 +2,7 @@
 /**
  * Unit tests for the schema migration chain.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 
