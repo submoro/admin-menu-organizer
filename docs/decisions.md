@@ -123,17 +123,20 @@ rather than reaching for `$GLOBALS['menu']` or calling `get_option()` directly.
 The WordPress-facing classes stay thin wrappers that fetch and delegate. That is
 better structure regardless of the test arrangement.
 
-### D-007 — Open: the readme Contributors field is not yet correct
+### D-007 — Resolved: `Contributors: submoro`
 
-`Contributors:` in `readme.txt` currently reads `moamenelabd`, which is a guess.
-It requires a **WordPress.org username**, the slug that appears at
-`profiles.wordpress.org/<username>/` — not the email address used to sign in,
-and not a display name. An email address there would fail directory validation
-and would publish the address on the plugin page.
+The field takes a **WordPress.org** username — the slug at
+`profiles.wordpress.org/<username>/`. Three wrong candidates were considered
+along the way, and the confusion is worth recording because it is easy to repeat:
 
-Must be confirmed before submission. Wrong value is not fatal to the plugin, but
-the plugin will not appear on the author's profile and the author will not be
-able to manage it.
+| Candidate | Why it was wrong |
+|---|---|
+| `moamenelabd` | A guess, from the author's name. No such account. |
+| `arch.mo2men@gmail.com` | The sign-in **email**, not a username. Would fail validation and publish the address on the public plugin page. |
+| `archmo2men` | The **WordPress.com** username. WordPress.com and WordPress.org are separate account systems, and having one does not give you the other. |
+
+Confirmed from the account itself at `profiles.wordpress.org/submoro/`:
+**`submoro`**, which also happens to match the GitHub account.
 
 ### D-008 — The detector is a cascade, not a lookup table
 

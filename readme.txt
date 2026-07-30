@@ -1,5 +1,5 @@
 === Admin Menu Organizer ===
-Contributors: moamenelabd
+Contributors: submoro
 Tags: admin menu, menu order, sidebar, accordion, admin
 Requires at least: 6.4
 Tested up to: 7.0

@@ -2,20 +2,16 @@
 
 ## Before you start
 
-Two things must be settled before the first submission, and neither can be done
-from this machine:
+One thing remains before the first submission:
 
-1. **`Contributors:` in `readme.txt`** currently reads `moamenelabd`, which is a
-   guess. It needs the WordPress.org **username** — the slug in your profile URL
-   at `profiles.wordpress.org/<username>/`. Not the email you sign in with, and
-   not a display name. An email there would fail validation and publish the
-   address on the plugin page. Getting it wrong is not fatal, but the plugin will
-   not appear on your profile and you will not be able to manage it.
+**Screenshots.** `readme.txt` describes five, and `.wordpress-org/` has the icons
+and banners but not the screenshots, because capturing them needs a running
+WordPress with the plugin active. See "Capturing screenshots" below. The directory
+simply shows no screenshots until they exist; nothing breaks.
 
-2. **Screenshots.** `readme.txt` describes five, and `.wordpress-org/` has the
-   icons and banners but not the screenshots, because capturing them needs a
-   running WordPress with the plugin active. See "Capturing screenshots" below.
-   The directory simply shows no screenshots until they exist; nothing breaks.
+`Contributors:` is settled — `submoro`, confirmed from the WordPress.org account
+itself. Note for future reference that this is **not** the same as the
+WordPress.com username (`archmo2men`); the two systems have separate accounts.
 
 ## Pre-submission gate
 
