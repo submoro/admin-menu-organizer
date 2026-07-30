@@ -55,6 +55,31 @@ final class Migrations {
 	);
 
 	/**
+	 * Group IDs whose label may be normalised, mapped to the labels that have
+	 * ever been the shipped default for them.
+	 *
+	 * A one-time schema migration is not enough here. A layout saved from the
+	 * Groups tab after the update carries the current schema number with the old
+	 * label still in it, because the form field was populated before the default
+	 * changed. Such a payload never re-enters the migration chain, so its labels
+	 * would stay clipped forever. Normalising on every read fixes that, and is
+	 * idempotent.
+	 *
+	 * Keyed by group ID so that a label matching a *different* group's old
+	 * default is left alone.
+	 *
+	 * @since 1.0.0
+	 * @var array<string, string[]>
+	 */
+	const HISTORICAL_LABELS = array(
+		'design'   => array( 'Design & Layout' ),
+		'seo'      => array( 'SEO & Marketing' ),
+		'security' => array( 'Security & Backup' ),
+		'users'    => array( 'Users & Access' ),
+		'tools'    => array( 'Tools & System' ),
+	);
+
+	/**
 	 * Migrates a raw stored value to the current schema.
 	 *
 	 * @since 1.0.0
@@ -105,6 +130,47 @@ final class Migrations {
 		}
 
 		return ( isset( $raw['schema'] ) ? (int) $raw['schema'] : 0 ) !== self::CURRENT;
+	}
+
+	/**
+	 * Replaces any group label that is still a superseded shipped default.
+	 *
+	 * Runs on every read, not only when the schema number changes, because a
+	 * layout can be saved carrying the current schema and an old label at the
+	 * same time. See HISTORICAL_LABELS.
+	 *
+	 * A label the administrator chose is never touched: it only matches against
+	 * labels this plugin itself once shipped, and only for the group ID that
+	 * shipped them. Pure, and safe to call repeatedly.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array                 $layout   Layout array, already migrated.
+	 * @param array<string, string> $defaults Current group ID to label map.
+	 * @return array
+	 */
+	public static function normalise_labels( array $layout, array $defaults ): array {
+		if ( empty( $layout['groups'] ) || ! is_array( $layout['groups'] ) ) {
+			return $layout;
+		}
+
+		foreach ( $layout['groups'] as $index => $group ) {
+			if ( ! is_array( $group ) || ! isset( $group['id'], $group['label'] ) ) {
+				continue;
+			}
+
+			$id = (string) $group['id'];
+
+			if ( ! isset( self::HISTORICAL_LABELS[ $id ], $defaults[ $id ] ) || ! is_string( $group['label'] ) ) {
+				continue;
+			}
+
+			if ( in_array( trim( $group['label'] ), self::HISTORICAL_LABELS[ $id ], true ) ) {
+				$layout['groups'][ $index ]['label'] = $defaults[ $id ];
+			}
+		}
+
+		return $layout;
 	}
 
 	/**

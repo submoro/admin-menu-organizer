@@ -28,7 +28,16 @@
 	--amorg-header-color: #fff;
 	--amorg-header-hover: #fff;
 	--amorg-row-height: 30px;
-	--amorg-indent: 6px;
+
+	/*
+	 * How far group members sit in from their header. 14px is enough to read as
+	 * a deliberate level of hierarchy while leaving room for core's longest
+	 * untruncated menu names in a 160px sidebar.
+	 */
+	--amorg-indent: 14px;
+
+	/* Where the connecting rule sits, roughly half the indent. */
+	--amorg-rule-inset: 7px;
 }
 
 body.admin-color-fresh #adminmenu {
@@ -238,6 +247,57 @@ body.admin-color-light #adminmenu {
 }
 
 /* -------------------------------------------------------------------------
+ * Group members: the indent that makes the hierarchy readable.
+ *
+ * Without this the sidebar is a flat list with headings in it, which reads no
+ * better than the stock menu. Indenting the members turns it into a visible
+ * two-level tree, in the manner of a work-breakdown structure, so the eye can
+ * tell at a glance which items belong to which group.
+ *
+ * The padding goes on the anchor rather than the <li>, because core floats
+ * div.wp-menu-image inside that anchor. Padding the anchor moves the icon and
+ * the label together; padding the <li> would move the row but leave the icon
+ * behind.
+ *
+ * A hairline rule runs down the group, drawn in currentColor at low opacity so
+ * it works on every admin colour scheme without naming a single hex value.
+ * inset-inline-start keeps it on the correct edge in RTL.
+ * ---------------------------------------------------------------------- */
+
+#adminmenu li.amorg-item {
+	position: relative;
+}
+
+#adminmenu li.amorg-item > a {
+	padding-inline-start: var(--amorg-indent);
+}
+
+#adminmenu li.amorg-item::before {
+	content: "";
+	position: absolute;
+	inset-block: 0;
+	inset-inline-start: var(--amorg-rule-inset);
+	width: 1px;
+	background: currentColor;
+	opacity: 0.16;
+	pointer-events: none;
+}
+
+/* The rule would otherwise run past the last member of a group and butt into
+ * the next header. Stopping it halfway down the final row closes the branch. */
+#adminmenu li.amorg-item.amorg-group-last::before {
+	inset-block-end: 50%;
+}
+
+/* The current item is the one place a solid accent is worth spending, since it
+ * answers "where am I" faster than the highlight alone. */
+#adminmenu li.amorg-item.current::before,
+#adminmenu li.amorg-item.wp-has-current-submenu::before {
+	opacity: 0.55;
+	width: 2px;
+}
+
+/* -------------------------------------------------------------------------
  * Folded sidebar.
  *
  * Core collapses the sidebar to icons only, either because the user collapsed it
@@ -276,6 +336,24 @@ body.admin-color-light #adminmenu {
 	display: block;
 }
 
+/*
+ * The indent and its rule are dropped when folded. At 36px wide there is no
+ * hierarchy left to express, and indenting would push the icons off-centre.
+ *
+ * Only .folded is unconditional here. The .auto-fold class is present on the
+ * body at every width, and core only actually folds it below 960px, so pairing
+ * the two selectors would silently remove the indent on a full-width desktop
+ * sidebar for anyone who has auto-fold enabled. It is handled in the media
+ * query below instead, as the rest of this file does.
+ */
+.folded #adminmenu li.amorg-item > a {
+	padding-inline-start: 0;
+}
+
+.folded #adminmenu li.amorg-item::before {
+	display: none;
+}
+
 /* -------------------------------------------------------------------------
  * Responsive.
  *
@@ -299,6 +377,15 @@ body.admin-color-light #adminmenu {
 
 	.auto-fold #adminmenu li.amorg-collapsed-member {
 		display: block;
+	}
+
+	/* Auto-folded: icons only, so the indent goes with the labels. */
+	.auto-fold #adminmenu li.amorg-item > a {
+		padding-inline-start: 0;
+	}
+
+	.auto-fold #adminmenu li.amorg-item::before {
+		display: none;
 	}
 }
 
@@ -325,6 +412,17 @@ body.admin-color-light #adminmenu {
 
 	.auto-fold #adminmenu li.amorg-collapsed-member {
 		display: none;
+	}
+
+	/* Full-width mobile list, so the hierarchy is worth showing again, and with
+	 * more room it can be a little more generous than on the desktop sidebar. */
+	.auto-fold #adminmenu li.amorg-item > a {
+		padding-inline-start: 20px;
+	}
+
+	.auto-fold #adminmenu li.amorg-item::before {
+		display: block;
+		inset-inline-start: 10px;
 	}
 
 	#adminmenu li.amorg-group-header::before {

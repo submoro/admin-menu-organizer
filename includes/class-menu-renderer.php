@@ -204,6 +204,7 @@ final class Menu_Renderer {
 		$collapsed = $this->collapsed_group_ids();
 		$emitted   = array();
 		$seen      = array();
+		$last_of   = array();
 
 		foreach ( $menu as $key => $item ) {
 			if ( ! is_array( $item ) || ! isset( $item[2] ) || ! is_scalar( $item[2] ) ) {
@@ -243,9 +244,30 @@ final class Menu_Renderer {
 					isset( $item[4] ) && is_scalar( $item[4] ) ? (string) $item[4] : '',
 					$classes
 				);
+
+				// Remember the most recent member of this group. Because the
+				// reorder guarantees members are contiguous, whatever this holds
+				// once the loop ends is genuinely the group's last row.
+				$last_of[ $group_id ] = $key;
 			}
 
 			$emitted[ $key ] = $item;
+		}
+
+		/*
+		 * Mark each group's final row so the stylesheet can stop the connecting
+		 * rule halfway down it, closing the branch instead of running the line
+		 * into the next group's header.
+		 */
+		foreach ( $last_of as $key ) {
+			if ( ! isset( $emitted[ $key ] ) || ! is_array( $emitted[ $key ] ) ) {
+				continue;
+			}
+
+			$emitted[ $key ][4] = self::add_class(
+				isset( $emitted[ $key ][4] ) && is_scalar( $emitted[ $key ][4] ) ? (string) $emitted[ $key ][4] : '',
+				'amorg-group-last'
+			);
 		}
 
 		return $emitted;

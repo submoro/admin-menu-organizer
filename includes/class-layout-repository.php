@@ -508,11 +508,26 @@ final class Layout_Repository {
 	 * @return array
 	 */
 	private static function prepare( $raw, Menu_Reader $reader ): array {
-		return Layout_Sanitizer::sanitize(
+		$layout = Layout_Sanitizer::sanitize(
 			Migrations::migrate( $raw ),
 			Categories::ids(),
 			$reader->organizable_slugs()
 		);
+
+		/*
+		 * Label normalisation is deliberately outside the migration chain. A
+		 * layout saved from the Groups tab right after an update carries the new
+		 * schema number and the old label together, because the form field was
+		 * filled before the default changed, and such a payload never re-enters
+		 * the chain. Running this on every read heals it, and is idempotent.
+		 */
+		$defaults = array();
+
+		foreach ( Categories::definitions() as $definition ) {
+			$defaults[ $definition['id'] ] = $definition['label'];
+		}
+
+		return Migrations::normalise_labels( $layout, $defaults );
 	}
 
 	/**

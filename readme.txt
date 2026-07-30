@@ -4,7 +4,7 @@ Tags: admin menu, menu order, sidebar, accordion, admin
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,10 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 
 == Changelog ==
 
+= 1.0.2 =
+* Group members are now indented beneath their group header, with a connecting rule, so the sidebar reads as a two-level tree rather than a flat list with headings in it.
+* Fix group names still showing clipped after updating from 1.0.0. Names are now corrected on read, not only during the schema migration, which missed layouts saved after the update.
+
 = 1.0.1 =
 * Detect MultiVendorX, WoodMart, WPML and CookieYes, which previously fell into the Other group. Adds the XTemos, MultiVendorX and WPML vendor prefixes so related screens are recognised too.
 * Fix the Comments menu label, which read "Comments 0 Comments in moderation".
@@ -130,6 +134,9 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+Indents group members so the hierarchy is visible, and fixes group names that stayed clipped after updating from 1.0.0.
 
 = 1.0.1 =
 Recognises MultiVendorX, WoodMart, WPML and CookieYes, fixes the Comments menu label, and shortens the default group names so they fit the sidebar. Groups you renamed are left as you set them.

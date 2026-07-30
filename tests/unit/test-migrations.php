@@ -328,6 +328,159 @@ final class Test_Migrations extends TestCase {
 	}
 
 	/**
+	 * A layout carrying the CURRENT schema but a superseded label is still healed.
+	 *
+	 * This is the case the schema migration cannot reach, and it is not
+	 * hypothetical: saving from the Groups tab immediately after an update writes
+	 * exactly this, because the form field was populated before the default
+	 * changed. On a live site it left every group label clipped even though the
+	 * migration and its test both passed.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function test_labels_are_normalised_even_at_the_current_schema(): void {
+		$defaults = array(
+			'design'   => 'Design',
+			'seo'      => 'Marketing',
+			'security' => 'Security',
+			'tools'    => 'Tools',
+		);
+
+		$out = Migrations::normalise_labels(
+			array(
+				'schema' => Migrations::CURRENT,
+				'groups' => array(
+					array(
+						'id'    => 'design',
+						'label' => 'Design & Layout',
+					),
+					array(
+						'id'    => 'seo',
+						'label' => 'SEO & Marketing',
+					),
+					array(
+						'id'    => 'security',
+						'label' => 'Security & Backup',
+					),
+					array(
+						'id'    => 'tools',
+						'label' => 'Tools & System',
+					),
+				),
+			),
+			$defaults
+		);
+
+		$this->assertSame(
+			array( 'Design', 'Marketing', 'Security', 'Tools' ),
+			array_column( $out['groups'], 'label' )
+		);
+	}
+
+	/**
+	 * Normalisation leaves a label the administrator chose completely alone.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function test_normalisation_never_overwrites_a_custom_label(): void {
+		$out = Migrations::normalise_labels(
+			array(
+				'groups' => array(
+					array(
+						'id'    => 'design',
+						'label' => 'Look and feel',
+					),
+					array(
+						'id'    => 'seo',
+						'label' => 'Growth',
+					),
+					array(
+						'id'    => 'tools',
+						'label' => '',
+					),
+				),
+			),
+			array(
+				'design' => 'Design',
+				'seo'    => 'Marketing',
+				'tools'  => 'Tools',
+			)
+		);
+
+		$this->assertSame( 'Look and feel', $out['groups'][0]['label'] );
+		$this->assertSame( 'Growth', $out['groups'][1]['label'] );
+		$this->assertSame( '', $out['groups'][2]['label'] );
+	}
+
+	/**
+	 * An old default belonging to a different group is not applied across.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function test_normalisation_is_scoped_to_the_owning_group(): void {
+		$out = Migrations::normalise_labels(
+			array(
+				'groups' => array(
+					// A user who named their content group after the old design one.
+					array(
+						'id'    => 'content',
+						'label' => 'Design & Layout',
+					),
+				),
+			),
+			array(
+				'content' => 'Content',
+				'design'  => 'Design',
+			)
+		);
+
+		$this->assertSame( 'Design & Layout', $out['groups'][0]['label'] );
+	}
+
+	/**
+	 * Normalisation is idempotent and survives junk without warnings.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function test_normalisation_is_idempotent_and_defensive(): void {
+		$defaults = array( 'design' => 'Design' );
+
+		$once  = Migrations::normalise_labels(
+			array(
+				'groups' => array(
+					array(
+						'id'    => 'design',
+						'label' => 'Design & Layout',
+					),
+				),
+			),
+			$defaults
+		);
+		$twice = Migrations::normalise_labels( $once, $defaults );
+
+		$this->assertSame( $once, $twice );
+
+		// No groups, wrong types, missing keys.
+		$this->assertSame( array(), Migrations::normalise_labels( array(), $defaults ) );
+		$this->assertSame(
+			array( 'groups' => 'nope' ),
+			Migrations::normalise_labels( array( 'groups' => 'nope' ), $defaults )
+		);
+		$this->assertSame(
+			array( 'groups' => array( array( 'id' => 'design' ), 'junk', 5 ) ),
+			Migrations::normalise_labels( array( 'groups' => array( array( 'id' => 'design' ), 'junk', 5 ) ), $defaults )
+		);
+	}
+
+	/**
 	 * Whether a stored value needs migrating.
 	 *
 	 * @since 1.0.0
