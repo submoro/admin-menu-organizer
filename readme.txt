@@ -80,7 +80,9 @@ No. The plugin never changes a menu item's required capability, so it cannot aff
 
 = Does it work with other menu plugins? =
 
-It is built to coexist. It runs at a late priority and preserves the relative position of any menu item it does not recognise, including items another plugin has already moved. It has been checked alongside Admin Menu Editor.
+It is built to coexist. It runs at a later priority than other menu plugins, it returns every menu slug it was given rather than a subset, and it preserves the relative position of anything it does not recognise, including items another plugin has already moved.
+
+That said, it has not been tested against every menu plugin in existence. If you hit a conflict, `?amorg=off` restores the stock menu immediately and a support thread will get it looked at.
 
 = Does each user get their own arrangement? =
 
@@ -88,11 +90,13 @@ Yes, if you allow it. There is a site-wide default that an administrator sets, o
 
 = Does it support right-to-left languages? =
 
-Yes. The sidebar is laid out with CSS logical properties, so it mirrors correctly in RTL languages including Arabic, and it has been checked with WPML active.
+Yes. The sidebar is laid out entirely with CSS logical properties — `margin-inline-start`, `padding-inline-end`, `inset-inline-start` — so it mirrors in RTL languages including Arabic rather than needing a separate stylesheet. An Arabic translation is bundled, and the plugin has been run on a site with WPML active.
 
 = Does it work with all the admin colour schemes? =
 
-Yes. All eight colour schemes that ship with WordPress are supported, and the plugin inherits your scheme's colours rather than hardcoding its own.
+Yes. Group headers take their colour from a CSS custom property rather than a hardcoded value, so they follow whichever scheme you have set. The Light scheme is the only one WordPress ships with a light sidebar, and it gets an explicit override; every other scheme uses the default, which is correct for a dark sidebar.
+
+The plugin also respects `prefers-reduced-motion` and Windows high-contrast mode.
 
 = Can I use it without a mouse? =
 
