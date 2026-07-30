@@ -103,6 +103,7 @@ return array(
 	// Filter box, from JavaScript.
 	'Filter menu items'             => 'تصفية عناصر القائمة',
 	'Filter menu…'                  => 'تصفية القائمة…',
+	'%s items match'                => 'عدد العناصر المطابقة: %s',
 
 	// Accordion, from JavaScript.
 	'expanded'                      => 'موسّع',

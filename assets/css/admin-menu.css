@@ -136,7 +136,7 @@ body.admin-color-light #adminmenu {
  * it is not clipped by the sidebar edge.
  */
 #adminmenu .amorg-group-toggle:focus-visible {
-	outline: 2px solid currentColor;
+	outline: 2px solid currentcolor;
 	outline-offset: -2px;
 }
 
@@ -175,7 +175,6 @@ body.admin-color-light #adminmenu {
 	min-width: 0;
 	overflow-wrap: anywhere;
 	white-space: normal;
-	word-break: break-word;
 }
 
 /* Chevron. Rotates rather than swapping glyphs, so the motion reads as one
@@ -281,7 +280,7 @@ body.admin-color-light #adminmenu {
 	margin: 0;
 	padding-block: 4px;
 	padding-inline: 8px 6px;
-	border: 1px solid currentColor;
+	border: 1px solid currentcolor;
 	border-radius: 3px;
 	background: rgba(0, 0, 0, 0.18);
 	box-shadow: none;
@@ -291,12 +290,12 @@ body.admin-color-light #adminmenu {
 }
 
 #adminmenu .amorg-filter-input::placeholder {
-	color: currentColor;
+	color: currentcolor;
 	opacity: 0.6;
 }
 
 #adminmenu .amorg-filter-input:focus {
-	outline: 2px solid currentColor;
+	outline: 2px solid currentcolor;
 	outline-offset: -2px;
 	box-shadow: none;
 }
@@ -316,12 +315,18 @@ body.admin-color-light #adminmenu .amorg-filter-input {
  * set is decided by a query rather than by the user's clicks. Hiding the headers
  * also stops a group whose members have all been filtered out from leaving a
  * stray heading behind, without needing to count matches per group.
+ *
+ * The :not() is load-bearing, not defensive. This selector carries one more
+ * class than the .amorg-filter-hidden rule above, so without the exclusion it
+ * wins on specificity and re-reveals every non-matching row that happened to be
+ * inside a collapsed group — the filter would appear to do nothing for exactly
+ * the groups it is most useful for.
  */
 #adminmenu.amorg-filtering li.amorg-group-header {
 	display: none;
 }
 
-#adminmenu.amorg-filtering li.amorg-collapsed-member {
+#adminmenu.amorg-filtering li.amorg-collapsed-member:not(.amorg-filter-hidden) {
 	display: block;
 }
 
@@ -372,7 +377,7 @@ body.admin-color-light #adminmenu .amorg-filter-input {
 	inset-block: 0;
 	inset-inline-start: var(--amorg-rule-inset);
 	width: 1px;
-	background: currentColor;
+	background: currentcolor;
 	opacity: 0.16;
 	pointer-events: none;
 }
@@ -425,8 +430,9 @@ body.admin-color-light #adminmenu .amorg-filter-input {
 }
 
 /* Nothing may be hidden while folded, because the flyouts are the only way to
- * reach a submenu and a hidden parent has no flyout. */
-.folded #adminmenu li.amorg-collapsed-member {
+ * reach a submenu and a hidden parent has no flyout. A filter match is still
+ * excluded from the override, so a query typed before folding is not undone. */
+.folded #adminmenu li.amorg-collapsed-member:not(.amorg-filter-hidden) {
 	display: block;
 }
 
@@ -469,7 +475,7 @@ body.admin-color-light #adminmenu .amorg-filter-input {
 		padding-inline: 0;
 	}
 
-	.auto-fold #adminmenu li.amorg-collapsed-member {
+	.auto-fold #adminmenu li.amorg-collapsed-member:not(.amorg-filter-hidden) {
 		display: block;
 	}
 
@@ -509,7 +515,13 @@ body.admin-color-light #adminmenu .amorg-filter-input {
 		font-size: 13px;
 	}
 
-	.auto-fold #adminmenu li.amorg-collapsed-member {
+	/*
+	 * Below 782px the accordion is meaningful again, so collapsed members are
+	 * hidden once more. Scoped to a non-filtering menu: this selector outweighs
+	 * the .amorg-filter-hidden rule, so left unscoped it would hide the very rows
+	 * a query had just matched, and the filter would look broken on mobile only.
+	 */
+	.auto-fold #adminmenu:not(.amorg-filtering) li.amorg-collapsed-member {
 		display: none;
 	}
 

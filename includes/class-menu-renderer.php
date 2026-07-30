@@ -452,7 +452,7 @@ final class Menu_Renderer {
 
 		// Long labels wrap instead of being clipped. See admin-menu.css for why.
 		$rules[] = '#adminmenu .amorg-toggle-label{min-width:0;white-space:normal;'
-			. 'overflow-wrap:anywhere;word-break:break-word}';
+			. 'overflow-wrap:anywhere}';
 
 		foreach ( $groups as $group ) {
 			if ( $group['count_members'] < 1 ) {
