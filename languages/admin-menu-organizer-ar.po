@@ -15,7 +15,7 @@ msgid "%1$d of %2$d items were grouped automatically."
 msgstr ""
 
 msgid "%s items match"
-msgstr ""
+msgstr "عدد العناصر المطابقة: %s"
 
 msgid "%s pending updates in this group"
 msgstr ""
