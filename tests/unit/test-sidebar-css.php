@@ -318,6 +318,12 @@ final class Test_Sidebar_CSS extends TestCase {
 	 * way with a fresh stylesheet and another with a stale one, which is far
 	 * harder to diagnose than either being wrong on its own.
 	 *
+	 * The inset and opacity are read out of the connector rule itself, so that an
+	 * unrelated rule carrying the same opacity cannot stand in for a connector that
+	 * has lost it. The two custom properties are the exception and are checked
+	 * globally on purpose: they are declared once on #adminmenu, not on the
+	 * connector, and the connector's job is only to reference them.
+	 *
 	 * @since 1.1.1
 	 *
 	 * @return void
@@ -326,18 +332,29 @@ final class Test_Sidebar_CSS extends TestCase {
 		$stylesheet = $this->stylesheet();
 		$inline     = $this->inline_rules();
 
-		// The stylesheet defines the custom property; the inline block repeats it
-		// as a fallback, so the two values have to match.
+		// The stylesheet defines the custom properties; the inline block repeats
+		// them as fallbacks, so the two values have to match.
 		$this->assertStringContainsString( '--amorg-indent:14px', $stylesheet );
-		$this->assertStringContainsString( 'var(--amorg-indent,14px)', $inline );
-
 		$this->assertStringContainsString( '--amorg-rule-inset:7px', $stylesheet );
-		$this->assertStringContainsString( 'var(--amorg-rule-inset,7px)', $inline );
 
-		// The connecting rule's opacity. At 0.16 it was invisible against the
-		// Fresh scheme, so the hierarchy rested on the indent alone.
-		$this->assertStringContainsString( 'opacity:0.28', $stylesheet );
-		$this->assertStringContainsString( 'opacity:.28', $inline );
+		$indent_rule = self::declarations_of( $stylesheet, 'li.amorg-item>a' );
+		$this->assertContains( 'padding-inline-start:var(--amorg-indent)', $indent_rule );
+
+		$inline_indent = self::declarations_of( $inline, 'li.amorg-item>a' );
+		$this->assertContains( 'padding-inline-start:var(--amorg-indent,14px)', $inline_indent );
+
+		// The connecting rule itself: where it sits, and how visible it is. At
+		// opacity 0.16 it was invisible against the Fresh scheme, so the hierarchy
+		// rested on the indent alone.
+		$connector = self::declarations_of( $stylesheet, 'li.amorg-item::before' );
+		$this->assertNotEmpty( $connector, 'No stylesheet connector rule found.' );
+		$this->assertContains( 'inset-inline-start:var(--amorg-rule-inset)', $connector );
+		$this->assertContains( 'opacity:0.28', $connector );
+
+		$inline_connector = self::declarations_of( $inline, 'li.amorg-item::before' );
+		$this->assertNotEmpty( $inline_connector, 'No inline connector rule found.' );
+		$this->assertContains( 'inset-inline-start:var(--amorg-rule-inset,7px)', $inline_connector );
+		$this->assertContains( 'opacity:.28', $inline_connector );
 	}
 
 	/**
