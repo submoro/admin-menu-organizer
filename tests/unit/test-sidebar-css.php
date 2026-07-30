@@ -137,11 +137,79 @@ final class Test_Sidebar_CSS extends TestCase {
 
 			// Wrapping has no upper bound on its own, and an unbounded header row
 			// pushes the rest of the menu down the page. Two lines is the cap.
+			//
+			// All four of these are load-bearing, not one declaration plus
+			// decoration. The clamp only engages on a -webkit-box, only counts
+			// lines with box-orient vertical, and only ellipsises what it hides
+			// with overflow hidden. Omitting any one of them leaves a rule that
+			// still parses and no longer clamps, so each is pinned separately.
+			// -webkit-line-clamp is listed as well as the unprefixed property
+			// because no browser yet honours the unprefixed one on its own, and
+			// `line-clamp:2` is a substring of `-webkit-line-clamp:2` — asserting
+			// only the former would pass on a rule that had dropped it.
 			'line-clamp'    => array( 'line-clamp:2' ),
-
-			// The clamp only takes effect on a -webkit-box, so the display type is
-			// load-bearing rather than stylistic.
+			'webkit-clamp'  => array( '-webkit-line-clamp:2' ),
+			'box-orient'    => array( '-webkit-box-orient:vertical' ),
 			'display'       => array( 'display:-webkit-box' ),
+			'overflow'      => array( 'overflow:hidden' ),
+			'white-space'   => array( 'white-space:normal' ),
+		);
+	}
+
+	/**
+	 * Extracts the declarations of the first rule whose selector ends in a class.
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param string $css      Normalised CSS.
+	 * @param string $selector Trailing selector fragment, e.g. '.amorg-toggle-label'.
+	 * @return string[] Declarations, without the surrounding braces.
+	 */
+	private static function declarations_of( string $css, string $selector ): array {
+		$start = strpos( $css, $selector . '{' );
+
+		if ( false === $start ) {
+			return array();
+		}
+
+		$open  = $start + strlen( $selector );
+		$close = strpos( $css, '}', $open );
+
+		if ( false === $close ) {
+			return array();
+		}
+
+		$body = substr( $css, $open + 1, $close - $open - 1 );
+
+		return array_values( array_filter( explode( ';', $body ) ) );
+	}
+
+	/**
+	 * The inline label rule says nothing the stylesheet does not.
+	 *
+	 * Stronger than checking declarations one at a time, and it is the property
+	 * that actually matters. The inline block wins the cascade tie, so any
+	 * declaration it carries that the stylesheet does not is a value that
+	 * overrides the file while being invisible when reading it. The reverse is
+	 * allowed: the stylesheet legitimately carries extra declarations, such as the
+	 * flex sizing, that the inline copy has no need to repeat.
+	 *
+	 * @since 1.1.1
+	 *
+	 * @return void
+	 */
+	public function test_inline_label_rule_is_a_subset_of_the_stylesheet(): void {
+		$inline     = self::declarations_of( $this->inline_rules(), '.amorg-toggle-label' );
+		$stylesheet = self::declarations_of( $this->stylesheet(), '.amorg-toggle-label' );
+
+		$this->assertNotEmpty( $inline, 'No inline .amorg-toggle-label rule found.' );
+		$this->assertNotEmpty( $stylesheet, 'No stylesheet .amorg-toggle-label rule found.' );
+
+		$this->assertSame(
+			array(),
+			array_values( array_diff( $inline, $stylesheet ) ),
+			'These declarations are printed inline but absent from admin-menu.css, so they '
+				. 'silently override the stylesheet. Add them there or drop them here.'
 		);
 	}
 

@@ -460,7 +460,7 @@ final class Menu_Renderer {
 		 * silently overrides a corrected one there. In particular `break-word`
 		 * must not drift back to `anywhere`, which breaks words mid-character.
 		 */
-		$rules[] = '#adminmenu .amorg-toggle-label{display:-webkit-box;min-width:0;'
+		$rules[] = '#adminmenu .amorg-toggle-label{display:-webkit-box;flex:1 1 auto;min-width:0;'
 			. 'overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;'
 			. 'line-clamp:2;overflow-wrap:break-word;white-space:normal;'
 			. 'word-break:normal;-webkit-hyphens:none;hyphens:none}';

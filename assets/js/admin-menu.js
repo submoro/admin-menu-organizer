@@ -329,7 +329,22 @@
 				return;
 			}
 
-			toggles = Array.prototype.slice.call( menu.querySelectorAll( '.amorg-group-toggle[data-amorg-group]' ) );
+			/*
+			 * Only headers that are actually on screen are traversable. A hidden
+			 * one still matches the selector, and calling focus() on a
+			 * display:none element does nothing and reports no error, so without
+			 * this filter arrowing past a filtered-out group silently stranded
+			 * focus where it was. Tested by class rather than by measuring, so a
+			 * keypress does not force layout.
+			 */
+			toggles = Array.prototype.slice
+				.call( menu.querySelectorAll( '.amorg-group-toggle[data-amorg-group]' ) )
+				.filter( function ( candidate ) {
+					var row = candidate.parentNode;
+
+					return row && ! row.classList.contains( 'amorg-filter-hidden' ) &&
+						! row.classList.contains( 'amorg-group-empty' );
+				} );
 
 			var index = toggles.indexOf( toggle );
 
@@ -513,8 +528,11 @@
 			 */
 			groupIndex = data.groups
 				.map( function ( group ) {
+					var header = document.getElementById( 'amorg-group-' + group.id );
+
 					return {
-						header: document.getElementById( 'amorg-group-' + group.id ),
+						header: header,
+						toggle: header ? header.querySelector( '.amorg-group-toggle[data-amorg-group]' ) : null,
 						rows: rows.filter( function ( row ) {
 							return row.el.classList.contains( 'amorg-group-' + group.id );
 						} )
@@ -546,6 +564,10 @@
 				} );
 				groupIndex.forEach( function ( entry ) {
 					entry.header.classList.remove( 'amorg-filter-hidden' );
+
+					if ( entry.toggle ) {
+						entry.toggle.removeAttribute( 'aria-disabled' );
+					}
 				} );
 				status.textContent = '';
 
@@ -574,6 +596,19 @@
 				} );
 
 				entry.header.classList.toggle( 'amorg-filter-hidden', ! kept );
+
+				/*
+				 * The header stops acting while a query is active, so it has to say
+				 * so. aria-disabled rather than the disabled attribute: disabled
+				 * would drop the button out of the focus order and, in some screen
+				 * readers, out of the accessibility tree altogether, which is a
+				 * larger change than "this control is inert for now" and would move
+				 * focus unpredictably mid-typing. The heading text stays announced
+				 * either way, which is the part carrying the information.
+				 */
+				if ( entry.toggle ) {
+					entry.toggle.setAttribute( 'aria-disabled', 'true' );
+				}
 			} );
 
 			status.textContent = sprintf(
