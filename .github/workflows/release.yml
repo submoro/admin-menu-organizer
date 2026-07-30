@@ -1,0 +1,132 @@
+name: Release
+
+# Pushing a v* tag publishes the release. Nothing is built from a branch, so a
+# release always corresponds to an immutable tag.
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing v* tag to build and publish'
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build and publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+          # The changelog extractor and version check read files, not history.
+          fetch-depth: 1
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: zip
+          coverage: none
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
+
+      # The tag is the one thing no test can check, because the tests do not know
+      # what it is. Everything else about the version is already covered by
+      # tests/unit/test-version-consistency.php, which asserts the plugin header,
+      # AMORG_VERSION and the readme's Stable tag agree — so proving the tag
+      # matches the header transitively proves it matches all three.
+      - name: Verify the tag matches the plugin version
+        id: version
+        run: |
+          set -euo pipefail
+
+          tag="${{ inputs.tag || github.ref_name }}"
+          version="${tag#v}"
+          header=$(sed -n 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*\(.*\)$/\1/p' \
+                     admin-menu-organizer.php | head -n1 | tr -d '[:space:]')
+
+          echo "tag=${tag}"
+          echo "tag version=${version}"
+          echo "plugin header=${header}"
+
+          if [ "${version}" != "${header}" ]; then
+            echo "::error::Tag ${tag} does not match the plugin header version ${header}. Bump the version, or retag."
+            exit 1
+          fi
+
+          echo "tag=${tag}" >> "${GITHUB_OUTPUT}"
+          echo "version=${version}" >> "${GITHUB_OUTPUT}"
+
+      # A release is the one artefact users install directly, so it is gated on
+      # the same checks CI runs, minus the integration suite: that needs MySQL and
+      # has already passed on the commit this tag points at.
+      - name: Coding standards
+        run: composer run lint
+
+      - name: Unit suite
+        run: composer run test:unit
+
+      - name: Validate readme.txt
+        run: composer run check:readme
+
+      - name: Security audit
+        run: composer run audit
+
+      - name: Build the distribution zip
+        id: build
+        run: |
+          set -euo pipefail
+          php bin/build-zip.php build
+          zip=$(ls build/*.zip | head -n1)
+          test -s "${zip}"
+          echo "zip=${zip}" >> "${GITHUB_OUTPUT}"
+          echo "Built ${zip} ($(stat -c%s "${zip}") bytes)"
+
+      # readme.txt is the source of truth, so the release and the WordPress.org
+      # changelog cannot describe the same version differently. Exits non-zero if
+      # the changelog has no entry for this version, which fails the release
+      # rather than publishing empty notes.
+      - name: Compose release notes
+        run: |
+          set -euo pipefail
+          php bin/release-notes.php "${{ steps.version.outputs.version }}" > release-notes.md
+          {
+            echo
+            echo "Full changelog and upgrade notes are in [readme.txt](readme.txt)."
+          } >> release-notes.md
+          cat release-notes.md
+
+      # gh is preinstalled on the runner, so this needs no third-party action —
+      # worth keeping for a plugin that ships a zip people install.
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          tag="${{ steps.version.outputs.tag }}"
+
+          if gh release view "${tag}" >/dev/null 2>&1; then
+            echo "Release ${tag} already exists; updating notes and replacing the asset."
+            gh release edit "${tag}" \
+              --title "${tag}" \
+              --notes-file release-notes.md
+            gh release upload "${tag}" "${{ steps.build.outputs.zip }}" --clobber
+          else
+            gh release create "${tag}" "${{ steps.build.outputs.zip }}" \
+              --title "${tag}" \
+              --notes-file release-notes.md
+          fi
+
+          gh release view "${tag}"
