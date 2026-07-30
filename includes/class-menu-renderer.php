@@ -446,7 +446,7 @@ final class Menu_Renderer {
 		$rules[] = '#adminmenu li.amorg-item::before{content:"";position:absolute;'
 			. 'inset-block:0;inset-inline-start:var(--amorg-rule-inset,7px);'
 			. 'width:1px;background:currentColor;opacity:.28;pointer-events:none}';
-		$rules[] = '#adminmenu li.amorg-group-last::before{inset-block-end:50%}';
+		$rules[] = '#adminmenu li.amorg-item.amorg-group-last::before{inset-block-end:50%}';
 		$rules[] = '.folded #adminmenu li.amorg-item>a{padding-inline-start:0}';
 		$rules[] = '.folded #adminmenu li.amorg-item::before{display:none}';
 
@@ -463,7 +463,7 @@ final class Menu_Renderer {
 		$rules[] = '#adminmenu .amorg-toggle-label{display:-webkit-box;min-width:0;'
 			. 'overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;'
 			. 'line-clamp:2;overflow-wrap:break-word;white-space:normal;'
-			. 'word-break:normal;hyphens:none}';
+			. 'word-break:normal;-webkit-hyphens:none;hyphens:none}';
 
 		foreach ( $groups as $group ) {
 			if ( $group['count_members'] < 1 ) {

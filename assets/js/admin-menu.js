@@ -300,6 +300,19 @@
 		toggle.addEventListener( 'click', function ( event ) {
 			event.preventDefault();
 
+			/*
+			 * Inert while a query is active. The stylesheet drops pointer-events on
+			 * the header for the same reason, but that only stops the mouse — a
+			 * <button> is still activated by Enter and Space from the keyboard, so
+			 * without this a keyboard user could collapse a group mid-filter and
+			 * have that state saved, while a mouse user could not. The visible
+			 * result would barely change, since matches stay revealed regardless;
+			 * the saved preference is the part worth not writing.
+			 */
+			if ( menu.classList.contains( 'amorg-filtering' ) ) {
+				return;
+			}
+
 			setExpanded( toggle, 'false' === toggle.getAttribute( 'aria-expanded' ), true );
 		} );
 
