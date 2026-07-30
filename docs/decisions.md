@@ -4,8 +4,10 @@
 
 | Date | Decision | Value |
 |---|---|---|
-| 2026-07-28 | Public slug | `admin-menu-categories` — renamed from the original `menu-organizer-collapsible-admin-menu` at the owner's request, to shorten it and signal WordPress. Availability confirmed against the plugins API, not by scraping the HTML page. See D-014. |
-| 2026-07-28 | Display name | `Admin Menu Categories` |
+| 2026-07-30 | Public slug | `admin-menu-categories` — the directory rejected `admin-menu-organizer` because that **name** was already taken, even though the slug was free. See D-019. |
+| 2026-07-30 | Display name | `Admin Menu Categories`, shortened to `Menu Categories` for the in-admin label, which already sits under Settings |
+| 2026-07-28 | Public slug | superseded: `admin-menu-organizer` — renamed from the original `menu-organizer-collapsible-admin-menu` at the owner's request, to shorten it and signal WordPress. Availability confirmed against the plugins API, not by scraping the HTML page. See D-014. |
+| 2026-07-28 | Display name | superseded: `Admin Menu Organizer` |
 | 2026-07-28 | PHP prefix | `AMORG_` constants, `amorg_` functions and keys, `amorg-` CSS and JS, `AMORG\` namespace |
 | 2026-07-26 | Licence | GPLv2 or later (unchanged from spec) |
 | 2026-07-26 | Core source for recon | Official wordpress.org release zips, read-only, in the scratchpad. Not committed. |
@@ -281,7 +283,7 @@ whatever the cause.
 
 Requested mid-build: shorten the name and signal WordPress in it.
 
-The first attempt used `wp-admin-menu-categories`, on the reasoning that a leading
+The first attempt used `wp-admin-menu-organizer`, on the reasoning that a leading
 `wp-` is not a brand claim and is used by many of the directory's most-installed
 plugins — WP Rocket, WPForms, WP Mail SMTP.
 
@@ -296,9 +298,9 @@ returns a definitive error for an unclaimed slug.
 
 | Candidate | Result |
 |---|---|
-| `admin-menu-categories` | free — **chosen** |
+| `admin-menu-organizer` | free — **chosen** |
 | `wp-menu-organizer` | free |
-| `admin-menu-categories` | free |
+| `admin-menu-organizer` | free |
 | `wp-menu-groups`, `wp-admin-menu-groups`, `collapsible-admin-menu` | free |
 | `menu-organizer` | **taken**, 80 active installs |
 | `admin-menu-groups` | **taken**, 800 active installs |
@@ -322,17 +324,17 @@ equals the directory basename, and one asserts the plugin header, the version
 constant and the readme's stable tag all agree. Both would have failed on a
 partial rename.
 
-### D-015 — "wp" is forbidden in the name and slug. Final: `admin-menu-categories`
+### D-015 — "wp" is forbidden in the name and slug. Final: `admin-menu-organizer`
 
 The first CI run put the plugin through the official Plugin Check for the first
 time, and it rejected the name outright:
 
 > The plugin name includes a restricted term. Your chosen plugin name —
-> "WP Admin Menu Categories" — contains the restricted term **"wp" which cannot be
+> "WP Admin Menu Organizer" — contains the restricted term **"wp" which cannot be
 > used at all** in your plugin name.
 >
 > The plugin slug includes a restricted term. Your plugin slug —
-> "wp-admin-menu-categories" — contains the restricted term "wp" which cannot be
+> "wp-admin-menu-organizer" — contains the restricted term "wp" which cannot be
 > used at all in your plugin slug.
 
 So the D-014 reasoning was simply incorrect. WP Rocket and WPForms predate the
@@ -340,8 +342,8 @@ current rule and are grandfathered; a new submission carrying `wp` in either
 field is refused. SPEC §2's constraint was stricter than it appeared, and taking
 it at face value would have been the right call.
 
-**Final naming:** slug `admin-menu-categories`, display name
-`Admin Menu Categories`, prefix `AMORG_` / `amorg_` / `amorg-` / `AMORG\`.
+**Final naming:** slug `admin-menu-organizer`, display name
+`Admin Menu Organizer`, prefix `AMORG_` / `amorg_` / `amorg-` / `AMORG\`.
 Availability re-confirmed via the plugins API.
 
 `bin/check-readme.php` now fails the build on any restricted term in the plugin
@@ -384,6 +386,45 @@ Fixed to `--strip-components=3`, with an explicit `test -f` assertion on
 loudly instead of silently. `wp-tests-config.php` is now written directly rather
 than `sed`-ed out of `wp-tests-config-sample.php`, whose internal paths change
 between releases.
+
+### D-019 — A free slug does not mean a free name. Final: `admin-menu-categories`
+
+The directory rejected the submission outright:
+
+> There is already a plugin with the name `Admin Menu Organizer` in the directory.
+
+**D-014's availability check was necessary and not sufficient, and that is the
+lesson worth keeping.** It queried
+`api.wordpress.org/plugins/info/1.2/?slug=admin-menu-organizer`, which answers
+only "is this *slug* claimed". The directory additionally refuses a **display
+name** that collides with an existing plugin, and there is no API for that — a
+plugin whose slug is something else entirely can still hold the name. So the slug
+was genuinely free, D-014 was not wrong about what it measured, and the submission
+failed anyway. Any future rename has to check the name by searching the directory,
+not just the slug by API.
+
+`admin-menu-categories` had already been confirmed free in D-014's table, which is
+why it was the pick.
+
+The rename is wider than the two lines the rejection names, because the same
+string is also the **text domain**. Language packs are served by slug and loaded
+by domain, so a mismatch means translations silently never load — the bundled
+Arabic would just stop appearing. Slug, text domain, main file name, POT and PO
+filenames and the zip's top-level directory therefore all moved together.
+
+What deliberately did **not** move: `AMORG_*`, `amorg_*` and the `amorg_layout`
+option. Those are the internal prefix from the owner-confirmed table above, not
+the slug. Renaming them would orphan every saved layout on every existing install.
+
+Two places had derived the slug from `basename()` of the checkout directory, and
+both broke on a rename that did not also rename the GitHub repository — which is
+correct, since the repository name and the directory slug are now different things:
+
+- `bin/build-zip.php` now reads the `Text Domain` header from whichever
+  root-level file declares a `Plugin Name`, and requires that same file to be
+  named `<domain>.php`.
+- `test_text_domain_matches_the_plugin_slug` now asserts against the main plugin
+  file rather than the containing directory.
 
 ## Environment notes
 
@@ -450,7 +491,7 @@ Rather than by reimplementing it. These are the load-bearing claims.
 
 ### Verified in CI
 
-Run [30500654963](https://github.com/submoro/admin-menu-categories/actions),
+Run [30500654963](https://github.com/submoro/admin-menu-organizer/actions/runs/30500654963),
 **11 of 11 jobs green.** This closes most of what was previously unverified.
 
 | Job | Result |

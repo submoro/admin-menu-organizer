@@ -4,7 +4,7 @@ Groups WordPress admin menu items into named, collapsible categories inside the
 native sidebar. Sorts what it recognises automatically, and lets you rearrange
 everything else by drag and drop.
 
-[![CI](https://github.com/submoro/admin-menu-categories/actions/workflows/ci.yml/badge.svg)](https://github.com/submoro/admin-menu-categories/actions/workflows/ci.yml)
+[![CI](https://github.com/submoro/admin-menu-organizer/actions/workflows/ci.yml/badge.svg)](https://github.com/submoro/admin-menu-organizer/actions/workflows/ci.yml)
 &nbsp;License: GPLv2 or later &nbsp;·&nbsp; Requires WordPress 6.4+ &nbsp;·&nbsp; Requires PHP 7.4+
 
 ---
@@ -28,7 +28,7 @@ Not yet on the WordPress.org directory, so install it from a zip for now.
 Requires PHP 7.4+ and [Composer](https://getcomposer.org/).
 
 ```bash
-git clone https://github.com/submoro/admin-menu-categories.git
+git clone https://github.com/submoro/admin-menu-organizer.git
 cd admin-menu-categories
 composer install
 composer run build
@@ -45,7 +45,7 @@ the text domain from it:
 
 ```bash
 cd wp-content/plugins
-git clone https://github.com/submoro/admin-menu-categories.git
+git clone https://github.com/submoro/admin-menu-organizer.git
 ```
 
 Then activate it from the **Plugins** screen. No `composer install` is needed to
