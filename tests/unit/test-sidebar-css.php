@@ -153,6 +153,22 @@ final class Test_Sidebar_CSS extends TestCase {
 			'display'       => array( 'display:-webkit-box' ),
 			'overflow'      => array( 'overflow:hidden' ),
 			'white-space'   => array( 'white-space:normal' ),
+
+			/*
+			 * The flex sizing, which the subset check cannot cover: that only
+			 * proves the inline copy says nothing extra, so if both sources lost
+			 * these the tests would still pass.
+			 *
+			 * min-width: 0 is the load-bearing one. A flex item will not shrink
+			 * below its own content width by default, so without it the label
+			 * refuses to narrow and therefore never wraps at all — the clamp and
+			 * the break-word rules above would have nothing to act on.
+			 *
+			 * Written as `flex:11auto` because normalize() strips every space, so
+			 * `flex: 1 1 auto` collapses to that. Ugly, and exact.
+			 */
+			'flex'          => array( 'flex:11auto' ),
+			'min-width'     => array( 'min-width:0' ),
 		);
 	}
 
