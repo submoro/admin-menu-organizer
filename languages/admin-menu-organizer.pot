@@ -19,7 +19,7 @@ msgid "%1$d of %2$d items were grouped automatically."
 msgstr ""
 
 #. translators: %s: Number of matching menu items.
-#: assets/js/admin-menu.js:568
+#: assets/js/admin-menu.js:616
 msgid "%s items match"
 msgstr ""
 
@@ -129,11 +129,11 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: assets/js/admin-menu.js:457
+#: assets/js/admin-menu.js:485
 msgid "Filter menu items"
 msgstr ""
 
-#: assets/js/admin-menu.js:463
+#: assets/js/admin-menu.js:491
 msgid "Filter menu…"
 msgstr ""
 

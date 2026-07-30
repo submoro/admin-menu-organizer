@@ -75,6 +75,29 @@ body.admin-color-light #adminmenu {
  * The no-JavaScript presentation. Rendered on the <li> itself so it exists
  * before any script runs, and suppressed once the script has replaced it with a
  * button, so the label is never announced twice.
+ *
+ * The wrapping rules match the enhanced label, so a long name breaks between
+ * words here too. The two-line clamp does not, and deliberately: this row is
+ * left free to grow.
+ *
+ * Every way of bounding it renders worse than not bounding it, measured in
+ * Chromium 1194 at 4x:
+ *
+ * - `-webkit-line-clamp` needs `display: -webkit-box`, which a pseudo-element
+ *   does not accept — it computes to flow-root. With `display: block` the clamp
+ *   is ignored outright and the row grew to 103px; with `-webkit-box` it appends
+ *   an ellipsis but stops clipping, painting the third line over the item below.
+ * - `max-height` with `overflow: hidden` does clip, but by pixel rather than by
+ *   line, so the cut lands inside the third line and leaves a mutilated half-row
+ *   of text. That reads as broken in a way a merely tall row does not.
+ * - Moving the padding onto the <li> to make the cut land on a line boundary
+ *   collides with core's `min-height: 34px` on `li.menu-top` and forces every
+ *   header to a uniform two-line height, which penalises the common case to
+ *   tidy the rare one.
+ *
+ * So an over-long label makes this row taller, and nothing is hidden. The
+ * exposure is small: it needs scripting to be off, which already leaves much of
+ * wp-admin non-functional, and a stored label longer than two lines.
  */
 #adminmenu li.amorg-group-header::before {
 	content: var(--amorg-icon, "\f228") " " var(--amorg-label, "");
