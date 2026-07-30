@@ -39,19 +39,19 @@ return array(
 	),
 	array(
 		'id'           => 'design',
-		'label'        => 'Design & Layout',
+		'label'        => 'Design',
 		'icon'         => 'dashicons-admin-appearance',
 		'default_open' => false,
 	),
 	array(
 		'id'           => 'seo',
-		'label'        => 'SEO & Marketing',
+		'label'        => 'Marketing',
 		'icon'         => 'dashicons-chart-line',
 		'default_open' => false,
 	),
 	array(
 		'id'           => 'security',
-		'label'        => 'Security & Backup',
+		'label'        => 'Security',
 		'icon'         => 'dashicons-shield',
 		'default_open' => false,
 	),
@@ -63,7 +63,7 @@ return array(
 	),
 	array(
 		'id'           => 'users',
-		'label'        => 'Users & Access',
+		'label'        => 'Users',
 		'icon'         => 'dashicons-groups',
 		'default_open' => false,
 	),
@@ -75,7 +75,7 @@ return array(
 	),
 	array(
 		'id'           => 'tools',
-		'label'        => 'Tools & System',
+		'label'        => 'Tools',
 		'icon'         => 'dashicons-admin-tools',
 		'default_open' => false,
 	),

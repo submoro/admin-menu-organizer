@@ -24,13 +24,13 @@ return array(
 	'Dashboard'                     => 'لوحة التحكم',
 	'Content'                       => 'المحتوى',
 	'Commerce'                      => 'التجارة',
-	'Design & Layout'               => 'التصميم والتنسيق',
-	'SEO & Marketing'               => 'تحسين محركات البحث والتسويق',
-	'Security & Backup'             => 'الأمان والنسخ الاحتياطي',
+	'Design'                        => 'التصميم',
+	'Marketing'                     => 'التسويق',
+	'Security'                      => 'الأمان',
 	'Performance'                   => 'الأداء',
-	'Users & Access'                => 'المستخدمون والوصول',
+	'Users'                         => 'المستخدمون',
 	'Integrations'                  => 'التكاملات',
-	'Tools & System'                => 'الأدوات والنظام',
+	'Tools'                         => 'الأدوات',
 	'Other'                         => 'أخرى',
 
 	// Tabs.
