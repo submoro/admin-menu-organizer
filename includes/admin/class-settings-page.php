@@ -146,7 +146,7 @@ final class Settings_Page {
 			'amorg-settings',
 			AMORG_PLUGIN_URL . 'assets/css/settings.css',
 			array( 'dashicons' ),
-			AMORG_VERSION
+			Plugin::asset_version( 'assets/css/settings.css' )
 		);
 
 		/*
@@ -158,7 +158,7 @@ final class Settings_Page {
 			'amorg-settings',
 			AMORG_PLUGIN_URL . 'assets/js/settings.js',
 			array( 'jquery', 'jquery-ui-sortable', 'wp-i18n' ),
-			AMORG_VERSION,
+			Plugin::asset_version( 'assets/js/settings.js' ),
 			true
 		);
 

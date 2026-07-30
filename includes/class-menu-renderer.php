@@ -133,14 +133,14 @@ final class Menu_Renderer {
 			'amorg-admin-menu',
 			AMORG_PLUGIN_URL . 'assets/css/admin-menu.css',
 			array( 'dashicons' ),
-			AMORG_VERSION
+			Plugin::asset_version( 'assets/css/admin-menu.css' )
 		);
 
 		wp_enqueue_script(
 			'amorg-admin-menu',
 			AMORG_PLUGIN_URL . 'assets/js/admin-menu.js',
 			array( 'wp-i18n' ),
-			AMORG_VERSION,
+			Plugin::asset_version( 'assets/js/admin-menu.js' ),
 			true
 		);
 

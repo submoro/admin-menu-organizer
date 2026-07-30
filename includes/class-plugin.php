@@ -161,6 +161,44 @@ final class Plugin {
 	private function __clone() {}
 
 	/**
+	 * Returns a cache-busting version string for a bundled asset.
+	 *
+	 * The plugin version alone is not enough, and the reason is worth recording
+	 * because the resulting state is genuinely hard to diagnose.
+	 *
+	 * If a server's OPcache is still serving previously compiled PHP after the
+	 * plugin files were replaced in place, AMORG_VERSION evaluates to the *old*
+	 * version. The stylesheet is then requested at the old URL and the browser
+	 * serves its cached copy. Meanwhile the Plugins screen reports the *new*
+	 * version, because WordPress reads that header straight off disk rather than
+	 * through OPcache. The result is a plugin that says it updated and behaves as
+	 * though it did not.
+	 *
+	 * Mixing in the file's modification time removes the failure mode: the URL
+	 * changes whenever the file on disk changes, whatever the constant says. One
+	 * stat call per asset per admin request is a fair price for never debugging
+	 * that again.
+	 *
+	 * @since 1.0.2
+	 *
+	 * @param string $relative Path relative to the plugin root.
+	 * @return string Version string suitable for wp_enqueue_style or _script.
+	 */
+	public static function asset_version( string $relative ): string {
+		$path = AMORG_PLUGIN_DIR . $relative;
+
+		if ( is_readable( $path ) ) {
+			$mtime = filemtime( $path );
+
+			if ( false !== $mtime ) {
+				return AMORG_VERSION . '.' . $mtime;
+			}
+		}
+
+		return AMORG_VERSION;
+	}
+
+	/**
 	 * Returns the sole instance of this class.
 	 *
 	 * @since 1.0.0

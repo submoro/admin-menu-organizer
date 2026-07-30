@@ -4,7 +4,7 @@ Tags: admin menu, menu order, sidebar, accordion, admin
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,9 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 
 == Changelog ==
 
+= 1.0.3 =
+* Stylesheet and script URLs now change whenever the files change, not only when the version number does. On a server with a stale OPcache this was making an update look like it had applied while the old styles were still being served.
+
 = 1.0.2 =
 * Group members are now indented beneath their group header, with a connecting rule, so the sidebar reads as a two-level tree rather than a flat list with headings in it.
 * Fix group names still showing clipped after updating from 1.0.0. Names are now corrected on read, not only during the schema migration, which missed layouts saved after the update.
@@ -134,6 +137,9 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+Fixes an update appearing to apply while the old stylesheet was still served, on servers with a stale OPcache.
 
 = 1.0.2 =
 Indents group members so the hierarchy is visible, and fixes group names that stayed clipped after updating from 1.0.0.
