@@ -112,7 +112,10 @@ The repository has three directories, and what goes where matters:
 ```bash
 # Unpack the built zip into trunk, replacing what is there.
 rm -rf trunk/*
-unzip -j -o /path/to/admin-menu-categories.1.0.0.zip -d /tmp/amorg
+rm -rf /tmp/amorg && mkdir -p /tmp/amorg
+# No -j: the zip's single admin-menu-categories/ directory is what the copy below
+# reaches into, and -j would flatten it away.
+unzip -o /path/to/admin-menu-categories.1.0.0.zip -d /tmp/amorg
 cp -R /tmp/amorg/admin-menu-categories/* trunk/
 
 # Directory assets go in assets/, not trunk/.

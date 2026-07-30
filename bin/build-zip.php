@@ -33,6 +33,7 @@ $dest = rtrim( $argv[1] ?? ( $root . '/build' ), '/\\' );
  * file, the POT, and the zip's single top-level directory.
  */
 $slug       = '';
+$main_file  = '';
 $main_files = glob( $root . '/*.php' ) ?: array();
 
 foreach ( $main_files as $candidate ) {
@@ -46,17 +47,31 @@ foreach ( $main_files as $candidate ) {
 		$slug = trim( $domain[1] );
 	}
 
+	$main_file = $candidate;
 	break;
 }
 
-if ( '' === $slug ) {
-	echo "Could not read a Text Domain header from the main plugin file.\n";
+if ( '' === $main_file ) {
+	echo "No root-level PHP file declares a Plugin Name header.\n";
 	exit( 1 );
 }
 
-if ( ! is_file( "{$root}/{$slug}.php" ) ) {
-	echo "Text Domain is '{$slug}' but {$slug}.php does not exist. "
-		. "WordPress.org requires the main file, the text domain and the slug to agree.\n";
+if ( '' === $slug ) {
+	echo 'Read the Plugin Name from ' . basename( $main_file )
+		. ", but it declares no Text Domain header.\n";
+	exit( 1 );
+}
+
+/*
+ * The file that carried the headers must itself be the one named for the slug.
+ * Checking only that some {$slug}.php exists would accept a layout where the
+ * headers live in one file and an unrelated file happens to match the domain,
+ * and the zip would then be built around the wrong entrypoint.
+ */
+if ( basename( $main_file ) !== "{$slug}.php" ) {
+	echo 'Text Domain is ' . $slug . ' but the headers were read from '
+		. basename( $main_file ) . ". WordPress.org requires the main file, "
+		. "the text domain and the slug to be the same string.\n";
 	exit( 1 );
 }
 
