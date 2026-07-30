@@ -1,4 +1,4 @@
-# Claude Code Build Prompt - WordPress Admin Menu Organizer Plugin
+# Claude Code Build Prompt - WordPress Admin Menu Categories Plugin
 
 **How to use this file:** open Claude Code in an empty directory and paste everything below the line into the first message. Keep this file in the repo root as `SPEC.md` so later sessions can re-read it.
 
@@ -41,8 +41,8 @@ A plugin that groups top-level admin menu items into named, collapsible categori
 
 ## 2. NAMING AND SLUG
 
-- Proposed slug: `admin-menu-organizer`
-- Proposed display name: `Admin Menu Organizer`
+- Proposed slug: `admin-menu-categories`
+- Proposed display name: `Admin Menu Categories`
 - Text domain: identical to the slug
 - PHP prefix: `AMORG_` for constants, `amorg_` for functions, `AMORG\` namespace for classes
 - CSS/JS/data prefix: `amorg-`
@@ -253,7 +253,7 @@ Auto-detection runs once, on activation, to seed the initial layout. It also run
 
 ## 7. SETTINGS SCREEN
 
-Location: `Settings > Menu Organizer` (`options-general.php?page=amorg`)
+Location: `Settings > Menu Categories` (`options-general.php?page=amorg`)
 
 ### 7.1 Tabs
 
@@ -297,10 +297,10 @@ Non-negotiable. Every one of these will be checked in review.
 
 ## 9. INTERNATIONALISATION
 
-- Every user-facing string wrapped in `__()`, `_e()`, `esc_html__()`, `esc_attr__()`, `_n()`, or `_x()` with the text domain `admin-menu-organizer`
+- Every user-facing string wrapped in `__()`, `_e()`, `esc_html__()`, `esc_attr__()`, `_n()`, or `_x()` with the text domain `admin-menu-categories`
 - Text domain must be a literal string in every call - never a variable or constant
 - No string concatenation to build sentences. Use `printf` with numbered placeholders (`%1$s`, `%2$s`)
-- Generate `languages/admin-menu-organizer.pot` with WP-CLI: `wp i18n make-pot . languages/admin-menu-organizer.pot`
+- Generate `languages/admin-menu-categories.pot` with WP-CLI: `wp i18n make-pot . languages/admin-menu-categories.pot`
 - JavaScript strings via `wp_set_script_translations()` and `wp.i18n`
 - Ship an Arabic translation (`ar.po`/`ar.mo`) as a starter and confirm RTL rendering against it
 
@@ -318,7 +318,7 @@ Non-negotiable. Every one of these will be checked in review.
 
 ```php
 /**
- * Plugin Name:       Admin Menu Organizer
+ * Plugin Name:       Admin Menu Categories
  * Plugin URI:        https://example.com/menu-organizer
  * Description:       Groups WordPress admin menu items into named, collapsible categories. Auto-sorts known plugins and lets you rearrange everything by drag and drop.
  * Version:           1.0.0
@@ -328,7 +328,7 @@ Non-negotiable. Every one of these will be checked in review.
  * Author URI:        https://example.com
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       admin-menu-organizer
+ * Text Domain:       admin-menu-categories
  * Domain Path:       /languages
  */
 ```
@@ -377,8 +377,8 @@ The plugin must pass, with zero errors:
 ## 11. FILE STRUCTURE
 
 ```
-admin-menu-organizer/
-├── admin-menu-organizer.php   # bootstrap only, no logic
+admin-menu-categories/
+├── admin-menu-categories.php   # bootstrap only, no logic
 ├── uninstall.php                               # delete options and user meta
 ├── readme.txt
 ├── LICENSE

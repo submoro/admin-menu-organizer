@@ -2,8 +2,8 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Admin Menu Organizer 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/admin-menu-organizer/\n"
+"Project-Id-Version: Admin Menu Categories 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/admin-menu-categories/\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-07-27T00:00:00+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Domain: admin-menu-organizer\n"
+"X-Domain: admin-menu-categories\n"
 
 #. translators: 1: Number of items grouped automatically, 2: Total number of items.
 #: includes/admin/views/tab-advanced.php:143
@@ -41,6 +41,16 @@ msgstr ""
 #. translators: %s: The query parameter, wrapped in a code element.
 #: includes/admin/views/tab-advanced.php:87
 msgid "Add %s to any admin URL to turn the plugin off for that one page load."
+msgstr ""
+
+#. translators: 1: Required PHP version, 2: PHP version running on the server.
+#: admin-menu-categories.php:85
+msgid "Admin Menu Categories requires PHP %1$s or newer. This site is running PHP %2$s, so the plugin has not been loaded."
+msgstr ""
+
+#. translators: 1: Required WordPress version, 2: WordPress version running on the site.
+#: admin-menu-categories.php:92
+msgid "Admin Menu Categories requires WordPress %1$s or newer. This site is running WordPress %2$s, so the plugin has not been loaded."
 msgstr ""
 
 #: includes/admin/views/page.php:29
@@ -228,21 +238,11 @@ msgstr ""
 #: includes/admin/views/page.php:37
 #: includes/admin/class-settings-page.php:102
 #: includes/admin/class-settings-page.php:103
-msgid "Menu Organizer"
-msgstr ""
-
-#. translators: 1: Required PHP version, 2: PHP version running on the server.
-#: admin-menu-organizer.php:85
-msgid "Menu Organizer requires PHP %1$s or newer. This site is running PHP %2$s, so the plugin has not been loaded."
-msgstr ""
-
-#. translators: 1: Required WordPress version, 2: WordPress version running on the site.
-#: admin-menu-organizer.php:92
-msgid "Menu Organizer requires WordPress %1$s or newer. This site is running WordPress %2$s, so the plugin has not been loaded."
+msgid "Menu Categories"
 msgstr ""
 
 #: includes/admin/views/page.php:45
-msgid "Menu Organizer sections"
+msgid "Menu Categories sections"
 msgstr ""
 
 #: includes/admin/views/tab-groups.php:54

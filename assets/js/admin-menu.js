@@ -1,5 +1,5 @@
 /**
- * Menu Organizer - sidebar accordion behaviour.
+ * Menu Categories - sidebar accordion behaviour.
  *
  * Progressive enhancement only. Grouping, ordering and the initial open or closed
  * state are all rendered by the server, so this file never decides what the
@@ -11,7 +11,7 @@
  * before this runs. See includes/class-menu-renderer.php for why core cannot be
  * made to emit a button itself.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  */
 
 ( function () {
@@ -186,7 +186,7 @@
 		var state = toggle.querySelector( '.amorg-sr-state' );
 
 		if ( state ) {
-			state.textContent = expanded ? __( 'expanded', 'admin-menu-organizer' ) : __( 'collapsed', 'admin-menu-organizer' );
+			state.textContent = expanded ? __( 'expanded', 'admin-menu-categories' ) : __( 'collapsed', 'admin-menu-categories' );
 		}
 
 		if ( persist ) {
@@ -262,7 +262,7 @@
 				'aria-label',
 				sprintf(
 					/* translators: %s: Number of pending updates. */
-					__( '%s pending updates in this group', 'admin-menu-organizer' ),
+					__( '%s pending updates in this group', 'admin-menu-categories' ),
 					String( group.updates )
 				)
 			);
@@ -277,7 +277,7 @@
 		 */
 		var state = document.createElement( 'span' );
 		state.className = 'amorg-sr-only amorg-sr-state';
-		state.textContent = startsCollapsed ? __( 'collapsed', 'admin-menu-organizer' ) : __( 'expanded', 'admin-menu-organizer' );
+		state.textContent = startsCollapsed ? __( 'collapsed', 'admin-menu-categories' ) : __( 'expanded', 'admin-menu-categories' );
 		toggle.appendChild( state );
 
 		var chevron = document.createElement( 'span' );
@@ -482,13 +482,13 @@
 
 		label.className = 'amorg-sr-only';
 		label.setAttribute( 'for', inputId );
-		label.textContent = __( 'Filter menu items', 'admin-menu-organizer' );
+		label.textContent = __( 'Filter menu items', 'admin-menu-categories' );
 
 		input.type = 'search';
 		input.id = inputId;
 		input.className = 'amorg-filter-input';
 		input.autocomplete = 'off';
-		input.setAttribute( 'placeholder', __( 'Filter menu…', 'admin-menu-organizer' ) );
+		input.setAttribute( 'placeholder', __( 'Filter menu…', 'admin-menu-categories' ) );
 
 		/*
 		 * A live region, so a screen-reader user hears how many items matched.
@@ -613,7 +613,7 @@
 
 			status.textContent = sprintf(
 				/* translators: %s: Number of matching menu items. */
-				__( '%s items match', 'admin-menu-organizer' ),
+				__( '%s items match', 'admin-menu-categories' ),
 				String( matches )
 			);
 		}

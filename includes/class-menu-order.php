@@ -2,7 +2,7 @@
 /**
  * Grouped reordering of the top-level admin menu.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 

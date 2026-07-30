@@ -54,7 +54,7 @@ jobs:
           tag="${{ inputs.tag || github.ref_name }}"
           version="${tag#v}"
           header=$(sed -n 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*\(.*\)$/\1/p' \
-                     admin-menu-organizer.php | head -n1 | tr -d '[:space:]')
+                     admin-menu-categories.php | head -n1 | tr -d '[:space:]')
 
           echo "tag=${tag}"
           echo "tag version=${version}"

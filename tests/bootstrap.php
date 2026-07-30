@@ -6,7 +6,7 @@
  * polyfills so the same tests run on PHP 7.4 through 8.3, then loads this
  * plugin into the test instance before WordPress finishes booting.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 
@@ -57,7 +57,7 @@ require_once $amorg_tests_dir . '/includes/functions.php';
  * @return void
  */
 function amorg_manually_load_plugin() {
-	require dirname( __DIR__ ) . '/admin-menu-organizer.php';
+	require dirname( __DIR__ ) . '/admin-menu-categories.php';
 }
 
 tests_add_filter( 'muplugins_loaded', 'amorg_manually_load_plugin' );

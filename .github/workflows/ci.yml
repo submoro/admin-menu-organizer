@@ -255,7 +255,7 @@ jobs:
       - name: Run Plugin Check
         uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: ${{ runner.temp }}/plugin/admin-menu-organizer
+          build-dir: ${{ runner.temp }}/plugin/admin-menu-categories
           categories: |
             general
             plugin_repo

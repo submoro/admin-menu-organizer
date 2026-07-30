@@ -5,7 +5,7 @@
  * Also serves the Personalise tab, which is the same editor scoped to the current
  * user's own meta rather than to the site option.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  *
  * @var string $tab          Current tab slug.
@@ -43,11 +43,11 @@ foreach ( (array) ( $amorg_layout['groups'] ?? array() ) as $amorg_group ) {
 
 <?php if ( $amorg_personal ) : ?>
 	<p class="amorg-intro">
-		<?php echo esc_html__( 'Arrange your own sidebar. This affects only your account; everyone else keeps the site default.', 'admin-menu-organizer' ); ?>
+		<?php echo esc_html__( 'Arrange your own sidebar. This affects only your account; everyone else keeps the site default.', 'admin-menu-categories' ); ?>
 	</p>
 <?php else : ?>
 	<p class="amorg-intro">
-		<?php echo esc_html__( 'Drag items between groups to arrange the sidebar for everyone. Every item stays reachable: anything you do not place appears in the Other group at the bottom.', 'admin-menu-organizer' ); ?>
+		<?php echo esc_html__( 'Drag items between groups to arrange the sidebar for everyone. Every item stays reachable: anything you do not place appears in the Other group at the bottom.', 'admin-menu-categories' ); ?>
 	</p>
 <?php endif; ?>
 
@@ -69,7 +69,7 @@ foreach ( (array) ( $amorg_layout['groups'] ?? array() ) as $amorg_group ) {
 					<span class="dashicons <?php echo esc_attr( $amorg_icon ); ?>" aria-hidden="true"></span>
 					<?php echo esc_html( $amorg_label ); ?>
 					<?php if ( Categories::UNGROUPED === $amorg_id ) : ?>
-						<span class="amorg-badge-permanent"><?php echo esc_html__( 'always visible', 'admin-menu-organizer' ); ?></span>
+						<span class="amorg-badge-permanent"><?php echo esc_html__( 'always visible', 'admin-menu-categories' ); ?></span>
 					<?php endif; ?>
 				</h2>
 
@@ -81,7 +81,7 @@ foreach ( (array) ( $amorg_layout['groups'] ?? array() ) as $amorg_group ) {
 					echo esc_attr(
 						sprintf(
 							/* translators: %s: Group name. */
-							__( 'Items in %s', 'admin-menu-organizer' ),
+							__( 'Items in %s', 'admin-menu-categories' ),
 							$amorg_label
 						)
 					);
@@ -108,7 +108,7 @@ foreach ( (array) ( $amorg_layout['groups'] ?? array() ) as $amorg_group ) {
 									echo esc_html(
 										sprintf(
 											/* translators: %s: Menu item name. */
-											__( 'Move %s to group', 'admin-menu-organizer' ),
+											__( 'Move %s to group', 'admin-menu-categories' ),
 											$amorg_item['label']
 										)
 									);
@@ -138,7 +138,7 @@ foreach ( (array) ( $amorg_layout['groups'] ?? array() ) as $amorg_group ) {
 	</div>
 
 	<p class="submit">
-		<?php submit_button( __( 'Save layout', 'admin-menu-organizer' ), 'primary', 'submit', false ); ?>
+		<?php submit_button( __( 'Save layout', 'admin-menu-categories' ), 'primary', 'submit', false ); ?>
 
 		<?php if ( $amorg_personal && Layout_Repository::has_user_layout( get_current_user_id() ) ) : ?>
 			<button
@@ -146,7 +146,7 @@ foreach ( (array) ( $amorg_layout['groups'] ?? array() ) as $amorg_group ) {
 				class="button button-secondary amorg-reset"
 				name="amorg_action"
 				value="reset_personal"
-			><?php echo esc_html__( 'Reset to site default', 'admin-menu-organizer' ); ?></button>
+			><?php echo esc_html__( 'Reset to site default', 'admin-menu-categories' ); ?></button>
 		<?php endif; ?>
 	</p>
 </form>

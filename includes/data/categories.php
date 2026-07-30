@@ -12,7 +12,7 @@
  * Each entry therefore carries an untranslated label plus a context-free key
  * that Categories::labels() maps to a translated string.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 

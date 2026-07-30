@@ -1,5 +1,5 @@
 /**
- * Menu Organizer - the collapsible sidebar.
+ * Menu Categories - the collapsible sidebar.
  *
  * Written entirely with CSS logical properties, so the sidebar mirrors correctly
  * in RTL without a generated rtl.css. SPEC section 6.4 makes RTL a hard
@@ -16,7 +16,7 @@
  * is taken from one custom property whose value is set per scheme from the values
  * core actually uses, keyed off the admin-color-* body class core already emits.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  */
 
 /* -------------------------------------------------------------------------

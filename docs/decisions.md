@@ -4,8 +4,8 @@
 
 | Date | Decision | Value |
 |---|---|---|
-| 2026-07-28 | Public slug | `admin-menu-organizer` — renamed from the original `menu-organizer-collapsible-admin-menu` at the owner's request, to shorten it and signal WordPress. Availability confirmed against the plugins API, not by scraping the HTML page. See D-014. |
-| 2026-07-28 | Display name | `Admin Menu Organizer` |
+| 2026-07-28 | Public slug | `admin-menu-categories` — renamed from the original `menu-organizer-collapsible-admin-menu` at the owner's request, to shorten it and signal WordPress. Availability confirmed against the plugins API, not by scraping the HTML page. See D-014. |
+| 2026-07-28 | Display name | `Admin Menu Categories` |
 | 2026-07-28 | PHP prefix | `AMORG_` constants, `amorg_` functions and keys, `amorg-` CSS and JS, `AMORG\` namespace |
 | 2026-07-26 | Licence | GPLv2 or later (unchanged from spec) |
 | 2026-07-26 | Core source for recon | Official wordpress.org release zips, read-only, in the scratchpad. Not committed. |
@@ -281,7 +281,7 @@ whatever the cause.
 
 Requested mid-build: shorten the name and signal WordPress in it.
 
-The first attempt used `wp-admin-menu-organizer`, on the reasoning that a leading
+The first attempt used `wp-admin-menu-categories`, on the reasoning that a leading
 `wp-` is not a brand claim and is used by many of the directory's most-installed
 plugins — WP Rocket, WPForms, WP Mail SMTP.
 
@@ -296,9 +296,9 @@ returns a definitive error for an unclaimed slug.
 
 | Candidate | Result |
 |---|---|
-| `admin-menu-organizer` | free — **chosen** |
+| `admin-menu-categories` | free — **chosen** |
 | `wp-menu-organizer` | free |
-| `admin-menu-organizer` | free |
+| `admin-menu-categories` | free |
 | `wp-menu-groups`, `wp-admin-menu-groups`, `collapsible-admin-menu` | free |
 | `menu-organizer` | **taken**, 80 active installs |
 | `admin-menu-groups` | **taken**, 800 active installs |
@@ -322,17 +322,17 @@ equals the directory basename, and one asserts the plugin header, the version
 constant and the readme's stable tag all agree. Both would have failed on a
 partial rename.
 
-### D-015 — "wp" is forbidden in the name and slug. Final: `admin-menu-organizer`
+### D-015 — "wp" is forbidden in the name and slug. Final: `admin-menu-categories`
 
 The first CI run put the plugin through the official Plugin Check for the first
 time, and it rejected the name outright:
 
 > The plugin name includes a restricted term. Your chosen plugin name —
-> "WP Admin Menu Organizer" — contains the restricted term **"wp" which cannot be
+> "WP Admin Menu Categories" — contains the restricted term **"wp" which cannot be
 > used at all** in your plugin name.
 >
 > The plugin slug includes a restricted term. Your plugin slug —
-> "wp-admin-menu-organizer" — contains the restricted term "wp" which cannot be
+> "wp-admin-menu-categories" — contains the restricted term "wp" which cannot be
 > used at all in your plugin slug.
 
 So the D-014 reasoning was simply incorrect. WP Rocket and WPForms predate the
@@ -340,8 +340,8 @@ current rule and are grandfathered; a new submission carrying `wp` in either
 field is refused. SPEC §2's constraint was stricter than it appeared, and taking
 it at face value would have been the right call.
 
-**Final naming:** slug `admin-menu-organizer`, display name
-`Admin Menu Organizer`, prefix `AMORG_` / `amorg_` / `amorg-` / `AMORG\`.
+**Final naming:** slug `admin-menu-categories`, display name
+`Admin Menu Categories`, prefix `AMORG_` / `amorg_` / `amorg-` / `AMORG\`.
 Availability re-confirmed via the plugins API.
 
 `bin/check-readme.php` now fails the build on any restricted term in the plugin
@@ -450,7 +450,7 @@ Rather than by reimplementing it. These are the load-bearing claims.
 
 ### Verified in CI
 
-Run [30500654963](https://github.com/submoro/admin-menu-organizer/actions),
+Run [30500654963](https://github.com/submoro/admin-menu-categories/actions),
 **11 of 11 jobs green.** This closes most of what was previously unverified.
 
 | Job | Result |

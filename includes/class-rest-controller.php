@@ -2,7 +2,7 @@
 /**
  * REST endpoints.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 
@@ -128,7 +128,7 @@ final class Rest_Controller {
 		if ( ! is_user_logged_in() || ! current_user_can( 'read' ) ) {
 			return new \WP_Error(
 				'amorg_forbidden',
-				__( 'You must be signed in to save your menu state.', 'admin-menu-organizer' ),
+				__( 'You must be signed in to save your menu state.', 'admin-menu-categories' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -147,7 +147,7 @@ final class Rest_Controller {
 		if ( ! current_user_can( Capabilities::MANAGE ) ) {
 			return new \WP_Error(
 				'amorg_forbidden',
-				__( 'You are not allowed to change the site-wide menu layout.', 'admin-menu-organizer' ),
+				__( 'You are not allowed to change the site-wide menu layout.', 'admin-menu-categories' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -166,7 +166,7 @@ final class Rest_Controller {
 		if ( ! Capabilities::current_user_can_personalise() ) {
 			return new \WP_Error(
 				'amorg_forbidden',
-				__( 'Personalising your menu is not available on this site.', 'admin-menu-organizer' ),
+				__( 'Personalising your menu is not available on this site.', 'admin-menu-categories' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}

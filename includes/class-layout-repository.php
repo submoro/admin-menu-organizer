@@ -2,7 +2,7 @@
 /**
  * Reading, resolving and saving layouts.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 

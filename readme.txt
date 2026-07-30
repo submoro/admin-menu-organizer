@@ -1,4 +1,4 @@
-=== Admin Menu Organizer ===
+=== Admin Menu Categories ===
 Contributors: submoro
 Tags: admin menu, menu order, sidebar, accordion, admin
 Requires at least: 6.4
@@ -14,7 +14,7 @@ Group your admin sidebar into named, collapsible categories. Sorts known plugins
 
 A busy WordPress site ends up with thirty to sixty plugins, and every one of them adds a top-level item to the admin sidebar. The result is a flat, unsorted list several screens long, with an SEO plugin sitting next to a mail delivery plugin sitting next to a firewall.
 
-Menu Organizer groups those items into named, collapsible categories inside the sidebar you already have. It sorts what it recognises automatically, and lets you rearrange everything else by dragging it.
+Menu Categories groups those items into named, collapsible categories inside the sidebar you already have. It sorts what it recognises automatically, and lets you rearrange everything else by dragging it.
 
 = What it does =
 
@@ -66,7 +66,7 @@ The grouping rules are filterable, so you can teach it about your own plugins wi
 1. Upload the plugin folder to `/wp-content/plugins/`, or install it through **Plugins > Add New** in your dashboard.
 2. Activate it through the **Plugins** screen.
 3. Your sidebar is grouped straight away, using the automatic rules.
-4. To change anything, go to **Settings > Menu Organizer**.
+4. To change anything, go to **Settings > Menu Categories**.
 
 == Frequently Asked Questions ==
 
@@ -122,6 +122,7 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 == Changelog ==
 
 = 1.1.1 =
+* The plugin is now called Admin Menu Categories. The previous name was already taken in the plugin directory, so it had to change before the plugin could be listed. Nothing about how it works has changed, and your saved arrangement is kept: it is stored under a key that the rename does not touch. On a site running the old build, this installs as a separate plugin rather than as an update, so deactivate the old one before activating this.
 * Fixed: long group names broke in the middle of a word. "Integrations" rendered as "INTEGRATION" above a lone "S", and "Tools & Settings" ran to four lines ending in "GS". Names now wrap between words, and a name too long for two lines is shortened with an ellipsis rather than growing the row without limit. The full name is shown on hover.
 * Group names have more room to begin with: the header row spends fewer pixels on spacing and on the update badge, which is enough for every default name to fit on one or two lines.
 * The line connecting a group's items was too faint to see against the default colour scheme, so the indent was doing the work of showing the hierarchy on its own. It is now visible.
@@ -151,7 +152,7 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 == Upgrade Notice ==
 
 = 1.1.1 =
-Fixes long group names breaking mid-word, makes the group hierarchy visible, and shows which category each filter result belongs to.
+Renamed to Admin Menu Categories, because the old name was taken in the directory. Also fixes long group names breaking mid-word, makes the group hierarchy visible, and shows which category each filter result belongs to. Your saved arrangement is kept, but this installs alongside the old build rather than over it, so deactivate that first.
 
 = 1.1.0 =
 Adds a filter box to the sidebar, scrolls a group to the top when you open it, and stops long group names being cut off.

@@ -2,7 +2,7 @@
 /**
  * Decoration of the rendered admin menu.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 
@@ -146,7 +146,7 @@ final class Menu_Renderer {
 
 		wp_set_script_translations(
 			'amorg-admin-menu',
-			'admin-menu-organizer',
+			'admin-menu-categories',
 			AMORG_PLUGIN_DIR . 'languages'
 		);
 

@@ -2,7 +2,7 @@
 /**
  * Safe reading of the WordPress admin menu globals.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 

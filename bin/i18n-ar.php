@@ -18,7 +18,7 @@
 return array(
 
 	// Plugin and screen names.
-	'Menu Organizer'                => 'منظّم القوائم',
+	'Menu Categories'                => 'فئات القائمة',
 
 	// Category labels.
 	'Dashboard'                     => 'لوحة التحكم',
@@ -39,7 +39,7 @@ return array(
 	'Roles'                         => 'الأدوار',
 	'Advanced'                       => 'إعدادات متقدمة',
 	'Personalise my menu'           => 'تخصيص قائمتي',
-	'Menu Organizer sections'       => 'أقسام منظّم القوائم',
+	'Menu Categories sections'       => 'أقسام فئات القائمة',
 
 	// Buttons and actions.
 	'Settings'                      => 'الإعدادات',
