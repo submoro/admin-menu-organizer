@@ -445,14 +445,25 @@ final class Menu_Renderer {
 		$rules[] = '#adminmenu li.amorg-item{position:relative}';
 		$rules[] = '#adminmenu li.amorg-item::before{content:"";position:absolute;'
 			. 'inset-block:0;inset-inline-start:var(--amorg-rule-inset,7px);'
-			. 'width:1px;background:currentColor;opacity:.16;pointer-events:none}';
+			. 'width:1px;background:currentColor;opacity:.28;pointer-events:none}';
 		$rules[] = '#adminmenu li.amorg-group-last::before{inset-block-end:50%}';
 		$rules[] = '.folded #adminmenu li.amorg-item>a{padding-inline-start:0}';
 		$rules[] = '.folded #adminmenu li.amorg-item::before{display:none}';
 
-		// Long labels wrap instead of being clipped. See admin-menu.css for why.
-		$rules[] = '#adminmenu .amorg-toggle-label{min-width:0;white-space:normal;'
-			. 'overflow-wrap:anywhere}';
+		/*
+		 * Long labels wrap on word boundaries, to two lines. See admin-menu.css
+		 * for the reasoning.
+		 *
+		 * These declarations must stay identical to the ones in that file. This
+		 * block is printed on admin_head, which is after the enqueued stylesheet,
+		 * so on a specificity tie it is this copy that wins — a stale value here
+		 * silently overrides a corrected one there. In particular `break-word`
+		 * must not drift back to `anywhere`, which breaks words mid-character.
+		 */
+		$rules[] = '#adminmenu .amorg-toggle-label{display:-webkit-box;min-width:0;'
+			. 'overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;'
+			. 'line-clamp:2;overflow-wrap:break-word;white-space:normal;'
+			. 'word-break:normal;hyphens:none}';
 
 		foreach ( $groups as $group ) {
 			if ( $group['count_members'] < 1 ) {

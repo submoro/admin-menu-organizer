@@ -19,12 +19,12 @@ msgid "%1$d of %2$d items were grouped automatically."
 msgstr ""
 
 #. translators: %s: Number of matching menu items.
-#: assets/js/admin-menu.js:511
+#: assets/js/admin-menu.js:568
 msgid "%s items match"
 msgstr ""
 
 #. translators: %s: Number of pending updates.
-#: assets/js/admin-menu.js:254
+#: assets/js/admin-menu.js:265
 msgid "%s pending updates in this group"
 msgstr ""
 
@@ -43,8 +43,8 @@ msgstr ""
 msgid "Add %s to any admin URL to turn the plugin off for that one page load."
 msgstr ""
 
-#: includes/admin/class-settings-page.php:202
 #: includes/admin/views/page.php:29
+#: includes/admin/class-settings-page.php:202
 msgid "Advanced"
 msgstr ""
 
@@ -129,11 +129,11 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: assets/js/admin-menu.js:445
+#: assets/js/admin-menu.js:457
 msgid "Filter menu items"
 msgstr ""
 
-#: assets/js/admin-menu.js:451
+#: assets/js/admin-menu.js:463
 msgid "Filter menu…"
 msgstr ""
 
@@ -153,9 +153,9 @@ msgstr ""
 msgid "Group name"
 msgstr ""
 
-#: includes/admin/class-settings-page.php:200
-#: includes/admin/views/page.php:27
 #: includes/admin/views/tab-groups.php:34
+#: includes/admin/views/page.php:27
+#: includes/admin/class-settings-page.php:200
 msgid "Groups"
 msgstr ""
 
@@ -188,8 +188,8 @@ msgstr ""
 msgid "Items in %s"
 msgstr ""
 
-#: includes/admin/class-settings-page.php:199
 #: includes/admin/views/page.php:26
+#: includes/admin/class-settings-page.php:199
 msgid "Layout"
 msgstr ""
 
@@ -225,9 +225,9 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
+#: includes/admin/views/page.php:37
 #: includes/admin/class-settings-page.php:102
 #: includes/admin/class-settings-page.php:103
-#: includes/admin/views/page.php:37
 msgid "Menu Organizer"
 msgstr ""
 
@@ -304,8 +304,8 @@ msgstr ""
 msgid "Personal layouts"
 msgstr ""
 
-#: includes/admin/class-settings-page.php:206
 #: includes/admin/views/page.php:33
+#: includes/admin/class-settings-page.php:206
 msgid "Personalise my menu"
 msgstr ""
 
@@ -346,8 +346,8 @@ msgstr ""
 msgid "Role"
 msgstr ""
 
-#: includes/admin/class-settings-page.php:201
 #: includes/admin/views/page.php:28
+#: includes/admin/class-settings-page.php:201
 msgid "Roles"
 msgstr ""
 
@@ -375,8 +375,8 @@ msgstr ""
 msgid "Security & Backup"
 msgstr ""
 
-#: includes/admin/class-settings-page.php:124
 #: includes/admin/views/tab-groups.php:37
+#: includes/admin/class-settings-page.php:124
 msgid "Settings"
 msgstr ""
 
@@ -469,12 +469,12 @@ msgid "always visible"
 msgstr ""
 
 #: assets/js/admin-menu.js:189
-#: assets/js/admin-menu.js:269
+#: assets/js/admin-menu.js:280
 msgid "collapsed"
 msgstr ""
 
 #: assets/js/admin-menu.js:189
-#: assets/js/admin-menu.js:269
+#: assets/js/admin-menu.js:280
 msgid "expanded"
 msgstr ""
 
