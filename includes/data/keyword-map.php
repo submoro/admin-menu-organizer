@@ -256,10 +256,20 @@ return array(
 		'wcv'     => 'commerce',
 		'yith'    => 'commerce',
 		'edd'     => 'commerce',
+		'mvx'     => 'commerce',
+		'dokan'   => 'commerce',
 		'wpsc'    => 'commerce',
 		'simpay'  => 'commerce',
 		'et_'     => 'design',
 		'et-'     => 'design',
+
+		/*
+		 * XTemos, whose WoodMart theme registers xts_dashboard,
+		 * xts_theme_settings, xts_header_builder and more. Found on a live site
+		 * where every one of them fell through to the catch-all group.
+		 */
+		'xts_'    => 'design',
+		'xts-'    => 'design',
 		'vc_'     => 'design',
 		'vc-'     => 'design',
 		'eael'    => 'design',
@@ -291,6 +301,16 @@ return array(
 		'mlang'   => 'integrations',
 		'gmw-'    => 'integrations',
 		'wpsl'    => 'integrations',
+
+		/*
+		 * WPML registers its top-level item as a path, tm/menu/main.php, not as
+		 * a conventional slug. Nothing else in the cascade recognised it, so it
+		 * landed in the catch-all on a live WPML site.
+		 */
+		'tm/menu' => 'integrations',
+		'wpml'    => 'integrations',
+		'cky_'    => 'integrations',
+		'cky-'    => 'integrations',
 		'acf'     => 'content',
 		'tribe_'  => 'content',
 		'tribe-'  => 'content',

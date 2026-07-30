@@ -75,6 +75,15 @@ return array(
 	'wc-reports'                                    => 'commerce',
 	'wc-orders'                                     => 'commerce',
 	'woocommerce-marketing'                         => 'commerce',
+
+	/*
+	 * Multi-vendor marketplaces. Every slug below was read off a live
+	 * MultiVendorX and YITH install where the cascade had missed it.
+	 */
+	'multivendorx'                                  => 'commerce',
+	'mvx-setting'                                   => 'commerce',
+	'yith_plugin_panel'                             => 'commerce',
+	'yith_plugin_panel_wc'                          => 'commerce',
 	'edit.php?post_type=product'                    => 'commerce',
 	'edit.php?post_type=shop_order'                 => 'commerce',
 	'edit.php?post_type=shop_coupon'                => 'commerce',
@@ -126,6 +135,16 @@ return array(
 
 	// Page builders.
 	'elementor'                                     => 'design',
+	'elementor-home'                                => 'design',
+	'elementor-app'                                 => 'design',
+
+	/*
+	 * XTemos WoodMart. Registers a dashboard and a separate theme settings
+	 * screen, both of which fell through to the catch-all on a live install.
+	 */
+	'xts_dashboard'                                 => 'design',
+	'xts_theme_settings'                            => 'design',
+	'woodmart'                                      => 'design',
 	'elementor-tools'                               => 'design',
 	'elementor-system-info'                         => 'design',
 	'edit.php?post_type=elementor_library'          => 'design',
@@ -360,6 +379,27 @@ return array(
 	'wpforms-overview'                              => 'integrations',
 	'gf_edit_forms'                                 => 'integrations',
 	'ninja-forms'                                   => 'integrations',
+	'click-to-chat'                                 => 'integrations',
+	'ht_ctc_tabs'                                   => 'integrations',
+
+	/*
+	 * WPML publishes its top-level item as a path rather than a slug, and the
+	 * path differs between the core plugin and Translation Management. Both
+	 * forms are listed because a live WPML site produced the second one, which
+	 * nothing in the cascade recognised.
+	 */
+	'tm/menu/main.php'                              => 'integrations',
+	'wpml-package-management'                       => 'integrations',
+
+	/*
+	 * Cookie consent and privacy compliance. Filed under Tools rather than
+	 * Integrations: these are site-wide compliance utilities, closer in spirit
+	 * to Settings than to a third-party service connection.
+	 */
+	'cookie-law-info'                               => 'tools',
+	'cookieyes'                                     => 'tools',
+	'gdpr-cookie-compliance'                        => 'tools',
+	'complianz'                                     => 'tools',
 	'formidable'                                    => 'integrations',
 	'fluent_forms'                                  => 'integrations',
 	'forminator'                                    => 'integrations',

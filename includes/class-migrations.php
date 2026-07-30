@@ -34,7 +34,25 @@ final class Migrations {
 	 * @since 1.0.0
 	 * @var int
 	 */
-	const CURRENT = 1;
+	const CURRENT = 2;
+
+	/**
+	 * Group labels that shipped in schema 1 and were later shortened.
+	 *
+	 * The originals were taken verbatim from the specification and every one of
+	 * them rendered clipped in the 160px sidebar — "Design & Layout" showed as
+	 * "DESIGN & LA...". Schema 2 replaces them.
+	 *
+	 * @since 1.0.0
+	 * @var array<string, string>
+	 */
+	const SHORTENED_LABELS = array(
+		'Design & Layout'   => 'Design',
+		'SEO & Marketing'   => 'Marketing',
+		'Security & Backup' => 'Security',
+		'Users & Access'    => 'Users',
+		'Tools & System'    => 'Tools',
+	);
 
 	/**
 	 * Migrates a raw stored value to the current schema.
@@ -63,6 +81,11 @@ final class Migrations {
 			$schema = 1;
 		}
 
+		if ( 1 === $schema ) {
+			$raw    = self::migrate_1_to_2( $raw );
+			$schema = 2;
+		}
+
 		$raw['schema'] = $schema;
 
 		return $raw;
@@ -82,6 +105,39 @@ final class Migrations {
 		}
 
 		return ( isset( $raw['schema'] ) ? (int) $raw['schema'] : 0 ) !== self::CURRENT;
+	}
+
+	/**
+	 * Schema 1 to 2. Shortens group labels that outgrew the sidebar.
+	 *
+	 * A label is replaced only when it still holds the exact schema 1 default. If
+	 * an administrator renamed a group — even to something long — that is their
+	 * decision and it is left alone. Group IDs, membership and order are
+	 * untouched, so this cannot move anybody's menu items.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $raw Layout at schema 1.
+	 * @return array Layout at schema 2.
+	 */
+	private static function migrate_1_to_2( array $raw ): array {
+		if ( empty( $raw['groups'] ) || ! is_array( $raw['groups'] ) ) {
+			return $raw;
+		}
+
+		foreach ( $raw['groups'] as $index => $group ) {
+			if ( ! is_array( $group ) || ! isset( $group['label'] ) || ! is_string( $group['label'] ) ) {
+				continue;
+			}
+
+			$label = trim( $group['label'] );
+
+			if ( isset( self::SHORTENED_LABELS[ $label ] ) ) {
+				$raw['groups'][ $index ]['label'] = self::SHORTENED_LABELS[ $label ];
+			}
+		}
+
+		return $raw;
 	}
 
 	/**

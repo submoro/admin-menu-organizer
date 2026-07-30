@@ -367,26 +367,101 @@ final class Menu_Reader {
 	 * @return string
 	 */
 	public static function plain_title( string $title ): string {
-		$text = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $title );
+		$text = (string) preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $title );
 
 		/*
-		 * Drop update-count bubbles wholesale rather than merely untagging them.
-		 * Simply stripping tags would leave the digit behind, turning "Plugins"
-		 * into "Plugins 7" and feeding a meaningless number into the detector's
-		 * keyword matching and into accessible labels. The count is still
-		 * available separately through update_count().
+		 * Drop update-count bubbles and screen-reader annotations wholesale
+		 * rather than merely untagging them, because stripping tags alone leaves
+		 * their text behind.
+		 *
+		 * Core nests these, and a single non-greedy pass gets it wrong. The
+		 * Comments item is the worst case:
+		 *
+		 *   Comments <span class="awaiting-mod count-0">
+		 *     <span class="pending-count">0</span>
+		 *     <span class="screen-reader-text">0 Comments in moderation</span>
+		 *   </span>
+		 *
+		 * A single `.*?</span>` stops at the first closing tag, leaving the
+		 * screen-reader sentence in place, which is how a live site ended up
+		 * displaying "Comments 0 Comments in moderation" as a menu label.
+		 *
+		 * Peeling leaf spans by class does not work either, because the inner
+		 * spans carry arbitrary class names — pending-count, processing-count,
+		 * update-count, whatever the plugin chose — so the outer bubble never
+		 * becomes a leaf and nothing is removed at all.
+		 *
+		 * So match the opening tag, then walk forward counting nesting depth to
+		 * find its true closing tag, and cut the whole span out. That is correct
+		 * at any depth and indifferent to what the inner spans are called.
+		 *
+		 * The count itself remains available through update_count().
 		 */
-		$text = preg_replace(
-			'@<span[^>]*\bclass=(["\'])[^"\']*\bcount-\d+\b[^"\']*\1[^>]*>.*?</span>@si',
-			'',
-			(string) $text
-		);
+		$text = self::strip_spans_matching( $text, '/\bclass=(["\'])[^"\']*\b(?:count-\d+|screen-reader-text)\b[^"\']*\1/i' );
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- wp_strip_all_tags() would couple this pure class to WordPress; script and style bodies are already removed above, which is the only behavioural difference.
-		$text = strip_tags( (string) $text );
+		$text = strip_tags( $text );
 		$text = html_entity_decode( $text, ENT_QUOTES, 'UTF-8' );
-		$text = preg_replace( '/\s+/u', ' ', $text );
+		$text = (string) preg_replace( '/\s+/u', ' ', $text );
 
-		return trim( (string) $text );
+		return trim( $text );
+	}
+
+	/**
+	 * Removes every <span> whose opening tag matches a pattern, contents included.
+	 *
+	 * Walks the string tracking span nesting depth rather than relying on a
+	 * regular expression, because a non-greedy match stops at the first closing
+	 * tag and a leaf-first strip never fires when the inner spans carry class
+	 * names the pattern does not know about. Both failure modes were observed on
+	 * real menu titles.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $html    Markup to filter.
+	 * @param string $pattern Pattern tested against each span's opening tag.
+	 * @return string
+	 */
+	private static function strip_spans_matching( string $html, string $pattern ): string {
+		$offset = 0;
+
+		while ( true ) {
+			if ( ! preg_match( '/<span\b[^>]*>/i', $html, $open, PREG_OFFSET_CAPTURE, $offset ) ) {
+				return $html;
+			}
+
+			$tag   = $open[0][0];
+			$start = (int) $open[0][1];
+
+			if ( ! preg_match( $pattern, $tag ) ) {
+				// Not a span we care about. Step past its opening tag and continue.
+				$offset = $start + strlen( $tag );
+				continue;
+			}
+
+			// Walk forward from just after the opening tag, tracking depth.
+			$depth  = 1;
+			$cursor = $start + strlen( $tag );
+			$length = strlen( $html );
+
+			while ( $depth > 0 && $cursor < $length ) {
+				if ( ! preg_match( '@</?span\b[^>]*>@i', $html, $next, PREG_OFFSET_CAPTURE, $cursor ) ) {
+					// Unbalanced markup. Leave the rest alone rather than guess.
+					return $html;
+				}
+
+				$token = $next[0][0];
+				$at    = (int) $next[0][1];
+
+				$depth += ( '/' === $token[1] ) ? -1 : 1;
+				$cursor = $at + strlen( $token );
+			}
+
+			$html = substr( $html, 0, $start ) . substr( $html, $cursor );
+
+			// The cut may have brought an outer span's tags together, so rescan
+			// from the same position rather than advancing.
+			$offset = $start;
+		}
 	}
 }

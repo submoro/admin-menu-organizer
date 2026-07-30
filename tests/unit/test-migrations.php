@@ -45,7 +45,7 @@ final class Test_Migrations extends TestCase {
 	 */
 	public function test_current_schema_passes_through(): void {
 		$layout = array(
-			'schema' => 1,
+			'schema' => Migrations::CURRENT,
 			'groups' => array(
 				array(
 					'id'    => 'content',
@@ -82,7 +82,7 @@ final class Test_Migrations extends TestCase {
 			)
 		);
 
-		$this->assertSame( 1, $out['schema'] );
+		$this->assertSame( Migrations::CURRENT, $out['schema'] );
 		$this->assertCount( 2, $out['groups'] );
 		$this->assertSame( array( 'edit.php', 'upload.php' ), $out['groups'][0]['items'] );
 		$this->assertSame( array( 'woocommerce' ), $out['groups'][1]['items'] );
@@ -106,7 +106,7 @@ final class Test_Migrations extends TestCase {
 			)
 		);
 
-		$this->assertSame( 1, $out['schema'] );
+		$this->assertSame( Migrations::CURRENT, $out['schema'] );
 		$this->assertCount( 3, $out['groups'] );
 
 		$by_id = array();
@@ -198,13 +198,150 @@ final class Test_Migrations extends TestCase {
 	 *
 	 * @return void
 	 */
+	public function test_schema_1_to_2_shortens_the_labels_that_clipped(): void {
+		$out = Migrations::migrate(
+			array(
+				'schema' => 1,
+				'groups' => array(
+					array(
+						'id'    => 'design',
+						'label' => 'Design & Layout',
+						'items' => array( 'themes.php' ),
+					),
+					array(
+						'id'    => 'seo',
+						'label' => 'SEO & Marketing',
+						'items' => array(),
+					),
+					array(
+						'id'    => 'security',
+						'label' => 'Security & Backup',
+						'items' => array(),
+					),
+					array(
+						'id'    => 'users',
+						'label' => 'Users & Access',
+						'items' => array(),
+					),
+					array(
+						'id'    => 'tools',
+						'label' => 'Tools & System',
+						'items' => array( 'tools.php' ),
+					),
+				),
+			)
+		);
+
+		$this->assertSame( 2, $out['schema'] );
+		$this->assertSame(
+			array( 'Design', 'Marketing', 'Security', 'Users', 'Tools' ),
+			array_column( $out['groups'], 'label' )
+		);
+	}
+
+	/**
+	 * A group the administrator renamed is left exactly as they set it, even if
+	 * their name is long. Their choice outranks our default.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function test_schema_1_to_2_respects_a_renamed_group(): void {
+		$out = Migrations::migrate(
+			array(
+				'schema' => 1,
+				'groups' => array(
+					array(
+						'id'    => 'design',
+						'label' => 'Look and feel, mostly',
+						'items' => array(),
+					),
+					array(
+						'id'    => 'seo',
+						'label' => 'SEO & Marketing',
+						'items' => array(),
+					),
+				),
+			)
+		);
+
+		$this->assertSame( 'Look and feel, mostly', $out['groups'][0]['label'] );
+		$this->assertSame( 'Marketing', $out['groups'][1]['label'] );
+	}
+
+	/**
+	 * The label migration never touches membership or order, so it cannot move
+	 * anybody's menu items.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function test_schema_1_to_2_preserves_membership_and_order(): void {
+		$before = array(
+			'schema' => 1,
+			'groups' => array(
+				array(
+					'id'    => 'design',
+					'label' => 'Design & Layout',
+					'items' => array( 'themes.php', 'elementor' ),
+				),
+				array(
+					'id'    => 'content',
+					'label' => 'Content',
+					'items' => array( 'edit.php' ),
+				),
+			),
+		);
+
+		$out = Migrations::migrate( $before );
+
+		$this->assertSame( array( 'design', 'content' ), array_column( $out['groups'], 'id' ) );
+		$this->assertSame( array( 'themes.php', 'elementor' ), $out['groups'][0]['items'] );
+		$this->assertSame( array( 'edit.php' ), $out['groups'][1]['items'] );
+	}
+
+	/**
+	 * A schema 0 payload passes through both steps and lands at the current
+	 * schema with the short labels, not stalling at 1.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function test_migration_chain_runs_end_to_end(): void {
+		$out = Migrations::migrate(
+			array(
+				'design' => array( 'themes.php' ),
+				'seo'    => array( 'wpseo_dashboard' ),
+			)
+		);
+
+		$this->assertSame( Migrations::CURRENT, $out['schema'] );
+
+		foreach ( $out['groups'] as $group ) {
+			if ( isset( $group['label'] ) && is_string( $group['label'] ) ) {
+				$this->assertStringNotContainsString( '&', $group['label'] );
+			}
+		}
+	}
+
+	/**
+	 * Whether a stored value needs migrating.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
 	public function test_needs_migration(): void {
 		$this->assertTrue( Migrations::needs_migration( null ) );
 		$this->assertTrue( Migrations::needs_migration( array() ) );
 		$this->assertTrue( Migrations::needs_migration( array( 'content' => array( 'edit.php' ) ) ) );
 		$this->assertTrue( Migrations::needs_migration( array( 'schema' => 0 ) ) );
+		$this->assertTrue( Migrations::needs_migration( array( 'schema' => 1 ) ) );
 		$this->assertTrue( Migrations::needs_migration( array( 'schema' => 99 ) ) );
-		$this->assertFalse( Migrations::needs_migration( array( 'schema' => 1 ) ) );
+		$this->assertFalse( Migrations::needs_migration( array( 'schema' => Migrations::CURRENT ) ) );
 	}
 
 	/**
@@ -247,7 +384,7 @@ final class Test_Migrations extends TestCase {
 			)
 		);
 
-		$this->assertSame( 1, $out['schema'] );
+		$this->assertSame( Migrations::CURRENT, $out['schema'] );
 		$this->assertCount( 1, $out['groups'] );
 	}
 }

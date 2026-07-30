@@ -207,6 +207,86 @@ final class Test_Menu_Reader extends TestCase {
 	}
 
 	/**
+	 * Core's Comments title, which nests a screen-reader sentence inside the
+	 * count bubble, reduces to just "Comments".
+	 *
+	 * This is the exact markup wp-admin/menu.php emits, and it produced the
+	 * label "Comments 0 Comments in moderation" on a live site: a single
+	 * non-greedy pass stopped at the first closing tag and left the
+	 * screen-reader sentence behind.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function test_plain_title_unwinds_nested_count_and_screen_reader_spans(): void {
+		$this->assertSame(
+			'Comments',
+			Menu_Reader::plain_title(
+				'Comments <span class="awaiting-mod count-0">'
+					. '<span class="pending-count" aria-hidden="true">0</span>'
+					. '<span class="comments-in-moderation-text screen-reader-text">0 Comments in moderation</span>'
+					. '</span>'
+			)
+		);
+
+		$this->assertSame(
+			'Comments',
+			Menu_Reader::plain_title(
+				'Comments <span class="awaiting-mod count-4">'
+					. '<span class="pending-count" aria-hidden="true">4</span>'
+					. '<span class="comments-in-moderation-text screen-reader-text">4 Comments in moderation</span>'
+					. '</span>'
+			)
+		);
+
+		// The Updates submenu item nests the same way.
+		$this->assertSame(
+			'Updates',
+			Menu_Reader::plain_title(
+				'Updates <span class="update-plugins count-7">'
+					. '<span class="update-count">7</span>'
+					. '</span>'
+			)
+		);
+	}
+
+	/**
+	 * Unwinding the nest does not disturb the count itself, which is read
+	 * separately and still has to be right.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function test_nested_bubbles_still_yield_their_count(): void {
+		$title = 'Comments <span class="awaiting-mod count-4">'
+			. '<span class="pending-count" aria-hidden="true">4</span>'
+			. '<span class="comments-in-moderation-text screen-reader-text">4 Comments in moderation</span>'
+			. '</span>';
+
+		$this->assertSame( 4, Menu_Reader::update_count( $title ) );
+		$this->assertSame( 'Comments', Menu_Reader::plain_title( $title ) );
+	}
+
+	/**
+	 * A title whose own words include a targeted class name is left alone.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return void
+	 */
+	public function test_plain_title_does_not_over_strip(): void {
+		$this->assertSame( 'Discount codes', Menu_Reader::plain_title( 'Discount codes' ) );
+		$this->assertSame( 'Contact Form 7', Menu_Reader::plain_title( 'Contact Form 7' ) );
+		$this->assertSame( 'All-in-One WP Migration', Menu_Reader::plain_title( 'All-in-One WP Migration' ) );
+		$this->assertSame(
+			'Products',
+			Menu_Reader::plain_title( '<span class="wp-menu-name">Products</span>' )
+		);
+	}
+
+	/**
 	 * A script block in a title does not leak its source into the plain text.
 	 *
 	 * @since 1.0.0

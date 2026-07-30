@@ -9,6 +9,7 @@
 declare( strict_types=1 );
 
 use AMORG\Layout_Sanitizer;
+use AMORG\Migrations;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -61,7 +62,7 @@ final class Test_Layout_Sanitizer extends TestCase {
 
 			$this->assertArrayHasKey( 'schema', $out );
 			$this->assertArrayHasKey( 'groups', $out );
-			$this->assertSame( 1, $out['schema'] );
+			$this->assertSame( Migrations::CURRENT, $out['schema'] );
 			$this->assertIsArray( $out['groups'] );
 		}
 	}
@@ -85,7 +86,11 @@ final class Test_Layout_Sanitizer extends TestCase {
 		);
 
 		$this->assertSame( array( 'schema', 'groups' ), array_keys( $out ) );
-		$this->assertSame( 1, $out['schema'], 'A stored schema must not override the current one.' );
+		$this->assertSame(
+			Migrations::CURRENT,
+			$out['schema'],
+			'A stored schema must not override the current one.'
+		);
 	}
 
 	/**
