@@ -112,6 +112,12 @@ function read_distignore( string $path ): array {
  * which is how .distignore is understood: a bare "tests" excludes the directory
  * wherever it appears.
  *
+ * A pattern containing a slash is matched against the whole relative path
+ * instead, so `languages/*.po` can say "the catalogues, not every .po anywhere".
+ * Segment matching alone could never satisfy that, because no single segment
+ * contains the slash — which is how a `languages/*.po` line sat in .distignore
+ * doing nothing.
+ *
  * @param string   $relative Repo-relative path with forward slashes.
  * @param string[] $patterns Patterns from .distignore.
  * @return bool
@@ -122,6 +128,14 @@ function is_excluded( string $relative, array $patterns ): bool {
 	foreach ( $patterns as $pattern ) {
 		if ( $relative === $pattern || 0 === strpos( $relative, $pattern . '/' ) ) {
 			return true;
+		}
+
+		if ( false !== strpos( $pattern, '/' ) ) {
+			if ( fnmatch( $pattern, $relative ) ) {
+				return true;
+			}
+
+			continue;
 		}
 
 		foreach ( $segments as $segment ) {

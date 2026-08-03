@@ -117,7 +117,6 @@ final class Menu_Renderer {
 	public function register(): void {
 		add_filter( 'add_menu_classes', array( $this, 'decorate' ), self::PRIORITY );
 		add_filter( 'admin_body_class', array( $this, 'body_classes' ) );
-		add_action( 'admin_head', array( $this, 'print_inline_styles' ), 20 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 	}
 
@@ -135,6 +134,19 @@ final class Menu_Renderer {
 			array( 'dashicons' ),
 			Plugin::asset_version( 'assets/css/admin-menu.css' )
 		);
+
+		/*
+		 * Per-group labels, icons and the indent ride the enqueued handle rather
+		 * than being echoed into admin_head. wp_add_inline_style() prints them
+		 * immediately after the stylesheet, still inside <head> and still before
+		 * the sidebar paints, so the flash-free guarantee is unchanged — and it is
+		 * the API the directory requires for generated CSS.
+		 */
+		$inline = $this->inline_styles();
+
+		if ( '' !== $inline ) {
+			wp_add_inline_style( 'amorg-admin-menu', $inline );
+		}
 
 		wp_enqueue_script(
 			'amorg-admin-menu',
@@ -160,31 +172,6 @@ final class Menu_Renderer {
 			'window.amorgMenu = ' . wp_json_encode( $data ) . ';',
 			'before'
 		);
-	}
-
-	/**
-	 * Prints the stylesheet that restores every group when scripting is off.
-	 *
-	 * Collapsed state is applied server-side, which is what makes the accordion
-	 * flash-free. The cost is that a browser with JavaScript disabled would be
-	 * left with closed groups and no control to open them, which would make menu
-	 * items unreachable and break SPEC section 15 outright.
-	 *
-	 * A noscript block resolves it exactly: the rule applies only when scripting
-	 * is unavailable, so the flash-free path is untouched for everyone else. With
-	 * scripting off the sidebar degrades to a grouped, fully expanded, fully
-	 * usable menu whose headers are still labelled, because the label is drawn by
-	 * a pseudo-element rather than by script.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	public function print_noscript_styles(): void {
-		echo '<noscript><style id="amorg-noscript">'
-			. '#adminmenu li.amorg-collapsed-member{display:block}'
-			. '#adminmenu .amorg-group-toggle{display:none}'
-			. '</style></noscript>' . "\n";
 	}
 
 	/**
@@ -330,7 +317,7 @@ final class Menu_Renderer {
 	 * because the capability check fails, and leaving it empty means a group label
 	 * can never reach the one field core emits unescaped. The label travels
 	 * through CSS custom properties instead, where it is escaped for a CSS string
-	 * context. See print_inline_styles().
+	 * context. See inline_styles().
 	 *
 	 * @since 1.0.0
 	 *
@@ -404,22 +391,27 @@ final class Menu_Renderer {
 	}
 
 	/**
-	 * Prints the inline CSS that carries each group's label, icon and badge.
+	 * Builds the per-request CSS that carries each group's label, icon and badge.
 	 *
 	 * Labels are user input and must not reach the one field core emits raw, so
 	 * they travel as CSS custom properties on a per-group selector. That has a
 	 * second benefit: the label is visible with no JavaScript at all, because a
 	 * pseudo-element renders it, which is what keeps a JS-less sidebar usable.
 	 *
+	 * Returned rather than echoed. The caller hands it to wp_add_inline_style(),
+	 * which attaches it to the enqueued stylesheet: same position in <head>, same
+	 * per-request freshness, but through the API the directory requires instead of
+	 * a <style> tag written straight into admin_head.
+	 *
 	 * @since 1.0.0
 	 *
-	 * @return void
+	 * @return string CSS, or an empty string when there is nothing to add.
 	 */
-	public function print_inline_styles(): void {
+	public function inline_styles(): string {
 		$groups = $this->groups();
 
 		if ( empty( $groups ) ) {
-			return;
+			return '';
 		}
 
 		$rules = array();
@@ -484,26 +476,17 @@ final class Menu_Renderer {
 			$rules[] = $selector . '{' . implode( ';', $declarations ) . '}';
 		}
 
-		$this->print_noscript_styles();
-
 		if ( empty( $rules ) ) {
-			return;
+			return '';
 		}
 
 		/*
-		 * The style element is printed rather than enqueued because it must land
-		 * in the document head before the sidebar paints; an enqueued stylesheet
-		 * would be fine too, but this content is per-request and unique per user,
-		 * so it must never be cached as a static file.
-		 *
 		 * Every interpolated value has been through css_string(), which escapes to
 		 * a CSS string context. wp_strip_all_tags is applied as a second, redundant
-		 * guard on the whole block.
+		 * guard on the whole block, so that no combination of stored data can close
+		 * the style element wp_add_inline_style() will wrap this in.
 		 */
-		printf(
-			"<style id='amorg-inline'>%s</style>\n",
-			wp_strip_all_tags( implode( "\n", $rules ) ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS block, not HTML; values individually escaped by css_string(), see docblock.
-		);
+		return wp_strip_all_tags( implode( "\n", $rules ) );
 	}
 
 	/**

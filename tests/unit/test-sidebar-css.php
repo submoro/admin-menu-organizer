@@ -13,10 +13,10 @@ use PHPUnit\Framework\TestCase;
 /**
  * Guards the group label rules, in both of the places they are written.
  *
- * Menu_Renderer::print_inline_styles() deliberately repeats a handful of
+ * Menu_Renderer::inline_styles() deliberately repeats a handful of
  * declarations that also live in assets/css/admin-menu.css, so that the
  * hierarchy survives a stale copy of the stylesheet. That duplication is a trap
- * as well as a safety net: the inline block is printed on admin_head, which is
+ * as well as a safety net: wp_add_inline_style() prints the block immediately
  * after the enqueued stylesheet, so on a specificity tie the inline copy is the
  * one that wins. A correction made in the stylesheet alone is therefore silently
  * overridden by the stale value inline — which is exactly how
@@ -50,7 +50,7 @@ final class Test_Sidebar_CSS extends TestCase {
 	}
 
 	/**
-	 * The CSS that print_inline_styles() builds, recovered from the source.
+	 * The CSS that inline_styles() builds, recovered from the source.
 	 *
 	 * Only the static rules are recoverable this way, which is all that needs
 	 * pinning: the per-group rules are built from stored labels and carry no
@@ -261,7 +261,7 @@ final class Test_Sidebar_CSS extends TestCase {
 		$this->assertContains(
 			$declaration,
 			self::declarations_of( $this->inline_rules(), '.amorg-toggle-label' ),
-			'print_inline_styles() wins the cascade tie, so it must also declare ' . $declaration . '.'
+			'The inline block wins the cascade tie, so it must also declare ' . $declaration . '.'
 		);
 	}
 
