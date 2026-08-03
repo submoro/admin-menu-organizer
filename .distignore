@@ -38,6 +38,17 @@ README.md
 # directory, not bundled in the plugin itself.
 .wordpress-org
 
+# Compiled translation catalogues.
+#
+# WordPress.org generates these per locale from translate.wordpress.org and
+# delivers them through the normal translation update system, so shipping our own
+# is redundant and the directory asks that we do not. The POT stays: it is the
+# extraction template, it is what a self-hosted install or a translator starts
+# from, and bin/build-zip.php requires it.
+languages/*.po
+languages/*.mo
+languages/*.l10n.php
+
 # Build output
 build
 dist
