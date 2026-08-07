@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name:       Admin Menu Categories
- * Plugin URI:        https://www.archinest.com/wp-plugins
+ * Plugin URI:        https://www.archinest.net/wp-plugins
  * Description:       Groups WordPress admin menu items into named, collapsible categories. Auto-sorts known plugins and lets you rearrange everything by drag and drop.
  * Version:           1.1.1
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Author:            Moamen Elabd
- * Author URI:        https://www.archinest.com
+ * Author URI:        https://www.archinest.net
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       admin-menu-categories
