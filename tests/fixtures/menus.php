@@ -7,7 +7,7 @@
  * titles, base64 SVG icons, post-type slugs carrying query strings, and items
  * registered by plugins that do not follow the documented array shape.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 

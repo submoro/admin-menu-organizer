@@ -1,4 +1,4 @@
-# Admin Menu Organizer
+# Admin Menu Categories
 
 Groups WordPress admin menu items into named, collapsible categories inside the
 native sidebar. Sorts what it recognises automatically, and lets you rearrange
@@ -15,13 +15,13 @@ Not yet on the WordPress.org directory, so install it from a zip for now.
 
 ### From a release zip
 
-1. Download the latest `admin-menu-organizer.<version>.zip` from
+1. Download the latest `admin-menu-categories.<version>.zip` from
    [Releases](../../releases).
 2. In your dashboard go to **Plugins → Add New → Upload Plugin**.
 3. Choose the zip, click **Install Now**, then **Activate**.
 4. Your sidebar is grouped immediately, using the automatic rules. Nothing to
    configure.
-5. To rearrange anything, go to **Settings → Menu Organizer**.
+5. To rearrange anything, go to **Settings → Menu Categories**.
 
 ### Building the zip yourself
 
@@ -29,18 +29,18 @@ Requires PHP 7.4+ and [Composer](https://getcomposer.org/).
 
 ```bash
 git clone https://github.com/submoro/admin-menu-organizer.git
-cd admin-menu-organizer
+cd admin-menu-categories
 composer install
 composer run build
 ```
 
 That runs the full gate — linting, tests, security audit, readme validation —
-then writes `build/admin-menu-organizer.<version>.zip`. Upload that as above.
+then writes `build/admin-menu-categories.<version>.zip`. Upload that as above.
 
 ### Installing directly into a site
 
 If you have filesystem access, clone straight into your plugins directory. The
-repository folder name must be `admin-menu-organizer`, because WordPress derives
+repository folder name must be `admin-menu-categories`, because WordPress derives
 the text domain from it:
 
 ```bash
@@ -55,7 +55,7 @@ development tooling.
 ### With WP-CLI
 
 ```bash
-wp plugin install /path/to/admin-menu-organizer.1.0.0.zip --activate
+wp plugin install /path/to/admin-menu-categories.1.0.0.zip --activate
 ```
 
 ### Requirements

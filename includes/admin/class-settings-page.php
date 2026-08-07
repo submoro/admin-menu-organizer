@@ -2,7 +2,7 @@
 /**
  * The settings screen.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 
@@ -19,7 +19,7 @@ use AMORG\Plugin;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Registers and renders Settings > Menu Organizer.
+ * Registers and renders Settings > Menu Categories.
  *
  * Four tabs, per SPEC section 7.1: the drag-and-drop layout editor, group
  * management, role presets, and an advanced tab holding reset, export, import and
@@ -99,8 +99,8 @@ final class Settings_Page {
 		$capability = Capabilities::current_user_can_manage() ? Capabilities::MANAGE : Capabilities::PERSONALISE;
 
 		add_options_page(
-			__( 'Menu Organizer', 'admin-menu-organizer' ),
-			__( 'Menu Organizer', 'admin-menu-organizer' ),
+			__( 'Menu Categories', 'admin-menu-categories' ),
+			__( 'Menu Categories', 'admin-menu-categories' ),
 			$capability,
 			self::SLUG,
 			array( __CLASS__, 'render' )
@@ -121,7 +121,7 @@ final class Settings_Page {
 		$settings = sprintf(
 			'<a href="%s">%s</a>',
 			esc_url( admin_url( 'options-general.php?page=' . self::SLUG ) ),
-			esc_html__( 'Settings', 'admin-menu-organizer' )
+			esc_html__( 'Settings', 'admin-menu-categories' )
 		);
 
 		array_unshift( $links, $settings );
@@ -164,7 +164,7 @@ final class Settings_Page {
 
 		wp_set_script_translations(
 			'amorg-settings',
-			'admin-menu-organizer',
+			'admin-menu-categories',
 			AMORG_PLUGIN_DIR . 'languages'
 		);
 	}
@@ -196,14 +196,14 @@ final class Settings_Page {
 		$tabs = array();
 
 		if ( Capabilities::current_user_can_manage() ) {
-			$tabs['layout']   = __( 'Layout', 'admin-menu-organizer' );
-			$tabs['groups']   = __( 'Groups', 'admin-menu-organizer' );
-			$tabs['roles']    = __( 'Roles', 'admin-menu-organizer' );
-			$tabs['advanced'] = __( 'Advanced', 'admin-menu-organizer' );
+			$tabs['layout']   = __( 'Layout', 'admin-menu-categories' );
+			$tabs['groups']   = __( 'Groups', 'admin-menu-categories' );
+			$tabs['roles']    = __( 'Roles', 'admin-menu-categories' );
+			$tabs['advanced'] = __( 'Advanced', 'admin-menu-categories' );
 		}
 
 		if ( Capabilities::current_user_can_personalise() ) {
-			$tabs['personal'] = __( 'Personalise my menu', 'admin-menu-organizer' );
+			$tabs['personal'] = __( 'Personalise my menu', 'admin-menu-categories' );
 		}
 
 		return $tabs;
@@ -218,7 +218,7 @@ final class Settings_Page {
 	 */
 	public static function render(): void {
 		if ( ! Capabilities::current_user_can_manage() && ! Capabilities::current_user_can_personalise() ) {
-			wp_die( esc_html__( 'You are not allowed to access this page.', 'admin-menu-organizer' ), 403 );
+			wp_die( esc_html__( 'You are not allowed to access this page.', 'admin-menu-categories' ), 403 );
 		}
 
 		$tab    = self::current_tab();
@@ -306,7 +306,7 @@ final class Settings_Page {
 		check_admin_referer( self::NONCE_SITE );
 
 		if ( ! Capabilities::current_user_can_manage() ) {
-			wp_die( esc_html__( 'You are not allowed to change these settings.', 'admin-menu-organizer' ), 403 );
+			wp_die( esc_html__( 'You are not allowed to change these settings.', 'admin-menu-categories' ), 403 );
 		}
 	}
 
@@ -321,7 +321,7 @@ final class Settings_Page {
 		check_admin_referer( self::NONCE_PERSONAL );
 
 		if ( ! Capabilities::current_user_can_personalise() ) {
-			wp_die( esc_html__( 'You are not allowed to personalise your menu.', 'admin-menu-organizer' ), 403 );
+			wp_die( esc_html__( 'You are not allowed to personalise your menu.', 'admin-menu-categories' ), 403 );
 		}
 	}
 
@@ -589,19 +589,19 @@ final class Settings_Page {
 	public static function notice_for( string $status ): ?array {
 		$notices = array(
 			'saved'         => array(
-				'message' => __( 'Your changes have been saved.', 'admin-menu-organizer' ),
+				'message' => __( 'Your changes have been saved.', 'admin-menu-categories' ),
 				'type'    => 'success',
 			),
 			'reset'         => array(
-				'message' => __( 'The layout has been reset to the automatically detected default.', 'admin-menu-organizer' ),
+				'message' => __( 'The layout has been reset to the automatically detected default.', 'admin-menu-categories' ),
 				'type'    => 'success',
 			),
 			'imported'      => array(
-				'message' => __( 'The layout was imported.', 'admin-menu-organizer' ),
+				'message' => __( 'The layout was imported.', 'admin-menu-categories' ),
 				'type'    => 'success',
 			),
 			'import-failed' => array(
-				'message' => __( 'That layout could not be imported. Check that it is the JSON produced by the export button.', 'admin-menu-organizer' ),
+				'message' => __( 'That layout could not be imported. Check that it is the JSON produced by the export button.', 'admin-menu-categories' ),
 				'type'    => 'error',
 			),
 		);

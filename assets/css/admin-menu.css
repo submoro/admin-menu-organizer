@@ -1,5 +1,5 @@
 /**
- * Menu Organizer - the collapsible sidebar.
+ * Menu Categories - the collapsible sidebar.
  *
  * Written entirely with CSS logical properties, so the sidebar mirrors correctly
  * in RTL without a generated rtl.css. SPEC section 6.4 makes RTL a hard
@@ -16,7 +16,7 @@
  * is taken from one custom property whose value is set per scheme from the values
  * core actually uses, keyed off the admin-color-* body class core already emits.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  */
 
 /* -------------------------------------------------------------------------
@@ -690,6 +690,32 @@ body.admin-color-light #adminmenu .amorg-filter-input {
  * ---------------------------------------------------------------------- */
 
 body.amorg-active #adminmenu li.wp-menu-separator {
+	display: none;
+}
+
+/* -------------------------------------------------------------------------
+ * Scripting unavailable.
+ *
+ * Collapsed state is applied server-side, which is what makes the accordion
+ * flash-free. The cost is that a browser with scripting off would be left with
+ * closed groups and no control to open them, making menu items unreachable and
+ * breaking SPEC section 15 outright. Every group is therefore forced open, and
+ * the header — which only the script turns into a button — is left as its
+ * pseudo-element label.
+ *
+ * Keyed off core's own no-js class rather than a <noscript><style> block. Core
+ * prints `no-js` on the admin <body> and swaps it for `js` in a script placed
+ * immediately after the opening tag, so the class is present exactly when
+ * scripting is unavailable. It is also documented as unfilterable — admin_body_class
+ * "cannot remove" it — which makes it more dependable than markup of our own, and
+ * it keeps this rule in the enqueued stylesheet where the directory wants it.
+ * ---------------------------------------------------------------------- */
+
+body.no-js #adminmenu li.amorg-collapsed-member {
+	display: block;
+}
+
+body.no-js #adminmenu .amorg-group-toggle {
 	display: none;
 }
 

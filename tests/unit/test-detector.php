@@ -2,7 +2,7 @@
 /**
  * Unit tests for the detection cascade.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 

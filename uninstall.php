@@ -6,7 +6,7 @@
  * that uninstalling leaves no residue. Runs only when WordPress itself deletes
  * the plugin.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 

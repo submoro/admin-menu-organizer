@@ -179,9 +179,11 @@ check( 'no menu item lost: every original slug appears in the HTML', (function (
 } )() );
 check( 'inline CSS carries a label for each group', (function () use ( $renderer ) {
 	ob_start();
-	$renderer->print_inline_styles();
+	echo $renderer->inline_styles();
 	$css = ob_get_clean();
-	return false !== strpos( $css, '--amorg-label' ) && false !== strpos( $css, 'noscript' );
+	// The no-JavaScript rules moved to the stylesheet's body.no-js block, so the
+	// per-request CSS now carries only the per-group custom properties.
+	return false !== strpos( $css, '--amorg-label' );
 } )() );
 
 echo "\n", 0 === $fail ? "END-TO-END RENDER OK\n" : "$fail ASSERTION(S) FAILED\n";

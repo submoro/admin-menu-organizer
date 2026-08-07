@@ -2,7 +2,7 @@
 /**
  * Recursive whitelist sanitiser for layout arrays.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 

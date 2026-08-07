@@ -2,7 +2,7 @@
 /**
  * Roles tab: per-role presets and the personalisation switch.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 
@@ -19,7 +19,7 @@ $amorg_presets   = is_array( $amorg_presets ) ? $amorg_presets : array();
 ?>
 
 <p class="amorg-intro">
-	<?php echo esc_html__( 'Give a role its own arrangement, or let it inherit the site-wide layout. A role with its own copy can then be edited independently on the Layout tab while that role is selected.', 'admin-menu-organizer' ); ?>
+	<?php echo esc_html__( 'Give a role its own arrangement, or let it inherit the site-wide layout. A role with its own copy can then be edited independently on the Layout tab while that role is selected.', 'admin-menu-categories' ); ?>
 </p>
 
 <form method="post" action="<?php echo esc_url( admin_url( 'options-general.php?page=' . Settings_Page::SLUG . '&tab=roles' ) ); ?>">
@@ -28,12 +28,12 @@ $amorg_presets   = is_array( $amorg_presets ) ? $amorg_presets : array();
 
 	<table class="widefat striped">
 		<caption class="screen-reader-text">
-			<?php echo esc_html__( 'Menu layout for each role', 'admin-menu-organizer' ); ?>
+			<?php echo esc_html__( 'Menu layout for each role', 'admin-menu-categories' ); ?>
 		</caption>
 		<thead>
 			<tr>
-				<th scope="col"><?php echo esc_html__( 'Role', 'admin-menu-organizer' ); ?></th>
-				<th scope="col"><?php echo esc_html__( 'Menu layout', 'admin-menu-organizer' ); ?></th>
+				<th scope="col"><?php echo esc_html__( 'Role', 'admin-menu-categories' ); ?></th>
+				<th scope="col"><?php echo esc_html__( 'Menu layout', 'admin-menu-categories' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -51,7 +51,7 @@ $amorg_presets   = is_array( $amorg_presets ) ? $amorg_presets : array();
 								echo esc_html(
 									sprintf(
 										/* translators: %s: Role name. */
-										__( 'Menu layout for %s', 'admin-menu-organizer' ),
+										__( 'Menu layout for %s', 'admin-menu-categories' ),
 										translate_user_role( $amorg_role['name'] )
 									)
 								);
@@ -65,7 +65,7 @@ $amorg_presets   = is_array( $amorg_presets ) ? $amorg_presets : array();
 									value="site"
 									<?php checked( ! $amorg_has_preset ); ?>
 								>
-								<?php echo esc_html__( 'Use the site-wide layout', 'admin-menu-organizer' ); ?>
+								<?php echo esc_html__( 'Use the site-wide layout', 'admin-menu-categories' ); ?>
 							</label>
 							<br>
 							<label>
@@ -75,7 +75,7 @@ $amorg_presets   = is_array( $amorg_presets ) ? $amorg_presets : array();
 									value="copy"
 									<?php checked( $amorg_has_preset ); ?>
 								>
-								<?php echo esc_html__( 'Give this role its own copy', 'admin-menu-organizer' ); ?>
+								<?php echo esc_html__( 'Give this role its own copy', 'admin-menu-categories' ); ?>
 							</label>
 						</fieldset>
 					</td>
@@ -84,12 +84,12 @@ $amorg_presets   = is_array( $amorg_presets ) ? $amorg_presets : array();
 		</tbody>
 	</table>
 
-	<?php submit_button( __( 'Save roles', 'admin-menu-organizer' ) ); ?>
+	<?php submit_button( __( 'Save roles', 'admin-menu-categories' ) ); ?>
 </form>
 
 <hr>
 
-<h2><?php echo esc_html__( 'Personal layouts', 'admin-menu-organizer' ); ?></h2>
+<h2><?php echo esc_html__( 'Personal layouts', 'admin-menu-categories' ); ?></h2>
 
 <form method="post" action="<?php echo esc_url( admin_url( 'options-general.php?page=' . Settings_Page::SLUG . '&tab=roles' ) ); ?>">
 	<?php wp_nonce_field( Settings_Page::NONCE_SITE ); ?>
@@ -103,13 +103,13 @@ $amorg_presets   = is_array( $amorg_presets ) ? $amorg_presets : array();
 				value="1"
 				<?php checked( Capabilities::personalisation_enabled() ); ?>
 			>
-			<?php echo esc_html__( 'Let each user arrange their own sidebar', 'admin-menu-organizer' ); ?>
+			<?php echo esc_html__( 'Let each user arrange their own sidebar', 'admin-menu-categories' ); ?>
 		</label>
 	</p>
 
 	<p class="description">
-		<?php echo esc_html__( 'When this is off, everyone sees the layout you have set here and the "Personalise my menu" tab disappears. Any personal arrangements already saved are kept, and take effect again if you switch this back on.', 'admin-menu-organizer' ); ?>
+		<?php echo esc_html__( 'When this is off, everyone sees the layout you have set here and the "Personalise my menu" tab disappears. Any personal arrangements already saved are kept, and take effect again if you switch this back on.', 'admin-menu-categories' ); ?>
 	</p>
 
-	<?php submit_button( __( 'Save', 'admin-menu-organizer' ) ); ?>
+	<?php submit_button( __( 'Save', 'admin-menu-categories' ) ); ?>
 </form>

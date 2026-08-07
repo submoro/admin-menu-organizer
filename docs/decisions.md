@@ -4,8 +4,10 @@
 
 | Date | Decision | Value |
 |---|---|---|
-| 2026-07-28 | Public slug | `admin-menu-organizer` — renamed from the original `menu-organizer-collapsible-admin-menu` at the owner's request, to shorten it and signal WordPress. Availability confirmed against the plugins API, not by scraping the HTML page. See D-014. |
-| 2026-07-28 | Display name | `Admin Menu Organizer` |
+| 2026-07-30 | Public slug | `admin-menu-categories` — the directory rejected `admin-menu-organizer` because that **name** was already taken, even though the slug was free. See D-019. |
+| 2026-07-30 | Display name | `Admin Menu Categories`, shortened to `Menu Categories` for the in-admin label, which already sits under Settings |
+| 2026-07-28 | Public slug | superseded: `admin-menu-organizer` — renamed from the original `menu-organizer-collapsible-admin-menu` at the owner's request, to shorten it and signal WordPress. Availability confirmed against the plugins API, not by scraping the HTML page. See D-014. |
+| 2026-07-28 | Display name | superseded: `Admin Menu Organizer` |
 | 2026-07-28 | PHP prefix | `AMORG_` constants, `amorg_` functions and keys, `amorg-` CSS and JS, `AMORG\` namespace |
 | 2026-07-26 | Licence | GPLv2 or later (unchanged from spec) |
 | 2026-07-26 | Core source for recon | Official wordpress.org release zips, read-only, in the scratchpad. Not committed. |
@@ -385,6 +387,45 @@ loudly instead of silently. `wp-tests-config.php` is now written directly rather
 than `sed`-ed out of `wp-tests-config-sample.php`, whose internal paths change
 between releases.
 
+### D-019 — A free slug does not mean a free name. Final: `admin-menu-categories`
+
+The directory rejected the submission outright:
+
+> There is already a plugin with the name `Admin Menu Organizer` in the directory.
+
+**D-014's availability check was necessary and not sufficient, and that is the
+lesson worth keeping.** It queried
+`api.wordpress.org/plugins/info/1.2/?slug=admin-menu-organizer`, which answers
+only "is this *slug* claimed". The directory additionally refuses a **display
+name** that collides with an existing plugin, and there is no API for that — a
+plugin whose slug is something else entirely can still hold the name. So the slug
+was genuinely free, D-014 was not wrong about what it measured, and the submission
+failed anyway. Any future rename has to check the name by searching the directory,
+not just the slug by API.
+
+`admin-menu-categories` had already been confirmed free in D-014's table, which is
+why it was the pick.
+
+The rename is wider than the two lines the rejection names, because the same
+string is also the **text domain**. Language packs are served by slug and loaded
+by domain, so a mismatch means translations silently never load — the bundled
+Arabic would just stop appearing. Slug, text domain, main file name, POT and PO
+filenames and the zip's top-level directory therefore all moved together.
+
+What deliberately did **not** move: `AMORG_*`, `amorg_*` and the `amorg_layout`
+option. Those are the internal prefix from the owner-confirmed table above, not
+the slug. Renaming them would orphan every saved layout on every existing install.
+
+Two places had derived the slug from `basename()` of the checkout directory, and
+both broke on a rename that did not also rename the GitHub repository — which is
+correct, since the repository name and the directory slug are now different things:
+
+- `bin/build-zip.php` now reads the `Text Domain` header from whichever
+  root-level file declares a `Plugin Name`, and requires that same file to be
+  named `<domain>.php`.
+- `test_text_domain_matches_the_plugin_slug` now asserts against the main plugin
+  file rather than the containing directory.
+
 ## Environment notes
 
 - The build machine had **no** WordPress install, PHP, Composer, WP-CLI or
@@ -450,7 +491,7 @@ Rather than by reimplementing it. These are the load-bearing claims.
 
 ### Verified in CI
 
-Run [30500654963](https://github.com/submoro/admin-menu-organizer/actions),
+Run [30500654963](https://github.com/submoro/admin-menu-organizer/actions/runs/30500654963),
 **11 of 11 jobs green.** This closes most of what was previously unverified.
 
 | Job | Result |

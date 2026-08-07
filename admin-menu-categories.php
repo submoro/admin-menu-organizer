@@ -1,21 +1,21 @@
 <?php
 /**
- * Plugin Name:       Admin Menu Organizer
- * Plugin URI:        https://www.archinest.com/wp-plugins
+ * Plugin Name:       Admin Menu Categories
+ * Plugin URI:        https://www.archinest.net/wp-plugins
  * Description:       Groups WordPress admin menu items into named, collapsible categories. Auto-sorts known plugins and lets you rearrange everything by drag and drop.
  * Version:           1.1.1
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Author:            Moamen Elabd
- * Author URI:        https://www.archinest.com
+ * Author URI:        https://www.archinest.net
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       admin-menu-organizer
+ * Text Domain:       admin-menu-categories
  * Domain Path:       /languages
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  *
- * Admin Menu Organizer is free software: you can redistribute
+ * Admin Menu Categories is free software: you can redistribute
  * it and/or modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 2 of the License,
  * or (at your option) any later version.
@@ -82,14 +82,14 @@ function amorg_render_requirement_notice() {
 	if ( 'php' === $unmet ) {
 		$message = sprintf(
 			/* translators: 1: Required PHP version, 2: PHP version running on the server. */
-			__( 'Menu Organizer requires PHP %1$s or newer. This site is running PHP %2$s, so the plugin has not been loaded.', 'admin-menu-organizer' ),
+			__( 'Admin Menu Categories requires PHP %1$s or newer. This site is running PHP %2$s, so the plugin has not been loaded.', 'admin-menu-categories' ),
 			AMORG_MIN_PHP,
 			PHP_VERSION
 		);
 	} else {
 		$message = sprintf(
 			/* translators: 1: Required WordPress version, 2: WordPress version running on the site. */
-			__( 'Menu Organizer requires WordPress %1$s or newer. This site is running WordPress %2$s, so the plugin has not been loaded.', 'admin-menu-organizer' ),
+			__( 'Admin Menu Categories requires WordPress %1$s or newer. This site is running WordPress %2$s, so the plugin has not been loaded.', 'admin-menu-categories' ),
 			AMORG_MIN_WP,
 			get_bloginfo( 'version' )
 		);

@@ -2,7 +2,7 @@
 /**
  * Category definitions and their translated labels.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 
@@ -158,17 +158,17 @@ final class Categories {
 	 */
 	private static function labels(): array {
 		return array(
-			'dashboard'    => __( 'Dashboard', 'admin-menu-organizer' ),
-			'content'      => __( 'Content', 'admin-menu-organizer' ),
-			'commerce'     => __( 'Commerce', 'admin-menu-organizer' ),
-			'design'       => __( 'Design & Layout', 'admin-menu-organizer' ),
-			'seo'          => __( 'SEO & Marketing', 'admin-menu-organizer' ),
-			'security'     => __( 'Security & Backup', 'admin-menu-organizer' ),
-			'performance'  => __( 'Performance', 'admin-menu-organizer' ),
-			'users'        => __( 'Users & Access', 'admin-menu-organizer' ),
-			'integrations' => __( 'Integrations', 'admin-menu-organizer' ),
-			'tools'        => __( 'Tools & System', 'admin-menu-organizer' ),
-			'ungrouped'    => __( 'Other', 'admin-menu-organizer' ),
+			'dashboard'    => __( 'Dashboard', 'admin-menu-categories' ),
+			'content'      => __( 'Content', 'admin-menu-categories' ),
+			'commerce'     => __( 'Commerce', 'admin-menu-categories' ),
+			'design'       => __( 'Design & Layout', 'admin-menu-categories' ),
+			'seo'          => __( 'SEO & Marketing', 'admin-menu-categories' ),
+			'security'     => __( 'Security & Backup', 'admin-menu-categories' ),
+			'performance'  => __( 'Performance', 'admin-menu-categories' ),
+			'users'        => __( 'Users & Access', 'admin-menu-categories' ),
+			'integrations' => __( 'Integrations', 'admin-menu-categories' ),
+			'tools'        => __( 'Tools & System', 'admin-menu-categories' ),
+			'ungrouped'    => __( 'Other', 'admin-menu-categories' ),
 		);
 	}
 

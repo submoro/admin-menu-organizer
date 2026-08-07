@@ -18,8 +18,62 @@ if ( ! extension_loaded( 'zip' ) ) {
 }
 
 $root = str_replace( '\\', '/', dirname( __DIR__ ) );
-$slug = basename( $root );
 $dest = rtrim( $argv[1] ?? ( $root . '/build' ), '/\\' );
+
+/*
+ * The slug comes from the Text Domain header, not from the directory name.
+ *
+ * WordPress.org requires the text domain to equal the plugin slug, so that header
+ * is the authoritative statement of what the slug is. Reading basename( $root )
+ * instead tied the build to whatever the checkout happened to be called — which
+ * broke the moment the plugin was renamed and the repository was not, and would
+ * equally break for anyone who cloned into a differently named directory.
+ *
+ * Every file whose name carries the slug is found through this: the main plugin
+ * file, the POT, and the zip's single top-level directory.
+ */
+$slug       = '';
+$main_file  = '';
+$main_files = glob( $root . '/*.php' ) ?: array();
+
+foreach ( $main_files as $candidate ) {
+	$head = (string) file_get_contents( $candidate, false, null, 0, 8192 );
+
+	if ( ! preg_match( '/^\s*\*\s*Plugin Name:\s*\S/m', $head ) ) {
+		continue;
+	}
+
+	if ( preg_match( '/^\s*\*\s*Text Domain:\s*(.+)$/m', $head, $domain ) ) {
+		$slug = trim( $domain[1] );
+	}
+
+	$main_file = $candidate;
+	break;
+}
+
+if ( '' === $main_file ) {
+	echo "No root-level PHP file declares a Plugin Name header.\n";
+	exit( 1 );
+}
+
+if ( '' === $slug ) {
+	echo 'Read the Plugin Name from ' . basename( $main_file )
+		. ", but it declares no Text Domain header.\n";
+	exit( 1 );
+}
+
+/*
+ * The file that carried the headers must itself be the one named for the slug.
+ * Checking only that some {$slug}.php exists would accept a layout where the
+ * headers live in one file and an unrelated file happens to match the domain,
+ * and the zip would then be built around the wrong entrypoint.
+ */
+if ( basename( $main_file ) !== "{$slug}.php" ) {
+	echo 'Text Domain is ' . $slug . ' but the headers were read from '
+		. basename( $main_file ) . ". WordPress.org requires the main file, "
+		. "the text domain and the slug to be the same string.\n";
+	exit( 1 );
+}
 
 if ( ! is_dir( $dest ) ) {
 	mkdir( $dest, 0755, true );
@@ -58,6 +112,12 @@ function read_distignore( string $path ): array {
  * which is how .distignore is understood: a bare "tests" excludes the directory
  * wherever it appears.
  *
+ * A pattern containing a slash is matched against the whole relative path
+ * instead, so `languages/*.po` can say "the catalogues, not every .po anywhere".
+ * Segment matching alone could never satisfy that, because no single segment
+ * contains the slash — which is how a `languages/*.po` line sat in .distignore
+ * doing nothing.
+ *
  * @param string   $relative Repo-relative path with forward slashes.
  * @param string[] $patterns Patterns from .distignore.
  * @return bool
@@ -68,6 +128,14 @@ function is_excluded( string $relative, array $patterns ): bool {
 	foreach ( $patterns as $pattern ) {
 		if ( $relative === $pattern || 0 === strpos( $relative, $pattern . '/' ) ) {
 			return true;
+		}
+
+		if ( false !== strpos( $pattern, '/' ) ) {
+			if ( fnmatch( $pattern, $relative ) ) {
+				return true;
+			}
+
+			continue;
 		}
 
 		foreach ( $segments as $segment ) {

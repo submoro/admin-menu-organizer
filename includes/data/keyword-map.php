@@ -20,7 +20,7 @@
  *
  * Extend through the amorg_keyword_map filter rather than editing this file.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 

@@ -2,7 +2,7 @@
 /**
  * Activation and deactivation routines.
  *
- * @package AdminMenuOrganizer
+ * @package AdminMenuCategories
  * @since   1.0.0
  */
 
