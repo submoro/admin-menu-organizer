@@ -4,7 +4,7 @@ Tags: admin menu, menu order, sidebar, accordion, admin
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -90,7 +90,7 @@ Yes, if you allow it. There is a site-wide default that an administrator sets, o
 
 = Does it support right-to-left languages? =
 
-Yes. The sidebar is laid out entirely with CSS logical properties — `margin-inline-start`, `padding-inline-end`, `inset-inline-start` — so it mirrors in RTL languages including Arabic rather than needing a separate stylesheet. An Arabic translation is bundled, and the plugin has been run on a site with WPML active.
+Yes. The sidebar is laid out entirely with CSS logical properties — `margin-inline-start`, `padding-inline-end`, `inset-inline-start` — so it mirrors in RTL languages including Arabic rather than needing a separate stylesheet. An Arabic translation is contributed through translate.wordpress.org, and the plugin has been run on a site with WPML active.
 
 = Does it work with all the admin colour schemes? =
 
@@ -121,8 +121,12 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 
 == Changelog ==
 
+= 1.1.2 =
+* The plugin is now called Archinest Sidebar Categories, and is the first in a line of Archinest plugins. The name it was published under before was too close to other admin-menu plugins in the directory. Nothing about how it works has changed, and your saved arrangement is kept: it is stored under a key the rename does not touch. On a site running an older build, this installs as a separate plugin rather than as an update, so deactivate the old one first.
+* The stylesheet the plugin generates for your group names and icons is now added through WordPress's own enqueue system rather than written into the page, which is what the directory asks of every plugin.
+* Translations are no longer bundled. WordPress.org generates them per language from translate.wordpress.org and delivers them automatically, so shipping our own copy only got in the way.
+
 = 1.1.1 =
-* The plugin is now called Archinest Sidebar Categories. The previous name was already taken in the plugin directory, so it had to change before the plugin could be listed. Nothing about how it works has changed, and your saved arrangement is kept: it is stored under a key that the rename does not touch. On a site running the old build, this installs as a separate plugin rather than as an update, so deactivate the old one before activating this.
 * Fixed: long group names broke in the middle of a word. "Integrations" rendered as "INTEGRATION" above a lone "S", and "Tools & Settings" ran to four lines ending in "GS". Names now wrap between words, and a name too long for two lines is shortened with an ellipsis rather than growing the row without limit. The full name is shown on hover.
 * Group names have more room to begin with: the header row spends fewer pixels on spacing and on the update badge, which is enough for every default name to fit on one or two lines.
 * The line connecting a group's items was too faint to see against the default colour scheme, so the indent was doing the work of showing the hierarchy on its own. It is now visible.
@@ -151,8 +155,11 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 
 == Upgrade Notice ==
 
+= 1.1.2 =
+Renamed to Archinest Sidebar Categories. Your saved arrangement is kept, but this installs alongside any older build rather than over it, so deactivate that one first.
+
 = 1.1.1 =
-Renamed to Archinest Sidebar Categories. Your saved arrangement is kept, but this installs alongside the old build rather than over it, so deactivate that one first. Also fixes long group names breaking mid-word, makes the hierarchy visible, and shows which category a filter result came from.
+Fixes long group names breaking mid-word, makes the group hierarchy visible, and shows which category each filter result belongs to.
 
 = 1.1.0 =
 Adds a filter box to the sidebar, scrolls a group to the top when you open it, and stops long group names being cut off.
