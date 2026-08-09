@@ -2,7 +2,7 @@
 /**
  * Grouped reordering of the top-level admin menu.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 

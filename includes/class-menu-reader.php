@@ -2,7 +2,7 @@
 /**
  * Safe reading of the WordPress admin menu globals.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 

@@ -1,9 +1,9 @@
-# Arabic translation for Admin Menu Categories.
+# Arabic translation for Archinest Sidebar Categories.
 # Copyright (C) 2026 Moamen Elabd
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Admin Menu Categories 1.0.0\n"
+"Project-Id-Version: Archinest Sidebar Categories 1.0.0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,12 +29,6 @@ msgstr ""
 msgid "Add %s to any admin URL to turn the plugin off for that one page load."
 msgstr ""
 
-msgid "Admin Menu Categories requires PHP %1$s or newer. This site is running PHP %2$s, so the plugin has not been loaded."
-msgstr ""
-
-msgid "Admin Menu Categories requires WordPress %1$s or newer. This site is running WordPress %2$s, so the plugin has not been loaded."
-msgstr ""
-
 msgid "Advanced"
 msgstr "إعدادات متقدمة"
 
@@ -43,6 +37,12 @@ msgstr "مفتوح دائمًا"
 
 msgid "Appearance"
 msgstr "المظهر"
+
+msgid "Archinest Sidebar Categories requires PHP %1$s or newer. This site is running PHP %2$s, so the plugin has not been loaded."
+msgstr ""
+
+msgid "Archinest Sidebar Categories requires WordPress %1$s or newer. This site is running WordPress %2$s, so the plugin has not been loaded."
+msgstr ""
 
 msgid "Arrange your own sidebar. This affects only your account; everyone else keeps the site default."
 msgstr ""
@@ -167,12 +167,6 @@ msgstr "مكبر صوت"
 msgid "Menu"
 msgstr "قائمة"
 
-msgid "Menu Categories"
-msgstr "فئات القائمة"
-
-msgid "Menu Categories sections"
-msgstr "أقسام فئات القائمة"
-
 msgid "Menu groups and their settings"
 msgstr ""
 
@@ -271,6 +265,12 @@ msgstr "الإعدادات"
 
 msgid "Shield"
 msgstr "درع"
+
+msgid "Sidebar Categories"
+msgstr "فئات الشريط الجانبي"
+
+msgid "Sidebar Categories sections"
+msgstr "أقسام فئات الشريط الجانبي"
 
 msgid "Slug"
 msgstr "المُعرّف"

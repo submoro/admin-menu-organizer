@@ -2,7 +2,7 @@
 /**
  * Category definitions and their translated labels.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 
@@ -158,17 +158,17 @@ final class Categories {
 	 */
 	private static function labels(): array {
 		return array(
-			'dashboard'    => __( 'Dashboard', 'admin-menu-categories' ),
-			'content'      => __( 'Content', 'admin-menu-categories' ),
-			'commerce'     => __( 'Commerce', 'admin-menu-categories' ),
-			'design'       => __( 'Design & Layout', 'admin-menu-categories' ),
-			'seo'          => __( 'SEO & Marketing', 'admin-menu-categories' ),
-			'security'     => __( 'Security & Backup', 'admin-menu-categories' ),
-			'performance'  => __( 'Performance', 'admin-menu-categories' ),
-			'users'        => __( 'Users & Access', 'admin-menu-categories' ),
-			'integrations' => __( 'Integrations', 'admin-menu-categories' ),
-			'tools'        => __( 'Tools & System', 'admin-menu-categories' ),
-			'ungrouped'    => __( 'Other', 'admin-menu-categories' ),
+			'dashboard'    => __( 'Dashboard', 'archinest-sidebar-categories' ),
+			'content'      => __( 'Content', 'archinest-sidebar-categories' ),
+			'commerce'     => __( 'Commerce', 'archinest-sidebar-categories' ),
+			'design'       => __( 'Design & Layout', 'archinest-sidebar-categories' ),
+			'seo'          => __( 'SEO & Marketing', 'archinest-sidebar-categories' ),
+			'security'     => __( 'Security & Backup', 'archinest-sidebar-categories' ),
+			'performance'  => __( 'Performance', 'archinest-sidebar-categories' ),
+			'users'        => __( 'Users & Access', 'archinest-sidebar-categories' ),
+			'integrations' => __( 'Integrations', 'archinest-sidebar-categories' ),
+			'tools'        => __( 'Tools & System', 'archinest-sidebar-categories' ),
+			'ungrouped'    => __( 'Other', 'archinest-sidebar-categories' ),
 		);
 	}
 

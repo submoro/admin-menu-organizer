@@ -2,7 +2,7 @@
 /**
  * Plugin container and hook registration.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 

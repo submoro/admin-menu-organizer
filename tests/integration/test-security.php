@@ -2,7 +2,7 @@
 /**
  * Integration tests for the security guarantees that need a real WordPress.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 

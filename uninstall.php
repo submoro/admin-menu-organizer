@@ -6,7 +6,7 @@
  * that uninstalling leaves no residue. Runs only when WordPress itself deletes
  * the plugin.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 

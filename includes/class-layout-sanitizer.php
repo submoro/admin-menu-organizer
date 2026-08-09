@@ -2,7 +2,7 @@
 /**
  * Recursive whitelist sanitiser for layout arrays.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 

@@ -2,7 +2,7 @@
 /**
  * Automatic category detection for admin menu items.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 

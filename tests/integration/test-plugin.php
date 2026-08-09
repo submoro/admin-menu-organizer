@@ -2,7 +2,7 @@
 /**
  * Tests for the plugin container, its guards and its activation routine.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 

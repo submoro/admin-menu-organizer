@@ -81,7 +81,7 @@ jobs:
 
           version="${tag#v}"
           header=$(sed -n 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*\(.*\)$/\1/p' \
-                     admin-menu-categories.php | head -n1 | tr -d '[:space:]')
+                     archinest-sidebar-categories.php | head -n1 | tr -d '[:space:]')
 
           printf 'tag=%s\ntag version=%s\nplugin header=%s\n' "$tag" "$version" "$header"
 

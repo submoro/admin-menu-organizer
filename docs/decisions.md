@@ -4,8 +4,10 @@
 
 | Date | Decision | Value |
 |---|---|---|
-| 2026-07-30 | Public slug | `admin-menu-categories` — the directory rejected `admin-menu-organizer` because that **name** was already taken, even though the slug was free. See D-019. |
-| 2026-07-30 | Display name | `Admin Menu Categories`, shortened to `Menu Categories` for the in-admin label, which already sits under Settings |
+| 2026-07-30 | Public slug | `archinest-sidebar-categories` — the review rejected `admin-menu-categories` as too close to existing admin-menu plugins. See D-020. |
+| 2026-07-30 | Display name | `Archinest Sidebar Categories`, shortened to `Sidebar Categories` for the in-admin label |
+| 2026-07-30 | Public slug | superseded: `admin-menu-categories` — the directory rejected `admin-menu-organizer` because that **name** was already taken, even though the slug was free. See D-019. |
+| 2026-07-30 | Display name | superseded: `Admin Menu Categories` |
 | 2026-07-28 | Public slug | superseded: `admin-menu-organizer` — renamed from the original `menu-organizer-collapsible-admin-menu` at the owner's request, to shorten it and signal WordPress. Availability confirmed against the plugins API, not by scraping the HTML page. See D-014. |
 | 2026-07-28 | Display name | superseded: `Admin Menu Organizer` |
 | 2026-07-28 | PHP prefix | `AMORG_` constants, `amorg_` functions and keys, `amorg-` CSS and JS, `AMORG\` namespace |
@@ -425,6 +427,60 @@ correct, since the repository name and the directory slug are now different thin
   named `<domain>.php`.
 - `test_text_domain_matches_the_plugin_slug` now asserts against the main plugin
   file rather than the containing directory.
+
+### D-020 — A free, distinct name can still be refused for similarity. Final: `archinest-sidebar-categories`
+
+The directory pended the submission a second time. `admin-menu-categories` was
+unclaimed and is not anyone's trademark, and it was still refused:
+
+> The name is descriptive, but it is quite close to existing plugin names built
+> around the same "Admin Menu" wording, especially a well-known published plugin.
+
+So the bar is not "unclaimed", and it is not "not a trademark" either. It is
+**not confusable with anything already listed**, judged on naming *pattern* and
+meaning rather than on string equality. Two plugins can share no exact words and
+still be too close; `admin-menu-categories` shares a whole phrase with
+`admin-menu-editor` and several others.
+
+What the guidelines actually accept is a distinguishing term **at the front**,
+and they name the failure modes explicitly: a generic qualifier such as
+"Advanced", "Simple" or "Super" does not distinguish anything, and neither does
+adding a letter. The owner initially suggested "Super Admin Menu Categories",
+which is precisely the rejected pattern — and would additionally have collided
+with core's own "Super Admin" role.
+
+`Archinest` is the owner's company, which satisfies the "personal brand at the
+beginning" pattern the guidelines endorse, works as a line prefix for future
+plugins *and themes* rather than being tied to menus, and — the reason it beat
+the coined alternatives — makes the ownership question answer itself: the brand,
+the declared URIs and the account's email domain are now all archinest.net, so
+there is nothing left for a reviewer to take on trust. See D-021.
+
+Not checked from this machine: wordpress.org is unreachable from the build
+environment, so the slug's availability was not confirmed against the plugins
+API as D-014 was able to do. A web search found no WordPress plugin or theme
+named Archinest; the closest are Archi, Archin and Archicon, all in the
+architecture and interior-design theme niche rather than admin tooling.
+
+### D-021 — Ownership is proved by domain, so the domain has to match exactly
+
+The review could not confirm ownership: the account was on gmail.com, which it
+rejects outright as a form of identification, while the plugin declared
+archinest.com.
+
+The account moved to `moamen@archinest.net`. That alone would **not** have
+resolved it, and the near-miss is the point worth recording: the check compares
+the email domain against the URLs declared in the plugin, and `.net` and `.com`
+are different domains. Moving the account without moving the headers would have
+produced the same mismatch report for a second time.
+
+Plugin URI, Author URI and the composer homepage therefore moved to
+archinest.net as well.
+
+Still outstanding and not something code can fix: the review flagged the
+certificate on the declared domain as expired. That has to be valid before the
+reply claims the domain, because it is trivially checkable and a reviewer will
+check it.
 
 ## Environment notes
 

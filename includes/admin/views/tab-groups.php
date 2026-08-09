@@ -6,7 +6,7 @@
  * because the categories themselves are defined in code and filterable. Emptying
  * has the outcome an administrator actually wants, and cannot orphan an item.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  *
  * @var array $amorg_layout Layout being edited.
@@ -18,31 +18,31 @@ use AMORG\Categories;
 defined( 'ABSPATH' ) || exit;
 
 $amorg_dashicons = array(
-	'dashicons-menu-alt'         => __( 'Menu', 'admin-menu-categories' ),
-	'dashicons-dashboard'        => __( 'Dashboard', 'admin-menu-categories' ),
-	'dashicons-admin-post'       => __( 'Post', 'admin-menu-categories' ),
-	'dashicons-admin-page'       => __( 'Page', 'admin-menu-categories' ),
-	'dashicons-admin-media'      => __( 'Media', 'admin-menu-categories' ),
-	'dashicons-cart'             => __( 'Cart', 'admin-menu-categories' ),
-	'dashicons-products'         => __( 'Products', 'admin-menu-categories' ),
-	'dashicons-admin-appearance' => __( 'Appearance', 'admin-menu-categories' ),
-	'dashicons-chart-line'       => __( 'Chart', 'admin-menu-categories' ),
-	'dashicons-megaphone'        => __( 'Megaphone', 'admin-menu-categories' ),
-	'dashicons-shield'           => __( 'Shield', 'admin-menu-categories' ),
-	'dashicons-backup'           => __( 'Backup', 'admin-menu-categories' ),
-	'dashicons-performance'      => __( 'Performance', 'admin-menu-categories' ),
-	'dashicons-groups'           => __( 'Groups', 'admin-menu-categories' ),
-	'dashicons-admin-links'      => __( 'Links', 'admin-menu-categories' ),
-	'dashicons-admin-tools'      => __( 'Tools', 'admin-menu-categories' ),
-	'dashicons-admin-settings'   => __( 'Settings', 'admin-menu-categories' ),
-	'dashicons-translation'      => __( 'Translation', 'admin-menu-categories' ),
-	'dashicons-email'            => __( 'Email', 'admin-menu-categories' ),
-	'dashicons-book'             => __( 'Book', 'admin-menu-categories' ),
+	'dashicons-menu-alt'         => __( 'Menu', 'archinest-sidebar-categories' ),
+	'dashicons-dashboard'        => __( 'Dashboard', 'archinest-sidebar-categories' ),
+	'dashicons-admin-post'       => __( 'Post', 'archinest-sidebar-categories' ),
+	'dashicons-admin-page'       => __( 'Page', 'archinest-sidebar-categories' ),
+	'dashicons-admin-media'      => __( 'Media', 'archinest-sidebar-categories' ),
+	'dashicons-cart'             => __( 'Cart', 'archinest-sidebar-categories' ),
+	'dashicons-products'         => __( 'Products', 'archinest-sidebar-categories' ),
+	'dashicons-admin-appearance' => __( 'Appearance', 'archinest-sidebar-categories' ),
+	'dashicons-chart-line'       => __( 'Chart', 'archinest-sidebar-categories' ),
+	'dashicons-megaphone'        => __( 'Megaphone', 'archinest-sidebar-categories' ),
+	'dashicons-shield'           => __( 'Shield', 'archinest-sidebar-categories' ),
+	'dashicons-backup'           => __( 'Backup', 'archinest-sidebar-categories' ),
+	'dashicons-performance'      => __( 'Performance', 'archinest-sidebar-categories' ),
+	'dashicons-groups'           => __( 'Groups', 'archinest-sidebar-categories' ),
+	'dashicons-admin-links'      => __( 'Links', 'archinest-sidebar-categories' ),
+	'dashicons-admin-tools'      => __( 'Tools', 'archinest-sidebar-categories' ),
+	'dashicons-admin-settings'   => __( 'Settings', 'archinest-sidebar-categories' ),
+	'dashicons-translation'      => __( 'Translation', 'archinest-sidebar-categories' ),
+	'dashicons-email'            => __( 'Email', 'archinest-sidebar-categories' ),
+	'dashicons-book'             => __( 'Book', 'archinest-sidebar-categories' ),
 );
 ?>
 
 <p class="amorg-intro">
-	<?php echo esc_html__( 'Rename groups, choose their icons, set whether they start open, and drag them into the order you want them to appear in the sidebar.', 'admin-menu-categories' ); ?>
+	<?php echo esc_html__( 'Rename groups, choose their icons, set whether they start open, and drag them into the order you want them to appear in the sidebar.', 'archinest-sidebar-categories' ); ?>
 </p>
 
 <form method="post" action="<?php echo esc_url( admin_url( 'options-general.php?page=' . Settings_Page::SLUG . '&tab=groups' ) ); ?>">
@@ -51,15 +51,15 @@ $amorg_dashicons = array(
 
 	<table class="widefat striped amorg-groups-table">
 		<caption class="screen-reader-text">
-			<?php echo esc_html__( 'Menu groups and their settings', 'admin-menu-categories' ); ?>
+			<?php echo esc_html__( 'Menu groups and their settings', 'archinest-sidebar-categories' ); ?>
 		</caption>
 		<thead>
 			<tr>
-				<th scope="col"><?php echo esc_html__( 'Order', 'admin-menu-categories' ); ?></th>
-				<th scope="col"><?php echo esc_html__( 'Name', 'admin-menu-categories' ); ?></th>
-				<th scope="col"><?php echo esc_html__( 'Icon', 'admin-menu-categories' ); ?></th>
-				<th scope="col"><?php echo esc_html__( 'Starts open', 'admin-menu-categories' ); ?></th>
-				<th scope="col"><?php echo esc_html__( 'Items', 'admin-menu-categories' ); ?></th>
+				<th scope="col"><?php echo esc_html__( 'Order', 'archinest-sidebar-categories' ); ?></th>
+				<th scope="col"><?php echo esc_html__( 'Name', 'archinest-sidebar-categories' ); ?></th>
+				<th scope="col"><?php echo esc_html__( 'Icon', 'archinest-sidebar-categories' ); ?></th>
+				<th scope="col"><?php echo esc_html__( 'Starts open', 'archinest-sidebar-categories' ); ?></th>
+				<th scope="col"><?php echo esc_html__( 'Items', 'archinest-sidebar-categories' ); ?></th>
 			</tr>
 		</thead>
 		<tbody class="amorg-group-rows">
@@ -85,7 +85,7 @@ $amorg_dashicons = array(
 								echo esc_html(
 									sprintf(
 										/* translators: %s: Group name. */
-										__( 'Position of %s', 'admin-menu-categories' ),
+										__( 'Position of %s', 'archinest-sidebar-categories' ),
 										$amorg_label
 									)
 								);
@@ -104,7 +104,7 @@ $amorg_dashicons = array(
 					<td>
 						<label>
 							<span class="screen-reader-text">
-								<?php echo esc_html__( 'Group name', 'admin-menu-categories' ); ?>
+								<?php echo esc_html__( 'Group name', 'archinest-sidebar-categories' ); ?>
 							</span>
 							<input
 								type="text"
@@ -120,7 +120,7 @@ $amorg_dashicons = array(
 					<td>
 						<label>
 							<span class="screen-reader-text">
-								<?php echo esc_html__( 'Group icon', 'admin-menu-categories' ); ?>
+								<?php echo esc_html__( 'Group icon', 'archinest-sidebar-categories' ); ?>
 							</span>
 							<select name="amorg_group_icon[<?php echo esc_attr( $amorg_id ); ?>]">
 								<?php foreach ( $amorg_dashicons as $amorg_choice => $amorg_choice_label ) : ?>
@@ -135,7 +135,7 @@ $amorg_dashicons = array(
 
 					<td>
 						<?php if ( $amorg_permanent ) : ?>
-							<em><?php echo esc_html__( 'Always open', 'admin-menu-categories' ); ?></em>
+							<em><?php echo esc_html__( 'Always open', 'archinest-sidebar-categories' ); ?></em>
 						<?php else : ?>
 							<label>
 								<input
@@ -149,7 +149,7 @@ $amorg_dashicons = array(
 									echo esc_html(
 										sprintf(
 											/* translators: %s: Group name. */
-											__( '%s starts open', 'admin-menu-categories' ),
+											__( '%s starts open', 'archinest-sidebar-categories' ),
 											$amorg_label
 										)
 									);
@@ -172,5 +172,5 @@ $amorg_dashicons = array(
 		value="<?php echo esc_attr( implode( ',', array_column( (array) ( $amorg_layout['groups'] ?? array() ), 'id' ) ) ); ?>"
 	>
 
-	<?php submit_button( __( 'Save groups', 'admin-menu-categories' ) ); ?>
+	<?php submit_button( __( 'Save groups', 'archinest-sidebar-categories' ) ); ?>
 </form>
