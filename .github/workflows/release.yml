@@ -33,6 +33,12 @@ jobs:
           # and cannot do that without them.
           fetch-depth: 1
           fetch-tags: true
+          # checkout writes the job token into .git/config by default, leaving a
+          # push-capable credential on disk for every later step — including
+          # composer install, which runs third-party code. Nothing here needs it:
+          # the only step that talks to the API is the publish step, which passes
+          # GH_TOKEN explicitly.
+          persist-credentials: false
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
