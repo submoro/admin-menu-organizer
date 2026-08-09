@@ -2,8 +2,8 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Admin Menu Categories 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/admin-menu-categories/\n"
+"Project-Id-Version: Archinest Sidebar Categories 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/archinest-sidebar-categories/\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-07-27T00:00:00+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Domain: admin-menu-categories\n"
+"X-Domain: archinest-sidebar-categories\n"
 
 #. translators: 1: Number of items grouped automatically, 2: Total number of items.
 #: includes/admin/views/tab-advanced.php:143
@@ -43,16 +43,6 @@ msgstr ""
 msgid "Add %s to any admin URL to turn the plugin off for that one page load."
 msgstr ""
 
-#. translators: 1: Required PHP version, 2: PHP version running on the server.
-#: admin-menu-categories.php:85
-msgid "Admin Menu Categories requires PHP %1$s or newer. This site is running PHP %2$s, so the plugin has not been loaded."
-msgstr ""
-
-#. translators: 1: Required WordPress version, 2: WordPress version running on the site.
-#: admin-menu-categories.php:92
-msgid "Admin Menu Categories requires WordPress %1$s or newer. This site is running WordPress %2$s, so the plugin has not been loaded."
-msgstr ""
-
 #: includes/admin/views/page.php:29
 #: includes/admin/class-settings-page.php:202
 msgid "Advanced"
@@ -64,6 +54,16 @@ msgstr ""
 
 #: includes/admin/views/tab-groups.php:28
 msgid "Appearance"
+msgstr ""
+
+#. translators: 1: Required PHP version, 2: PHP version running on the server.
+#: archinest-sidebar-categories.php:85
+msgid "Archinest Sidebar Categories requires PHP %1$s or newer. This site is running PHP %2$s, so the plugin has not been loaded."
+msgstr ""
+
+#. translators: 1: Required WordPress version, 2: WordPress version running on the site.
+#: archinest-sidebar-categories.php:92
+msgid "Archinest Sidebar Categories requires WordPress %1$s or newer. This site is running WordPress %2$s, so the plugin has not been loaded."
 msgstr ""
 
 #: includes/admin/views/tab-layout.php:46
@@ -235,16 +235,6 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: includes/admin/views/page.php:37
-#: includes/admin/class-settings-page.php:102
-#: includes/admin/class-settings-page.php:103
-msgid "Menu Categories"
-msgstr ""
-
-#: includes/admin/views/page.php:45
-msgid "Menu Categories sections"
-msgstr ""
-
 #: includes/admin/views/tab-groups.php:54
 msgid "Menu groups and their settings"
 msgstr ""
@@ -382,6 +372,16 @@ msgstr ""
 
 #: includes/admin/views/tab-groups.php:31
 msgid "Shield"
+msgstr ""
+
+#: includes/admin/views/page.php:37
+#: includes/admin/class-settings-page.php:102
+#: includes/admin/class-settings-page.php:103
+msgid "Sidebar Categories"
+msgstr ""
+
+#: includes/admin/views/page.php:45
+msgid "Sidebar Categories sections"
 msgstr ""
 
 #: includes/admin/views/tab-advanced.php:119

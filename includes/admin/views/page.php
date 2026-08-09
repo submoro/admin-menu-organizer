@@ -2,7 +2,7 @@
 /**
  * Settings screen shell.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  *
  * @var string                    $tab    Current tab slug, from Settings_Page::render().
@@ -23,18 +23,18 @@ $amorg_layout = Settings_Page::editing_layout( $tab, $reader );
 $amorg_items  = Settings_Page::item_index( $reader );
 
 if ( Capabilities::current_user_can_manage() ) {
-	$amorg_tabs['layout']   = __( 'Layout', 'admin-menu-categories' );
-	$amorg_tabs['groups']   = __( 'Groups', 'admin-menu-categories' );
-	$amorg_tabs['roles']    = __( 'Roles', 'admin-menu-categories' );
-	$amorg_tabs['advanced'] = __( 'Advanced', 'admin-menu-categories' );
+	$amorg_tabs['layout']   = __( 'Layout', 'archinest-sidebar-categories' );
+	$amorg_tabs['groups']   = __( 'Groups', 'archinest-sidebar-categories' );
+	$amorg_tabs['roles']    = __( 'Roles', 'archinest-sidebar-categories' );
+	$amorg_tabs['advanced'] = __( 'Advanced', 'archinest-sidebar-categories' );
 }
 
 if ( Capabilities::current_user_can_personalise() ) {
-	$amorg_tabs['personal'] = __( 'Personalise my menu', 'admin-menu-categories' );
+	$amorg_tabs['personal'] = __( 'Personalise my menu', 'archinest-sidebar-categories' );
 }
 ?>
 <div class="wrap amorg-settings">
-	<h1><?php echo esc_html__( 'Menu Categories', 'admin-menu-categories' ); ?></h1>
+	<h1><?php echo esc_html__( 'Sidebar Categories', 'archinest-sidebar-categories' ); ?></h1>
 
 	<?php if ( null !== $amorg_notice ) : ?>
 		<div class="notice notice-<?php echo esc_attr( $amorg_notice['type'] ); ?> is-dismissible">
@@ -42,7 +42,7 @@ if ( Capabilities::current_user_can_personalise() ) {
 		</div>
 	<?php endif; ?>
 
-	<nav class="nav-tab-wrapper wp-clearfix" aria-label="<?php echo esc_attr__( 'Menu Categories sections', 'admin-menu-categories' ); ?>">
+	<nav class="nav-tab-wrapper wp-clearfix" aria-label="<?php echo esc_attr__( 'Sidebar Categories sections', 'archinest-sidebar-categories' ); ?>">
 		<?php foreach ( $amorg_tabs as $amorg_slug => $amorg_label ) : ?>
 			<?php $amorg_is_current = ( $tab === $amorg_slug ); ?>
 			<a

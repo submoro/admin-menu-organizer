@@ -50,7 +50,7 @@ click through every screen. Zero notices, warnings or deprecations.
 php bin/build-zip.php
 ```
 
-Writes `build/admin-menu-categories.<version>.zip`, taking its
+Writes `build/archinest-sidebar-categories.<version>.zip`, taking its
 exclusions from `.distignore` so the result matches what `wp dist-archive` would
 produce. The script then verifies its own output: it fails if anything that must
 never ship has crept in, or if anything the plugin cannot run without is absent.
@@ -81,7 +81,7 @@ viewport and the default admin colour scheme.
    showing.
 2. A collapsed group showing an aggregated update count on its header. Let some
    plugin updates accumulate first, or the badge will not be there.
-3. The drag-and-drop layout editor under Settings > Menu Categories.
+3. The drag-and-drop layout editor under Settings > Sidebar Categories.
 4. The Groups tab.
 5. The Personalise my menu panel.
 
@@ -94,10 +94,10 @@ viewport and the default admin colour scheme.
 ## Publishing to SVN, once approved
 
 You will be given an SVN URL of the form
-`https://plugins.svn.wordpress.org/admin-menu-categories/`.
+`https://plugins.svn.wordpress.org/archinest-sidebar-categories/`.
 
 ```bash
-svn checkout https://plugins.svn.wordpress.org/admin-menu-categories/ amorg-svn
+svn checkout https://plugins.svn.wordpress.org/archinest-sidebar-categories/ amorg-svn
 cd amorg-svn
 ```
 
@@ -113,10 +113,10 @@ The repository has three directories, and what goes where matters:
 # Unpack the built zip into trunk, replacing what is there.
 rm -rf trunk/*
 rm -rf /tmp/amorg && mkdir -p /tmp/amorg
-# No -j: the zip's single admin-menu-categories/ directory is what the copy below
+# No -j: the zip's single archinest-sidebar-categories/ directory is what the copy below
 # reaches into, and -j would flatten it away.
-unzip -o /path/to/admin-menu-categories.1.0.0.zip -d /tmp/amorg
-cp -R /tmp/amorg/admin-menu-categories/* trunk/
+unzip -o /path/to/archinest-sidebar-categories.1.0.0.zip -d /tmp/amorg
+cp -R /tmp/amorg/archinest-sidebar-categories/* trunk/
 
 # Directory assets go in assets/, not trunk/.
 cp /path/to/.wordpress-org/*.png assets/

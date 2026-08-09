@@ -2,7 +2,7 @@
 /**
  * Decoration of the rendered admin menu.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 
@@ -158,7 +158,7 @@ final class Menu_Renderer {
 
 		wp_set_script_translations(
 			'amorg-admin-menu',
-			'admin-menu-categories',
+			'archinest-sidebar-categories',
 			AMORG_PLUGIN_DIR . 'languages'
 		);
 

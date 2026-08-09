@@ -18,7 +18,7 @@
 return array(
 
 	// Plugin and screen names.
-	'Menu Categories'                => 'فئات القائمة',
+	'Sidebar Categories'             => 'فئات الشريط الجانبي',
 
 	// Category labels.
 	'Dashboard'                     => 'لوحة التحكم',
@@ -39,7 +39,7 @@ return array(
 	'Roles'                         => 'الأدوار',
 	'Advanced'                       => 'إعدادات متقدمة',
 	'Personalise my menu'           => 'تخصيص قائمتي',
-	'Menu Categories sections'       => 'أقسام فئات القائمة',
+	'Sidebar Categories sections'    => 'أقسام فئات الشريط الجانبي',
 
 	// Buttons and actions.
 	'Settings'                      => 'الإعدادات',

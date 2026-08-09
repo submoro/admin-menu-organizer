@@ -20,7 +20,7 @@
  *
  * Extend through the amorg_keyword_map filter rather than editing this file.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 

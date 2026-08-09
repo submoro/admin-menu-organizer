@@ -2,7 +2,7 @@
 /**
  * Unit tests pinning the sidebar's label and hierarchy CSS.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.1.1
  */
 

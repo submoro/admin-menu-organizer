@@ -2,7 +2,7 @@
 /**
  * Detector regression tests built from a real production site.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 

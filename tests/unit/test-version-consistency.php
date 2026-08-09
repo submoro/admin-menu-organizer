@@ -10,7 +10,7 @@
  *
  * These parse the files directly, so they need no WordPress at all.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 
@@ -96,7 +96,7 @@ final class Test_Version_Consistency extends TestCase {
 	 * @return void
 	 */
 	public function test_all_three_version_declarations_agree(): void {
-		$plugin_file = $this->read( 'admin-menu-categories.php' );
+		$plugin_file = $this->read( 'archinest-sidebar-categories.php' );
 		$readme      = $this->read( 'readme.txt' );
 
 		$header   = $this->capture( '/^\s*\*\s*Version:\s*(.+)$/m', $plugin_file, 'the Version plugin header' );
@@ -116,7 +116,7 @@ final class Test_Version_Consistency extends TestCase {
 	 * @return void
 	 */
 	public function test_version_is_semantic(): void {
-		$plugin_file = $this->read( 'admin-menu-categories.php' );
+		$plugin_file = $this->read( 'archinest-sidebar-categories.php' );
 		$header      = $this->capture( '/^\s*\*\s*Version:\s*(.+)$/m', $plugin_file, 'the Version plugin header' );
 
 		$this->assertMatchesRegularExpression( '/^\d+\.\d+\.\d+$/', $header );
@@ -131,7 +131,7 @@ final class Test_Version_Consistency extends TestCase {
 	 * @return void
 	 */
 	public function test_minimum_requirements_agree_across_header_and_readme(): void {
-		$plugin_file = $this->read( 'admin-menu-categories.php' );
+		$plugin_file = $this->read( 'archinest-sidebar-categories.php' );
 		$readme      = $this->read( 'readme.txt' );
 
 		$header_php = $this->capture( '/^\s*\*\s*Requires PHP:\s*(.+)$/m', $plugin_file, 'the Requires PHP header' );
@@ -152,7 +152,7 @@ final class Test_Version_Consistency extends TestCase {
 	 * @return void
 	 */
 	public function test_runtime_guard_constants_match_the_headers(): void {
-		$plugin_file = $this->read( 'admin-menu-categories.php' );
+		$plugin_file = $this->read( 'archinest-sidebar-categories.php' );
 
 		$header_php   = $this->capture( '/^\s*\*\s*Requires PHP:\s*(.+)$/m', $plugin_file, 'the Requires PHP header' );
 		$constant_php = $this->capture( "/define\(\s*'AMORG_MIN_PHP',\s*'([^']+)'/", $plugin_file, 'the AMORG_MIN_PHP constant' );
@@ -182,11 +182,11 @@ final class Test_Version_Consistency extends TestCase {
 	 * @return void
 	 */
 	public function test_text_domain_matches_the_plugin_slug(): void {
-		$plugin_file = $this->read( 'admin-menu-categories.php' );
+		$plugin_file = $this->read( 'archinest-sidebar-categories.php' );
 
 		$domain = $this->capture( '/^\s*\*\s*Text Domain:\s*(.+)$/m', $plugin_file, 'the Text Domain header' );
 
-		$this->assertSame( 'admin-menu-categories', $domain );
+		$this->assertSame( 'archinest-sidebar-categories', $domain );
 
 		// The main file is named for the domain, so the two cannot drift apart.
 		$this->assertFileExists(

@@ -2,7 +2,7 @@
 /**
  * Unit tests for the menu read layer.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 

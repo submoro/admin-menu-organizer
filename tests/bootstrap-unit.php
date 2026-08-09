@@ -10,7 +10,7 @@
  * Anything that reads an option, writes user meta, or calls a WordPress
  * function belongs in tests/integration/ instead.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 

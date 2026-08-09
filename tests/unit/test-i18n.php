@@ -2,7 +2,7 @@
 /**
  * Unit tests for internationalisation.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 
@@ -29,7 +29,7 @@ final class Test_I18n extends TestCase {
 	 * @since 1.0.0
 	 * @var string
 	 */
-	private const DOMAIN = 'admin-menu-categories';
+	private const DOMAIN = 'archinest-sidebar-categories';
 
 	/**
 	 * Gettext function names that take a text domain.

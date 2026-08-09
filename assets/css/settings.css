@@ -1,10 +1,10 @@
 /**
- * Menu Categories - settings screen.
+ * Sidebar Categories - settings screen.
  *
  * Logical properties throughout, so the editor mirrors in RTL alongside the
  * sidebar it configures.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  */
 
 .amorg-settings .amorg-intro {

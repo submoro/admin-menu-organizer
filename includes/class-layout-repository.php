@@ -2,7 +2,7 @@
 /**
  * Reading, resolving and saving layouts.
  *
- * @package AdminMenuCategories
+ * @package ArchinestSidebarCategories
  * @since   1.0.0
  */
 
