@@ -162,7 +162,7 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 Compatibility update for WordPress 7.1.
 
 = 1.1.2 =
-Renamed to Archinest Sidebar Categories. Your saved arrangement is kept, but this installs alongside any older build rather than over it, so deactivate that one first.
+Renamed to Archinest Sidebar Categories. Your saved arrangement is kept.
 
 = 1.1.1 =
 Fixes long group names breaking mid-word, makes the group hierarchy visible, and shows which category each filter result belongs to.
