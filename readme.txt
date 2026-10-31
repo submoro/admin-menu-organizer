@@ -2,9 +2,9 @@
 Contributors: submoro
 Tags: admin menu, menu order, sidebar, accordion, admin
 Requires at least: 6.4
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,8 +121,11 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 
 == Changelog ==
 
+= 1.1.3 =
+* Tested with WordPress 7.1.
+
 = 1.1.2 =
-* The plugin is now called Archinest Sidebar Categories, and is the first in a line of Archinest plugins. The name it was published under before was too close to other admin-menu plugins in the directory. Nothing about how it works has changed, and your saved arrangement is kept: it is stored under a key the rename does not touch. On a site running an older build, this installs as a separate plugin rather than as an update, so deactivate the old one first.
+* Renamed to Archinest Sidebar Categories, to keep the name distinct from other admin-menu plugins. Saved arrangements are kept.
 * The stylesheet the plugin generates for your group names and icons is now added through WordPress's own enqueue system rather than written into the page, which is what the directory asks of every plugin.
 * Translations are no longer bundled. WordPress.org generates them per language from translate.wordpress.org and delivers them automatically, so shipping our own copy only got in the way.
 
@@ -154,6 +157,9 @@ Your sidebar returns to exactly how WordPress renders it by default, with no res
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.1.3 =
+Compatibility update for WordPress 7.1.
 
 = 1.1.2 =
 Renamed to Archinest Sidebar Categories. Your saved arrangement is kept, but this installs alongside any older build rather than over it, so deactivate that one first.
